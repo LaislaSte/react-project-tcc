@@ -1,13 +1,142 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap');
+
+:root {
+  /*THEME*/
+  --BACKGROUND_DARK: #1D3240;
+  --BACKGROUND_DARK_DARKER: #212228;
+  --BARCKGROUND_LIGHT: #F5FFF8;
+  --BARCKGROUND_LIGHT_DARKER: #A8FFC0;
+
+  /*fullfilled and borders*/
+  --PRIMARY_900: #025939;
+  --PRIMARY_800: #027333;
+  --PRIMARY_700: #03A63C;
+  --PRIMARY_600: #04D939;
+
+  /*titles*/
+  --SECONDARY_900: #224573;
+  --SECONDARY_800: #049DBF;
+  --SECONDARY_700: #04C4D9;
+
+  /*paragraph*/
+  --TEXT: #011140;
+  --TEXT_LIGHT: #DFE6EA;
+
+  /*fonts*/
+  /*italic / small-caps / bold / 12px/18px / Arial, Helvetica, Verdana
+    Font-style / font-variant / font-weight / font-size/line-height / font-family*/
+  --LIGHT: normal 300 1rem 'Nunito', san-serif;
+  --LIGHT_ITALIC: italic 300 1rem 'Nunito', san-serif;
+  --REGULAR: normal 400 1rem 'Nunito', san-serif;
+  --REGULAR_WARNING: normal uppercase 400 1rem 'Nunito', san-serif;
+  --MEDIUM: normal 500 1.5rem 'Nunito', san-serif;
+  --BOLD: normal 700 1.7rem 'Nunito', san-serif;
+
+  /*others*/
+  --ALERT: #D9042B;
+  --WARNING: #F2B705;
+  --LINE_DARK: #0D0000;
+  --LINE_LIGHT: #595959;
+
+  /*containers sizing*/
+  --container-width-lg: 100%;
+  --transition: all 400ms ease;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  outline: none;
+  text-decoration: none;
+  list-style: none;
+}
+html {
+  scroll-behavior: smooth;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+body {
+  background-color: var(--BACKGROUND_DARK_DARKER);
+  color: var(--TEXT_LIGHT);
+  font: var(--LIGHT);
+}
+
+
+.container {
+  width: var(--container-width-lg);
+  margin: 0 auto;
+}
+.section{
+  margin-top: 8rem;
+}
+
+
+/*titles content*/
+h1 {
+  font: var(--BOLD);
+  color: var(--SECONDARY_800);
+}
+h2 {
+  font: var(--MEDIUM);
+}
+
+h3, h4, h4{
+  font: var(--REGULAR);
+}
+
+label{
+  font:var(--REGULAR);
+}
+
+p{
+  font: var(--LIGHT);
+}
+.p-italic{
+  font: var(--LIGHT_ITALIC);
+}
+
+a {
+  font: var(--LIGHT);
+  color: var(--TEXT_LIGHT);
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--PRIMARY_700);
+}
+
+/*buttons contents*/
+.btn {
+  width: max-content;
+  display: inline-block;
+  color: var(--TEXT_LIGHT);
+  background-color: var(--BACKGROUND_DARK_DARKER);
+  font: var(--LIGHT);
+  border: solid 2px var(--PRIMARY_900);
+  border-radius: 15px;
+  transition: var(--transition);
+  padding: .7rem;
+}
+.btn:hover{
+  background-color: var(--PRIMARY_800);
+  transform: scaleY(.6rem);
+}
+
+
+/*===============
+  MEDIA QUERYS
+=================*/
+@media screen and (max-width: 991.98px) {
+  .section{
+    margin-top: 6rem;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .section{
+    margin-top: 4rem;
+  }
 }

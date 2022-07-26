@@ -1,0 +1,35 @@
+
+.nav-menu{
+    background: #22457357;
+    backdrop-filter: blur(15px);
+    z-index: 2;
+    position: fixed;
+    top: 90vh;
+    width: 100%;
+    padding: .7rem;
+    display: flex;
+    justify-content: center;
+}
+
+/*my code*/
+
+.nav-text {
+    background: var(--PRIMARY_600);
+    border-radius: 2rem;
+    width: 15%;
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+.nav-text:hover {
+    box-shadow: 2px 2px 10px var(--PRIMARY_700);
+}
+
+
+.nav-menu-items {
+    display: flex;
+    justify-content: space-evenly;
+    width: 70%;
+}

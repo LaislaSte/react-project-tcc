@@ -1,0 +1,13 @@
+.fade{
+    display: none;
+}
+
+header div .img-background{
+    background-color: var(--PRIMARY_600);
+}
+.img-profile{
+    background-color: var(--PRIMARY_700);
+}
+.bios{
+    background-color: var(--PRIMARY_800);
+}

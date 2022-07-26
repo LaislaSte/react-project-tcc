@@ -1,0 +1,28 @@
+/*apartir dos 830px nav vira toglee*/
+
+nav {
+    background: #22457357;
+    width: max-content;
+    height: 100vh;
+    display: block;
+    padding: 1rem 5rem;
+    z-index: 2;
+    position: fixed;
+    /*apartir dos 770px left fica 20%*/
+    /*apartir dos 1000px left fica 15%*/
+    left: 10%;
+    transform: translateX(-50%);
+    top: 0;
+    backdrop-filter: blur(15px);
+}
+
+nav li {
+    background: var(--PRIMARY_600);
+    padding: 0.9rem;
+    border-radius: 5rem;
+    display: flex;
+    gap: .6rem;
+    color: var(--SECONDARY_900);
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+}
