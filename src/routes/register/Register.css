@@ -1,0 +1,53 @@
+.login{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 1.5rem;
+    width: 100vw;
+    height: max-content;
+    margin: 0 auto 2rem auto;
+}
+
+.container-log{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: 50%;
+    height: max-content;
+    text-align: center;
+    border: solid 2px var(--PRIMARY_900); 
+    border-radius: 15px;
+    padding-bottom: 1rem;
+}
+
+.um-so{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+    width: auto;
+}
+
+.my-input{
+    width: 75%;
+    height: 2rem;
+    font: var(--LIGHT_ITALIC);
+    color: var(--PRIMARY_700);
+    margin: 0 2rem;
+    padding: 1rem;
+    background-color: var(--BACKGROUND-DARK-DARKER);
+
+    border-radius: 10px;
+    border: solid 2px var(--PRIMARY_800);
+}
+
+.top-card{
+    background-color: var(--PRIMARY_900);
+    color: var(--TEXT_LIGHT);
+    padding: 1.3rem;
+    width: 100%;
+    height: 20%;
+    border-radius: 12px 12px 0 0;
+}

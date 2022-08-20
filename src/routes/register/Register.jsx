@@ -10,7 +10,9 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('dados do form', { email, senha })
-        cadastrar({nome, email, senha})
+        
+        //fun cadastrar do CostumerContext
+        //cadastrar({nome, email, senha})
     }
 
     return (
@@ -65,17 +67,8 @@ const Register = () => {
 
                 </div>
             </form>
-
-            <div className="container-log">
-                <div className="top-card top-card-fg">
-                    <p> Ou Acesse pela conta </p>
-                </div>
-                <button class="ms-lg-4 btn-face " type="button" onClick={singInFacebook}>
-                    Facebook
-                </button>
-                <button class="btn-google" type="button" onClick={singInGoogle}>
-                    Google
-                </button>
+            <div className="authentication-option">
+                <button onClick={cadastrarGoogle()}>Cadastrar com o Google</button>
             </div>
 
         </div>
