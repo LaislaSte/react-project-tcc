@@ -1,0 +1,143 @@
+.post {
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px solid var(--SECONDARY_900);
+}
+
+.header-post {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 1rem;
+}
+
+.img-profile {
+    background-color: var(--ALERT);
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    object-fit: cover;
+}
+
+.main-content {
+    text-align: justify;
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.img-content {
+    background-color: var(--WARNING);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-post {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 1rem;
+}
+
+.footer-post .icon {
+    cursor: pointer;
+    font-size: 2.3rem;
+    color: var(--ALERT);
+    transition: var(--transition);
+}
+
+.footer-post .icon:hover {
+    color: var(--SECONDARY_900);
+}
+
+
+@media (min-width: 870px) {
+    .post {
+        width: 80%;
+        padding: 1.5rem;
+        background-color: var(--BACKGROUND_DARK);
+        border-radius: 2rem;
+        justify-self: center;
+    }
+
+    .main-content p {
+        font-size: 1.5rem;
+    }
+
+    .img-content {
+        width: 80%;
+    }
+
+    .footer-post .icon {
+        font-size: 3rem;
+    }
+}
+
+/*==============================
+        POPUP STYLE
+==============================*/
+
+.nav-menu {
+    background: #22457357;
+    height: 100vh;
+    width: 100%;
+    padding: 0 5rem;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /*you can hide it with left: -100%*/
+    left: -100%;
+    transition: var(--transition);
+}
+
+.nav-menu-active {
+    left: 0;
+    transition: var(--transition);
+}
+
+.popup-container{
+    width: fit-content;
+    height: 80%;
+    background-color: var(--BACKGROUND_DARK);
+    border-radius: 15px;
+    padding: .5rem;
+    box-shadow: 1px 1px 10px var(--SECONDARY_700);
+}
+
+.popup-content{
+    position: relative;
+    top: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.close-popup{
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: .5rem .5rem 0 0 ;
+}
+
+.btns-popup{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
