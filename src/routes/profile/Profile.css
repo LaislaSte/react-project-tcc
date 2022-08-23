@@ -1,13 +1,45 @@
-.fade{
-    display: none;
+.Profile{
+    margin-bottom: 3rem;
 }
 
-header div .img-background{
+.section-profile{
+    margin-top: 2.5rem;
+}
+
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
+.img-background{
     background-color: var(--PRIMARY_600);
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.img-profile{
-    background-color: var(--PRIMARY_700);
+.avatar{
+    border-radius: 50%;
+    object-fit: cover;
 }
+
 .bios{
-    background-color: var(--PRIMARY_800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5vh;
+    padding: 1rem 2rem;
+}
+
+.profile-posts{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
