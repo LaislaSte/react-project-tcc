@@ -1,0 +1,25 @@
+/*buttons contents*/
+.btn {
+    width: max-content;
+    display: inline-block;
+    color: var(--TEXT_LIGHT);
+    font: var(--LIGHT);
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.btn:hover {
+    /*background-color: var(--PRIMARY_800);*/
+    transform: scaleY(.6rem);
+    background: none;
+}
+
+.primary {
+    background-color: var(--PRIMARY_800);
+    border: solid 2px var(--PRIMARY_900);
+}
+
+.secondary {
+    background-color: var(--SECONDARY_800);
+    border: solid 2px var(--SECONDARY_900);
+}
