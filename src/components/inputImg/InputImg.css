@@ -1,3 +1,12 @@
 .hided {
     display: none;
 }
+
+.img-profile-preview{
+    width: 5rem;
+    height: 5rem;
+}
+
+.img-post-preview{
+    width: 60%;
+}

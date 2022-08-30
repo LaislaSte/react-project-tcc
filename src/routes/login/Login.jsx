@@ -2,7 +2,9 @@
 import React,  { useState } from 'react';
 import './Login.css'
 
-const Login = ({PropriedadeOnSubmit}) => {
+const Login = ({
+    PropriedadeOnSubmit
+}) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 

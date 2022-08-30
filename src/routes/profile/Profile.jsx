@@ -2,6 +2,8 @@ import React from 'react';
 import './Profile.css';
 import { Post } from '../../components/post/Post';
 import Explore from '../../assets/Explore.jpg';
+import InputImg from '../../components/inputImg/InputImg';
+import { useState } from 'react';
 
 const Profile = () => {
     //pegar o id do usuario logado
@@ -11,7 +13,9 @@ const Profile = () => {
     //puxar postagens realizadas pelo usuario
     //mapear id e conteudo das postagens atreladas ao usuario logado na lista não ordenada retornando uma li com o componente post e suas props conteudo referente ao post, foto de perfil e nome do usuario logado
 
-    const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
+    // const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
+    const [image, setImage] = useState(null);
+    console.log(image);
 
     const fakeUser = {
         id: 1,
@@ -52,6 +56,7 @@ const Profile = () => {
             </header>
 
             <div className="section-profile profile-posts">
+                <InputImg setImage={setImage} imgPreview={image?.preview} />
                 <Post/>
                 {fakeUser.posts.map(item => {
                     return (

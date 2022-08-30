@@ -1,0 +1,27 @@
+.input-container{
+    width: 80%;
+    border-radius: 10px;
+    height: 3rem;
+    background: none;
+    padding-left: .7rem;
+    font: var(--LIGHT_ITALIC);
+    color: var(--TEXT);
+}
+
+.input-outline{
+    border-radius: 15px;
+    flex: 1;
+}
+.input-icon{
+    flex: 2;
+}
+
+.input-outline-primary{
+    border: 2px solid var(--PRIMARY_700);
+    
+}
+
+.input-outline-secondary{
+    border: 2px solid var(--SECONDARY_800);
+    
+}

@@ -1,28 +1,114 @@
-.Config{
+.Config {
     height: 100vh;
 }
 
-.section-form{
+.config-form-container {
+    display: flex;
+}
+
+.form-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 5rem 0 3rem;
+    margin-top: 3rem;
+}
+
+.form-content .header-container {
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    font-size: 1.2rem;
+}
+
+.form-content .header-container .input-outline-secondary {
+    width: 100%;
+    color: var(--TEXT_LIGTH);
+}
+
+.form-content .btns-rb-container .input-form-rb {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.img-upload-container {
+    background-color: var(--PRIMARY_700);
+    height: 100vh;
+    width: 40vw;
+    padding: 1rem;
     text-align: center;
 }
 
-.form-checked-boxes{
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    height: 30vh;
-    gap: .5rem;
-    margin-top: 3rem;
-    flex-wrap: wrap;
-    padding: 0 1rem;
+.img-upload-container .img-preview-profile {
+    object-fit: cover;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;    
+
 }
 
-.form-checked-box{
-    display: flex;
-    justify-content: flex-start;
-    gap: .5rem;
-    margin-bottom: 1rem;
+.img-upload-container button {
+    width: 50%;
 }
-.form-checked-box > input{
-    width: 2rem;
+
+
+.btns-rb-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.config-form-container textarea {
+    background: none;
+    width: 100%;
+    border: 2px solid var(--SECONDARY_700);
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--TEXT_LIGTH);
+}
+
+.form-content p {
+    margin: 2rem 0;
+    font-size: 1.4rem;
+}
+
+.form-checked-boxes {
+    display: flex;
+    height: 30vh;
+    align-items: center;
+    /* gap: 2rem; */
+    flex-wrap: wrap;
+}
+
+.form-checked-box {
+    display: flex;
+    width: 10rem;
+    gap: .8rem;
+}
+
+.form-checked-box input {
+    width: 1.5rem;
+}
+
+.form-checked-box label {
+    font-size: 1.2rem;
+}
+
+
+
+/* MEDIA QUERYS */
+
+@media screen and (max-width:970px) {
+    .config-form-container{
+        flex-direction: column;
+    }
+    .img-upload-container{
+        height: 30vh;
+        align-self: center;
+    }
+    .header-container{
+        flex-direction: column;
+    }
 }

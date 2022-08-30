@@ -3,8 +3,8 @@
     width: max-content;
     display: inline-block;
     color: var(--TEXT_LIGHT);
-    font: var(--LIGHT);
-    border-radius: 10px;
+    font: var(--REGULAR);
+    border-radius: 30px;
     transition: var(--transition);
 }
 
@@ -12,14 +12,21 @@
     /*background-color: var(--PRIMARY_800);*/
     transform: scaleY(.6rem);
     background: none;
+    color: var(--TEXT);
 }
 
 .primary {
-    background-color: var(--PRIMARY_800);
-    border: solid 2px var(--PRIMARY_900);
+    background-color: var(--PRIMARY_700);
+    border: solid 2px var(--PRIMARY_800);
 }
 
 .secondary {
     background-color: var(--SECONDARY_800);
     border: solid 2px var(--SECONDARY_900);
+}
+
+.google{
+    background-color: var(--TEXT_LIGHT);
+    border: solid 2px var(--SECONDARY_800);
+    color: var(--TEXT);
 }

@@ -1,35 +1,88 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Config.css';
-import '../../../src/index.css'
+import InputImg from '../../components/inputImg/InputImg';
+import Button from '../../components/button/Button';
+import Input from '../../components/input/Input';
+
+import avatarDefault from '../../assets/img-avatar.png'
 
 const Config = () => {
-    
-    const [prefer, setPrefer] = useState([]);
+    const [image, setImage] = useState(null)
+
+    // const [prefer, setPrefer] = useState([]);
 
     //const { configPrefer } = useContext(CostumerContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, senha })
+        // console.log('dados do form', { email, senha })
 
-        configPrefer({ nome, email, senha })
+        // configPrefer({ nome, email, senha })
     }
 
-    const selectedCat = (idC) =>{
-        const cats = 0;
-        cats = cats + idC;
+    // const selectedCat = (idC) =>{
+    //     var cats = 0;
+    //     cats = cats + idC;
 
-    }
+    // }
+
 
     return (
         <div className='container Config'>
-            <div className="section-form">
-                <h1>Configure suas preferêcias por conteúdos </h1>
+            <form onSubmit={handleSubmit} className="config-form-container">
 
-                <form action="" onSubmit={handleSubmit}>
+                <div className="img-upload-container">
+                    <div className="img-preview-container">
+
+                        <InputImg
+                            setImage={setImage}
+                            imgPreview={image?.preview}
+                            imgPreviewClassName='img-preview-profile'
+                        />
+                    </div>
+                    <Button
+                        text='Salvar'
+                        type='submit'
+                        bg_color='secondary'
+                    />
+                </div>
+
+                <div className="form-content">
+
+                    <div className="header-container">
+
+                        <div className="btns-rb-container">
+                            <div className="input-form-rb">
+                                <Input
+                                    type='radio'
+                                />
+                                Professor(a)
+
+                            </div>
+                            <div className="input-form-rb">
+                                <Input
+                                    type='radio'
+                                />
+                                Aluno(a)
+                            </div>
+                        </div>
+
+                        <Input
+                            text='Nome de Usuário'
+                            className='input-outline-secondary'
+                        />
+                    </div>
+
+                    <textarea name="" id="" cols="30" rows="8" placeholder='Adicione alguma descrição...' className='outline-secondary'></textarea>
+
+                    <p>
+                        Selecione quais assuntos de interesse (até 5)
+                    </p>
+
                     <div className='form-checked-boxes'>
                         <div className="form-checked-box">
-                            <input type="checkbox" id='historia' onSelect={selectedCat(id)}/>
+                            <input type="checkbox" id='historia' />
                             <label htmlFor="historia">Historia</label>
                         </div>
                         <div className="form-checked-box">
@@ -66,10 +119,10 @@ const Config = () => {
                         </div>
                     </div>
 
-                    <input type="submit" className='btn' />
-                </form>
-            </div>
+                </div>
 
+
+            </form>
         </div>
     )
 }

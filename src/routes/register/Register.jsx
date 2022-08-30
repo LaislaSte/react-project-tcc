@@ -1,74 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from '../../components/button/Button';
+import Input from '../../components/input/Input';
+import { Link } from 'react-router-dom';
+import './Register.css';
+import Explore from '../../assets/image-girl-holding-phone.png';
 
 const Register = () => {
-    const [nome, setNome] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
 
     //const {cadastrar, singInGoogle, singInFacebook } = useContext(CostumerContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, senha })
-        
+        console.log('dados do form', { email, password })
+
         //fun cadastrar do CostumerContext
         //cadastrar({nome, email, senha})
     }
 
     return (
         <div className='register'>
+            <div className="brand-img-register">
+                <img src={Explore} alt="" />
+            </div>
 
-            <h1>Register Page</h1>
-            <form action="" class="container-log" onSubmit={handleSubmit}>
-                <div class="top-card ">
-                    <p> Acesse com seu Email ou Usuário </p>
+            <div className="register-container">
+                <div className="brand-content-item">
+                    <h1>Crie sua conta</h1>
+                    <p className="p-italic">Preencha seus dados</p>
                 </div>
-                <div class="d-flex flex-column align-content-around gap-4 mb-3">
+                <form className="register-form-container">
+                    <Input
+                        text='Nome'
+                        className='input-outline-primary'
+                        type='text'
+                        icon='jd'
+                        value={name}
+                        onchange={(e) => { setName(e.target.value) }}
+                    />
+                    <Input
+                        text='E-mail'
+                        className='input-outline-primary'
+                        type='text'
+                        icon='jd'
+                        value={email}
+                        onchange={(e) => { setEmail(e.target.value) }}
+                    />
+                    <Input
+                        text='Senha'
+                        className='input-outline-primary'
+                        type='password'
+                        icon='dj'
+                        value={password}
+                        onchange={(e) => { setPassword(e.target.value) }}
+                    />
+                    <Input
+                        text='Confirme a senha'
+                        className='input-outline-primary'
+                        type='password'
+                        icon='dj'
+                        value={passwordConfirm}
+                        onchange={(e) => { setPasswordConfirm(e.target.value) }}
+                    />
 
-                    <div class="um-so">
-                        <label class="mx-5" htmlFor='nome'>Insira seu nome</label>
-                        <input
-                            type="nome"
-                            name='nome'
-                            id='nome'
-                            className='my-input'
-                            placeholder="Nome"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                        />
-                    </div>
+                    <Button
+                        type='submit'
+                        text='Cadastrar'
+                        bg_color='primary'
+                    />
+                    <Button
+                        type='submit'
+                        text='Entrar com Google'
+                        bg_color='google'
+                    />
 
-                    <div class="um-so">
-                        <label class="mx-5" htmlFor='email'>Insira seu email ou nome de usuário</label>
-                        <input
-                            type="email"
-                            name='email'
-                            id='email'
-                            className='my-input'
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-
-                    <div class="um-so">
-                        <label class="mx-5" htmlFor='password'>Insira sua Senha</label>
-                        <input
-                            type="password"
-                            name='password'
-                            id='password'
-                            className='my-input'
-                            placeholder="Senha"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)} />
-                    </div>
-
-                    <input type="submit" id="enviar" value="Entrar" class="btn" />
-
-                </div>
-            </form>
-            <div className="authentication-option">
-                <button onClick={cadastrarGoogle()}>Cadastrar com o Google</button>
+                </form>
+                <h3 className='label'>
+                    Já possui uma conta?
+                    <Link to={'/'} className=' colorfull-text' >Acesse por aqui</Link>
+                </h3>
             </div>
 
         </div>

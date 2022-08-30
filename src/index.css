@@ -77,7 +77,7 @@ body {
 /*titles content*/
 h1 {
   font: var(--BOLD);
-  color: var(--SECONDARY_800);
+  color: var(--SECONDARY_700);
 }
 h2 {
   font: var(--MEDIUM);
@@ -99,13 +99,13 @@ p{
 }
 
 a {
-  font: var(--LIGHT);
-  color: var(--TEXT_LIGHT);
+  font: var(--REGULAR);
+  color: var(--PRIMARY_600);
   transition: var(--transition);
 }
 
 a:hover {
-  color: var(--PRIMARY_700);
+  color: var(--TEXT);
 }
 
 /*buttons contents*/
@@ -125,6 +125,11 @@ a:hover {
   transform: scaleY(.6rem);
 }
 
+/* util */
+.input-message{
+  color: var(--ALERT);
+  display: block;
+}
 
 /*===============
   MEDIA QUERYS
