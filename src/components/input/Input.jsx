@@ -8,26 +8,27 @@ const Input = ({
     icon,
     onchange,
     value,
-    validationMessage,
+    message,
     showMessage
-}) => {
 
-    if(showMessage = true){
-        
-    }
+}) => {
 
     return (
         <div className="input-container">
-            <input
-                type={type}
-                className={`input-container ${className}`}
-                placeholder={text}
-                onChange={onchange}
-                value={value}
-            />
-            <p className="input-message">
-                {validationMessage}
-            </p>
+            <div className={`input-outline ${className}`}>
+                <div className="img-input">
+                    {icon}
+                </div>
+
+                <input
+                    type={type}
+                    placeholder={text}
+                    onChange={onchange}
+                    value={value}
+                />
+
+            </div>
+                {showMessage && <p className='input-error-message'> {message} </p>}
         </div>
     )
 }

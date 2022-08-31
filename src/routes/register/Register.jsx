@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import Button from '../../components/button/Button';
-import Input from '../../components/input/Input';
 import { Link } from 'react-router-dom';
+import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validadores';
+
 import './Register.css';
 import Explore from '../../assets/image-girl-holding-phone.png';
+
+import Button from '../../components/button/Button';
+import Input from '../../components/input/Input';
+
+import {FaEnvelope} from 'react-icons/fa';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -12,6 +17,10 @@ const Register = () => {
     const [passwordConfirm, setPasswordConfirm] = useState('');
 
     //const {cadastrar, singInGoogle, singInFacebook } = useContext(CostumerContext);
+
+    const formValidRegister = () => {
+        return emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -37,10 +46,13 @@ const Register = () => {
                         text='Nome'
                         className='input-outline-primary'
                         type='text'
-                        icon='jd'
+                        icon={ <FaEnvelope/> }
                         value={name}
                         onchange={(e) => { setName(e.target.value) }}
+                        message='Nome tem que ter mais de 3 caracteres'
+                        showMessage={name && !nameValid(name)}
                     />
+
                     <Input
                         text='E-mail'
                         className='input-outline-primary'
@@ -48,6 +60,8 @@ const Register = () => {
                         icon='jd'
                         value={email}
                         onchange={(e) => { setEmail(e.target.value) }}
+                        message='E-mail inválido'
+                        showMessage={email && !emailValid(email)}
                     />
                     <Input
                         text='Senha'
@@ -56,6 +70,8 @@ const Register = () => {
                         icon='dj'
                         value={password}
                         onchange={(e) => { setPassword(e.target.value) }}
+                        message='Senha inválida'
+                        showMessage={password && !passwordValid(password)}
                     />
                     <Input
                         text='Confirme a senha'
@@ -64,15 +80,19 @@ const Register = () => {
                         icon='dj'
                         value={passwordConfirm}
                         onchange={(e) => { setPasswordConfirm(e.target.value) }}
+                        message='As senhas tem que conhecidirem'
+                        showMessage={passwordConfirm && !passConfValid(password, passwordConfirm)}
                     />
 
                     <Button
                         type='submit'
                         text='Cadastrar'
                         bg_color='primary'
+                        disable={!formValidRegister()}
                     />
+
                     <Button
-                        type='submit'
+                        type='button'
                         text='Entrar com Google'
                         bg_color='google'
                     />

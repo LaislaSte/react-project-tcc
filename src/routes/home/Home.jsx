@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import {emailValid, passwordValid} from '../../utils/validadores';
 
 import './Home.css';
 import Explore from '../../assets/Explore.jpg';
@@ -16,6 +17,10 @@ const Home = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
+    const formValidLogin = () => {
+        return emailValid(email) && passwordValid(senha)
+    }
+
     return (
         <div className='container'>
 
@@ -31,9 +36,11 @@ const Home = () => {
                             text='E-mail'
                             className='input-outline-secondary'
                             type='text'
-                            icon='jd'
+                            icon={ <BsFillArrowDownCircleFill /> } 
                             value={email}
                             onchange={(e) => { setEmail(e.target.value) }}
+                            message='E-mail inválido'
+                            showMessage={email && !emailValid(email)}
                         />
                         <Input
                             text='Senha'
@@ -42,15 +49,19 @@ const Home = () => {
                             icon='dj'
                             value={senha}
                             onchange={(e) => { setSenha(e.target.value) }}
+                            message='Senha inválida'
+                            showMessage={senha && !passwordValid(senha)}
                         />
 
                         <Button
                             type='submit'
                             text='Entrar'
                             bg_color='secondary'
+                            disable={!formValidLogin()}
                         />
+
                         <Button
-                            type='submit'
+                            type='button'
                             text='Entrar com Google'
                             bg_color='google'
                         />

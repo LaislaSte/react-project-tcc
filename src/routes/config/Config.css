@@ -6,6 +6,26 @@
     display: flex;
 }
 
+.avatar{
+    border-radius: 50%;
+    object-fit: cover;
+}
+.img-preview-profile{
+    height: 10rem;
+    width: 10rem;
+}
+
+.img-preview-profile::after{
+    height: 5rem;
+    width: 5rem;
+    position: absolute;
+    right: 0;
+    left: 13rem;
+    bottom: 0;
+    margin: auto;
+    content:url('../../assets/icons/avatarDefault.svg');
+}
+
 .form-content {
     width: 100%;
     display: flex;

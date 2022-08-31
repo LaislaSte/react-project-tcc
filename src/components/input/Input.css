@@ -2,18 +2,22 @@
     width: 80%;
     border-radius: 10px;
     height: 3rem;
-    background: none;
-    padding-left: .7rem;
-    font: var(--LIGHT_ITALIC);
-    color: var(--TEXT);
+    margin-bottom: .8rem;
 }
 
 .input-outline{
     border-radius: 15px;
-    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 90%;
+    padding-left: 1rem;
 }
-.input-icon{
-    flex: 2;
+
+.input-outline input{
+    background: none;
+    padding-left: .7rem;
+    font: var(--LIGHT_ITALIC);
+    color: var(--TEXT);
 }
 
 .input-outline-primary{
@@ -24,4 +28,9 @@
 .input-outline-secondary{
     border: 2px solid var(--SECONDARY_800);
     
+}
+
+.input-error-message{
+    color: var(--ALERT);
+    margin: .5rem auto;
 }

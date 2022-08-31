@@ -37,7 +37,8 @@ const Config = () => {
 
                         <InputImg
                             setImage={setImage}
-                            imgPreview={image?.preview}
+                            className='avatar'
+                            imgPreview={image?.preview || avatarDefault.src}
                             imgPreviewClassName='img-preview-profile'
                         />
                     </div>

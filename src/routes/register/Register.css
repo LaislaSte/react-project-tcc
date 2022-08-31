@@ -28,7 +28,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1rem;
     text-align: center;
     color: var(--TEXT_LIGHT);
 }
