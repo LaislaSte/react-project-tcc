@@ -8,10 +8,11 @@ import Explore from '../../assets/Explore.jpg';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 
-import { FaBrain } from 'react-icons/fa';
+import { FaBrain, FaEnvelope } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { MdPermMedia } from 'react-icons/md'
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
+import {RiLockPasswordFill} from 'react-icons/ri';
 
 const Home = () => {
     const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ const Home = () => {
                             text='E-mail'
                             className='input-outline-secondary'
                             type='text'
-                            icon={ <BsFillArrowDownCircleFill /> } 
+                            icon={ <FaEnvelope /> } 
                             value={email}
                             onchange={(e) => { setEmail(e.target.value) }}
                             message='E-mail inválido'
@@ -46,7 +47,7 @@ const Home = () => {
                             text='Senha'
                             className='input-outline-secondary'
                             type='password'
-                            icon='dj'
+                            icon={<RiLockPasswordFill />}
                             value={senha}
                             onchange={(e) => { setSenha(e.target.value) }}
                             message='Senha inválida'

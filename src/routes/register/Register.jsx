@@ -9,6 +9,8 @@ import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 
 import {FaEnvelope} from 'react-icons/fa';
+import {RiLockPasswordFill} from 'react-icons/ri';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -46,7 +48,7 @@ const Register = () => {
                         text='Nome'
                         className='input-outline-primary'
                         type='text'
-                        icon={ <FaEnvelope/> }
+                        icon={ <BsFillPersonFill/> }
                         value={name}
                         onchange={(e) => { setName(e.target.value) }}
                         message='Nome tem que ter mais de 3 caracteres'
@@ -57,7 +59,7 @@ const Register = () => {
                         text='E-mail'
                         className='input-outline-primary'
                         type='text'
-                        icon='jd'
+                        icon={ <FaEnvelope/> }
                         value={email}
                         onchange={(e) => { setEmail(e.target.value) }}
                         message='E-mail inválido'
@@ -67,7 +69,7 @@ const Register = () => {
                         text='Senha'
                         className='input-outline-primary'
                         type='password'
-                        icon='dj'
+                        icon={< RiLockPasswordFill />}
                         value={password}
                         onchange={(e) => { setPassword(e.target.value) }}
                         message='Senha inválida'
@@ -77,7 +79,7 @@ const Register = () => {
                         text='Confirme a senha'
                         className='input-outline-primary'
                         type='password'
-                        icon='dj'
+                        icon={< RiLockPasswordFill />}
                         value={passwordConfirm}
                         onchange={(e) => { setPasswordConfirm(e.target.value) }}
                         message='As senhas tem que conhecidirem'
