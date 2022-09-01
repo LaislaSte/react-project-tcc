@@ -1,82 +1,40 @@
-.Config {
-    height: 100vh;
-}
-
 .config-form-container {
     display: flex;
-}
-
-.avatar{
-    border-radius: 50%;
-    object-fit: cover;
-}
-.img-preview-profile{
-    height: 10rem;
-    width: 10rem;
-}
-
-.img-preview-profile::after{
-    height: 5rem;
-    width: 5rem;
-    position: absolute;
-    right: 0;
-    left: 13rem;
-    bottom: 0;
-    margin: auto;
-    content:url('../../assets/icons/avatarDefault.svg');
-}
-
-.form-content {
-    width: 100%;
-    display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 0 5rem 0 3rem;
-    margin-top: 3rem;
-}
-
-.form-content .header-container {
-    display: flex;
     align-items: center;
-    gap: 5rem;
-    font-size: 1.2rem;
+    margin: 1.5rem;
+    gap: 1.5rem;
 }
 
-.form-content .header-container .input-outline-secondary {
+.config-form-container input {
+    color: var(--TEXT_LIGHT);
     width: 100%;
-    color: var(--TEXT_LIGTH);
 }
 
-.form-content .btns-rb-container .input-form-rb {
+.radios-button{
+    display: flex;
+    gap: 1rem;
+}
+.form-rb{
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: .5rem;
 }
 
-.img-upload-container {
-    background-color: var(--PRIMARY_700);
-    height: 100vh;
-    width: 40vw;
-    padding: 1rem;
-    text-align: center;
+.form-rb .rb{
+    border: 1px solid var(--PRIMARY_700);
+    background-color: aqua;
+    height: .8rem;
+    width: .8rem;
+    border-radius: 50%;
+    cursor: pointer;
 }
-
-.img-upload-container .img-preview-profile {
-    object-fit: cover;
-    width: 10rem;
-    height: 10rem;
-    border-radius: 50%;    
-
-}
-
-.img-upload-container button {
-    width: 50%;
-}
-
-
-.btns-rb-container {
-    display: flex;
-    gap: 1rem;
+.form-rb .rb-false{
+    border: 1px solid var(--SECONDARY_700);
+    height: .8rem;
+    width: .8rem;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .config-form-container textarea {
@@ -85,20 +43,22 @@
     border: 2px solid var(--SECONDARY_700);
     border-radius: 1rem;
     padding: 1rem;
-    font-size: 1rem;
+    font: var(--REGULAR);
     color: var(--TEXT_LIGTH);
 }
 
-.form-content p {
-    margin: 2rem 0;
-    font-size: 1.4rem;
+.selects-container{
+    text-align: center;
+}
+.selects-container p{
+    font-size: 1.2rem;
 }
 
 .form-checked-boxes {
     display: flex;
     height: 30vh;
     align-items: center;
-    /* gap: 2rem; */
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -116,13 +76,18 @@
     font-size: 1.2rem;
 }
 
-
+.config-form-container button{
+    width: 20%;
+}
 
 /* MEDIA QUERYS */
 
 @media screen and (max-width:970px) {
+    .container-form{
+        width: 100vw;
+    }
     .config-form-container{
-        flex-direction: column;
+        width: 60%;
     }
     .img-upload-container{
         height: 30vh;
