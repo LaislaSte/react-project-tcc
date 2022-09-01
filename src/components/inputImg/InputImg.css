@@ -1,12 +1,37 @@
-.hided {
+.input-img-container{
+    width: auto;
+    height: auto;
+}
+
+.hided{
     display: none;
 }
 
-.img-profile-preview{
-    width: 5rem;
-    height: 5rem;
+.avatar{
+    border-radius: 50%;
+    height: 10rem;
+    width: 10rem;
+    object-fit: cover;
+    cursor: pointer;
 }
 
-.img-post-preview{
-    width: 60%;
-}
+/* .imgPreviewContainer{
+    height: 10rem;
+    width: 10rem;
+} */
+
+/* .container-img-profile-preview{
+    height: 10rem;
+    width: 10rem;
+} */
+
+/* .img-preview-profile::after{
+    height: 5rem;
+    width: 5rem;
+    position: absolute;
+    right: 0;
+    left: 13rem;
+    bottom: 0;
+    margin: auto;
+    content:url('../../assets/icons/avatarDefault.svg');
+} */

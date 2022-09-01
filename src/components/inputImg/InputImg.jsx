@@ -50,12 +50,12 @@ const InputImg = ({
     }
 
     return (
-        <div className={`input-img-container ${className}`} onClick={showSelector}>
-            <button>Abrir Seletor</button>
+        <div className={`input-img-container`} onClick={showSelector}>
+            
             {
                 //esta condição dira que se a url da img existir (se a props for passada e a primeira expressão for true, então, retorne uma div com o elemento img setando seu src com a url da imagem)
                 imgPreview && (
-                    <div className='imgPreviewContainer'>
+                    <div className={className}>
                         <img
                             src={imgPreview}
                             alt="pré visualização da imagem"
