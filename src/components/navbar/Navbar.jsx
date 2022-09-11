@@ -7,37 +7,45 @@ import { BsGearFill, BsPersonCircle } from 'react-icons/bs';
 
 const Navbar = () => {
     return (
-        <nav className="navbar">
+        <header className='header-home'>
+            <div className="header-content-home">
+                <div className="header-logo">
+
+                </div>
+            </div>
             
-            <ul>
-                <li>
-                    <AiFillHome />
-                    <p>
-                        <a href="#Home">Página Inicial</a>
-                    </p>
-                </li>
-                <li>
-                    <FaSearch />
-                    <a href="#Explore">Explorar</a>
-                </li>
-                <li>
-                    <MdCreate />
-                    <a href="#Create">Criar</a>
-                </li>
-                <li>
-                    <FaHeart />
-                    <a href="#Notification">Notificações</a>
-                </li>
-                <li>
-                    <BsPersonCircle />
-                    <a href="#Profile">Meu Perfil</a>
-                </li>
-                <li>
-                    <BsGearFill />
-                    <a href="#Config">Conficurações</a>
-                </li>
-            </ul>
-        </nav>
+        </header>
+        // <nav className="navbar">
+            
+        //     <ul>
+        //         <li>
+        //             <AiFillHome />
+        //             <p>
+        //                 <a href="#Home">Página Inicial</a>
+        //             </p>
+        //         </li>
+        //         <li>
+        //             <FaSearch />
+        //             <a href="#Explore">Explorar</a>
+        //         </li>
+        //         <li>
+        //             <MdCreate />
+        //             <a href="#Create">Criar</a>
+        //         </li>
+        //         <li>
+        //             <FaHeart />
+        //             <a href="#Notification">Notificações</a>
+        //         </li>
+        //         <li>
+        //             <BsPersonCircle />
+        //             <a href="#Profile">Meu Perfil</a>
+        //         </li>
+        //         <li>
+        //             <BsGearFill />
+        //             <a href="#Config">Conficurações</a>
+        //         </li>
+        //     </ul>
+        // </nav>
     )
 }
 

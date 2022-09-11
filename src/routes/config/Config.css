@@ -1,9 +1,19 @@
-.config-form-container {
+.container-form{
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.config-form-container{
     display: flex;
     flex-direction: column;
+    width: 60%;
+    justify-content: center;
     align-items: center;
-    margin: 1.5rem;
-    gap: 1.5rem;
+    align-self: center;
+    padding: 1rem 0;
+    gap: 1rem;
 }
 
 .config-form-container input {
@@ -39,7 +49,7 @@
 
 .config-form-container textarea {
     background: none;
-    width: 100%;
+    width: 80%;
     border: 2px solid var(--SECONDARY_700);
     border-radius: 1rem;
     padding: 1rem;
@@ -48,24 +58,27 @@
 }
 
 .selects-container{
-    text-align: center;
+    width: 80%;
 }
 .selects-container p{
+    text-align: center;
     font-size: 1.2rem;
 }
 
 .form-checked-boxes {
     display: flex;
-    height: 30vh;
+    height: max-content;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    margin: .5rem 0;
 }
 
 .form-checked-box {
     display: flex;
     width: 10rem;
     gap: .8rem;
+    margin: .5rem 0;
 }
 
 .form-checked-box input {
@@ -83,17 +96,10 @@
 /* MEDIA QUERYS */
 
 @media screen and (max-width:970px) {
-    .container-form{
-        width: 100vw;
-    }
     .config-form-container{
-        width: 60%;
+        width: 100%;
     }
-    .img-upload-container{
-        height: 30vh;
-        align-self: center;
-    }
-    .header-container{
-        flex-direction: column;
+    .config-form-container button{
+        width: 40%;
     }
 }

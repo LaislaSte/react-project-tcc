@@ -13,10 +13,10 @@ export const Post = ({
     content
 }) => {
 
-    
+
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
-    
+
     const registerReview = () => {
         console.log('user e conteudo registrado em revisoes, setado o contador e primeira data de revisao');
         showPopUp()
@@ -33,18 +33,15 @@ export const Post = ({
 
 
     return (
-        <div className="post">
+        <li className="post">
             <div className="header-post">
                 <div className="img-profile"> {img_profile} </div>
                 <h3 className="p-italic"> {user_name} </h3>
             </div>
             <div className="main-content">
-                <p> {content} 
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore maxime sed ipsum eaque sequi dolore placeat culpa, iusto in? Architecto aspernatur minus enim corporis beatae aperiam quas excepturi iure eligendi?
-                </p>
-                <div className="img-content">
-
-                </div>
+                    {content}
+                    <div className="img-content">
+                    </div>
             </div>
             <div className="footer-post">
                 <Link to='#' className='icon-container'>
@@ -69,6 +66,6 @@ export const Post = ({
                 </section>
             </div>
 
-        </div>
+        </li>
     )
 }

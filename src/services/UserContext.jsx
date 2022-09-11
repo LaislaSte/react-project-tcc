@@ -1,14 +1,19 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
-import { db, provider, auth } from './Banco';
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, setDoc, getDocFromServer, query, where } from "firebase/firestore";
+import { db, app } from './Banco';
+// import   from './Banco';
 
 //instanciado um objeto com o Hook do react createContext
 export const CostumerContext = createContext();
 //referenciando a coleção do banco de dados a ser usada
 const collectionRef = collection(db, 'users');
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
+
 
 export const CostumerProvider = ({ children }) => {
     //instanciado um navigate para navegação de rotas
@@ -16,15 +21,17 @@ export const CostumerProvider = ({ children }) => {
 
     //criado estados
     const [user, setUser] = useState(null);
+    const [submiting, setSubmiting] = useState(null);
+
     const [users, setUsers] = useState(null);
 
-    // const [image, setImage] = useState(null);
-    // const [bios, setBios] = useState('');
-    // const [studentProfessor, setStudentProfessor] = useState('');
+    const [image, setImage] = useState(null);
+    const [bios, setBios] = useState('');
+    const [studentProfessor, setStudentProfessor] = useState('');
 
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
 
     //Ao renderizar meu componente, verifica se há algum usuário logado, pegando os item do localstorage e os validando
@@ -40,7 +47,7 @@ export const CostumerProvider = ({ children }) => {
                 setUser(JSON.parse(recoveredGoggleUser));
                 //navegue para a home
                 navigate('/');
-            } 
+            }
             if (recoveredUser) {
                 setUser(JSON.parse(recoveredUser));
                 navigate('/');
@@ -76,13 +83,15 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //função para cadastrar um usuário na coleção user
-    const addUser = async () => {
+    const addUser = async ({ name, email, password }) => {
+        setSubmiting(true);
         const user = await addDoc(collectionRef, {
             name,
             email,
             password
         });
         console.log("usuario cadastrado", user);
+        setSubmiting(false)
     }
 
     //função para atualizar um usuário na coleção user
@@ -92,7 +101,7 @@ export const CostumerProvider = ({ children }) => {
         if (userSelected) {
             try {
                 await updateDoc(userSelected, {
-                    avatar: file,
+                    avatar: image,
                     biosDB: bios,
                     studentProfessorDB: studentProfessor
                 });
@@ -117,19 +126,48 @@ export const CostumerProvider = ({ children }) => {
     const login = async ({ email, password }) => {
         // console.log("login auth", { email, password });
 
-        const userLogged = {
-            password,
-            email
+        // const userLogged = {
+        //     password,
+        //     email
+        // }
+
+        // const userSelected = doc(db, 'users', email);
+        
+        // const docRef = doc(db, "users", 'email');
+        // const userSelected = await getDoc(docRef);
+        const userSelected = query(collectionRef, where("email", "==", email));
+        
+        // if (userSelected.exists()) {
+        //     console.log("Document data:", userSelected.data());
+        // } else {
+        //     // doc.data() will be undefined in this case
+        //     console.log("No such document!");
+        // }
+
+
+        if (userSelected) {
+            console.log('user existente: ', userSelected.converter.toFirestore);
+            console.log('user existente ID: ', userSelected.id);
+
+        //     const token = userSelected.id;
+
+        // if ( password === userSelected.data().password ) {
+        //     const userLogged = {
+        //         email,
+        //         password,
+        //         token
+        //     }
+        //     setUser(userLogged);
+        //     localStorage.setItem('user', JSON.stringify(userLogged));
+        //     //corrigir rotas privadas e públicas
+        //     // navigate('/');
+        // }
+
         }
 
+
         //se existir o e-mail fornecido no banco e se existir uma senha e essa senha for igual à fornecida, set usuário para um usuário logado
-        if (email === users.name && password === users.password) {
-            //get token/id,
-            setUser(userLogged);
-            localStorage.setItem('user', JSON.stringify(userLogged));
-            //corrigir rotas privadas e públicas
-            navigate('/');
-        }
+
     };
 
     const loginGoogle = () => {
@@ -142,7 +180,7 @@ export const CostumerProvider = ({ children }) => {
                 setUser(userG);
                 localStorage.setItem('@google:user ', JSON.stringify(user));
                 localStorage.setItem('@google:token ', token);
-                navigate('/');
+                navigate('/config');
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
@@ -153,7 +191,7 @@ export const CostumerProvider = ({ children }) => {
     }
 
     const logout = () => {
-        if(user){
+        if (user) {
             setUser(null);
             localStorage.removeItem('user');
             localStorage.removeItem('@google:user ');
@@ -166,7 +204,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated: !!user, user, addUser, updateUser, removeUser, login, loginGoogle, logout, loading }}>
+        <CostumerContext.Provider value={{ authenticated: !!user, user, addUser, updateUser, removeUser, login, loginGoogle, logout, loading, submiting }}>
             {children}
         </CostumerContext.Provider>
     )

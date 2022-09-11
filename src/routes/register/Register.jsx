@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validadores';
+import { CostumerContext } from '../../services/UserContext';
 
 import './Register.css';
 import Explore from '../../assets/image-girl-holding-phone.png';
@@ -8,8 +9,8 @@ import Explore from '../../assets/image-girl-holding-phone.png';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 
-import {FaEnvelope} from 'react-icons/fa';
-import {RiLockPasswordFill} from 'react-icons/ri';
+import { FaEnvelope } from 'react-icons/fa';
+import { RiLockPasswordFill } from 'react-icons/ri';
 import { BsFillPersonFill } from 'react-icons/bs';
 
 const Register = () => {
@@ -17,23 +18,25 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-
-    //const {cadastrar, singInGoogle, singInFacebook } = useContext(CostumerContext);
+    const { addUser, submiting } = useContext(CostumerContext);
 
     const formValidRegister = () => {
-        return emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)
+        if(emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)){
+            return true;
+        }
+        if(submiting){
+            return false
+        }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, password })
-
-        //fun cadastrar do CostumerContext
-        //cadastrar({nome, email, senha})
+        addUser({ name, email, password });
     }
 
     return (
         <div className='register'>
+
             <div className="brand-img-register">
                 <img src={Explore} alt="" />
             </div>
@@ -43,12 +46,12 @@ const Register = () => {
                     <h1>Crie sua conta</h1>
                     <p className="p-italic">Preencha seus dados</p>
                 </div>
-                <form className="register-form-container">
+                <form className="register-form-container" onSubmit={handleSubmit}>
                     <Input
                         text='Nome'
                         className='input-outline-primary'
                         type='text'
-                        icon={ <BsFillPersonFill/> }
+                        icon={<BsFillPersonFill />}
                         value={name}
                         onchange={(e) => { setName(e.target.value) }}
                         message='Nome tem que ter mais de 3 caracteres'
@@ -59,7 +62,7 @@ const Register = () => {
                         text='E-mail'
                         className='input-outline-primary'
                         type='text'
-                        icon={ <FaEnvelope/> }
+                        icon={<FaEnvelope />}
                         value={email}
                         onchange={(e) => { setEmail(e.target.value) }}
                         message='E-mail inválido'
@@ -93,19 +96,8 @@ const Register = () => {
                         disable={!formValidRegister()}
                     />
 
-                    <Button
-                        type='button'
-                        text='Entrar com Google'
-                        bg_color='google'
-                    />
-
                 </form>
-                <h3 className='label'>
-                    Já possui uma conta?
-                    <Link to={'/'} className=' colorfull-text' >Acesse por aqui</Link>
-                </h3>
             </div>
-
         </div>
     )
 }

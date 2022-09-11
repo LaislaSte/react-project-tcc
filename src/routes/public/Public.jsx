@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {emailValid, passwordValid} from '../../utils/validadores';
+import { emailValid, passwordValid } from '../../utils/validadores';
 
-import './Home.css';
+import './Public.css';
 import Explore from '../../assets/Explore.jpg';
+import { CostumerContext } from '../../services/UserContext';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
@@ -12,14 +13,29 @@ import { FaBrain, FaEnvelope } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { MdPermMedia } from 'react-icons/md'
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
-import {RiLockPasswordFill} from 'react-icons/ri';
+import { RiLockPasswordFill } from 'react-icons/ri';
 
-const Home = () => {
+
+const Public = () => {
+    const { login,authenticated, loginGoogle } = useContext(CostumerContext);
+
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [password, setPassword] = useState('');
 
     const formValidLogin = () => {
-        return emailValid(email) && passwordValid(senha)
+        return emailValid(email) && passwordValid(password)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('dados do form', { email, password });
+
+        login({email, password});
+    }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        loginGoogle();
     }
 
     return (
@@ -31,13 +47,14 @@ const Home = () => {
                     <div className="brand-content-item">
                         <h1>Entrar</h1>
                         <p className="p-italic">Insira seus dados</p>
+                        <p> Autenticado: {String(authenticated)} </p>
                     </div>
-                    <form className="login-form-container">
+                    <form className="login-form-container" onSubmit={handleSubmit}>
                         <Input
                             text='E-mail'
                             className='input-outline-secondary'
                             type='text'
-                            icon={ <FaEnvelope /> } 
+                            icon={<FaEnvelope />}
                             value={email}
                             onchange={(e) => { setEmail(e.target.value) }}
                             message='E-mail inválido'
@@ -48,10 +65,10 @@ const Home = () => {
                             className='input-outline-secondary'
                             type='password'
                             icon={<RiLockPasswordFill />}
-                            value={senha}
-                            onchange={(e) => { setSenha(e.target.value) }}
+                            value={password}
+                            onchange={(e) => { setPassword(e.target.value) }}
                             message='Senha inválida'
-                            showMessage={senha && !passwordValid(senha)}
+                            showMessage={password && !passwordValid(password)}
                         />
 
                         <Button
@@ -65,6 +82,7 @@ const Home = () => {
                             type='button'
                             text='Entrar com Google'
                             bg_color='google'
+                            fun={handleClick}
                         />
 
                     </form>
@@ -144,5 +162,5 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Public;
 

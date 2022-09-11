@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa';
 import { ReviewData } from './ReviewData';
+import Navtest from "./components/navbar/Navtest";
 
 const Review = () => {
     return (
@@ -44,6 +44,7 @@ const Review = () => {
                 })}
 
             </div>
+            <Navtest />
         </div>
     )
 }
