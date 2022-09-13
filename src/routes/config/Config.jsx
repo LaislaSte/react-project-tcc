@@ -9,11 +9,19 @@ import avatarDefault from '../../assets/img-avatar.png'
 
 const Config = () => {
     const [image, setImage] = useState(null);
-    const [rb1, setRb1] = useState(null);
-    const changeRB1 = () => setRb1(!rb1);
+    const [rb1, setRb1] = useState(false);
+    const [rb2, setRb2] = useState(false);
 
-    const [rb2, setRb2] = useState(null);
-    const changeRB2 = () => setRb2(!rb2);
+    const changeRB1 = () => {
+        if (!rb2) { setRb1(true); }  
+        if(rb2){ setRb1(false); }
+    }
+
+    const changeRB2 = () => {
+        if (!rb1) { setRb2(true); } 
+        if(rb1){ setRb2(false); }
+    };
+
 
 
     //const { configPrefer } = useContext(CostumerContext);
