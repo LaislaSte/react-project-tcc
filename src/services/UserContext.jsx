@@ -59,28 +59,28 @@ export const CostumerProvider = ({ children }) => {
     );
 
     //Ao renderizar meu componente, traga junto os meus dados do banco
-    useEffect(() => {
-        getUsers();
-    },
-        []
-    );
+    // useEffect(() => {
+    //     getUsers();
+    // },
+    //     []
+    // );
 
     //função para pegar os usuários do banco da coleção user
-    function getUsers() {
-        getDocs(collectionRef)
-            .then(response => {
-                const usersDB = response.docs.map(doc => (
-                    {
-                        data: doc.data(),
-                        nameDB: doc.data().nome,
-                        emailDB: doc.data().email,
-                        passwordDB: doc.data().password,
-                        id: doc.id
-                    }))
-                setUsers(usersDB);
-            })
-            .catch(error => { console.log(error.message) })
-    }
+    // function getUsers() {
+    //     getDocs(collectionRef)
+    //         .then(response => {
+    //             const usersDB = response.docs.map(doc => (
+    //                 {
+    //                     data: doc.data(),
+    //                     nameDB: doc.data().nome,
+    //                     emailDB: doc.data().email,
+    //                     passwordDB: doc.data().password,
+    //                     id: doc.id
+    //                 }))
+    //             setUsers(usersDB);
+    //         })
+    //         .catch(error => { console.log(error.message) })
+    // }
 
     //função para cadastrar um usuário na coleção user
     const addUser = async ({ name, email, password }) => {

@@ -17,29 +17,29 @@ export const PostProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     //Ao renderizar meu componente, traga junto os meus dados do banco
-    useEffect(() => {
-        getPosts();
-    },
-        []
-    );
+    // useEffect(() => {
+    //     getPosts();
+    // },
+    //     []
+    // );
 
     //função para pegar os posts do banco da coleção posts
-    function getPosts() {
-        getDocs(collectionRef)
-            .then(response => {
-                const postsDB = response.docs.map(doc => (
-                    {
-                        data: doc.data(),
-                        userDB: doc.data().user,
-                        contentDB: doc.data().content,
-                        categoryDB: doc.data().category,
-                        likesDB: doc.data().likes,
-                        id: doc.id
-                    }))
-                setPosts(postsDB);
-            })
-            .catch(error => { console.log(error.message) })
-    }
+    // function getPosts() {
+    //     getDocs(collectionRef)
+    //         .then(response => {
+    //             const postsDB = response.docs.map(doc => (
+    //                 {
+    //                     data: doc.data(),
+    //                     userDB: doc.data().user,
+    //                     contentDB: doc.data().content,
+    //                     categoryDB: doc.data().category,
+    //                     likesDB: doc.data().likes,
+    //                     id: doc.id
+    //                 }))
+    //             setPosts(postsDB);
+    //         })
+    //         .catch(error => { console.log(error.message) })
+    // }
 
     //função para cadastrar um post na coleção posts
     const addPost = async () => {
