@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // import { Posts } from './ExploreData';
 // import { Post } from '../../components/post/Post';
-import Navtest from '../../components/navbar/Navtest';
+import Navbar from '../../components/navbar/Navbar';
 import Input from '../../components/input/Input';
 
 import './Explore.css';
@@ -50,7 +50,8 @@ const Explore = () => {
 
     return (
         <>
-        <Navtest />
+        <h1>Tela da Home</h1>
+        <Navbar />
 
         </>
     )
