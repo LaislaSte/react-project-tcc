@@ -9,10 +9,10 @@ import avatarDefault from '../../assets/img-avatar.png'
 
 const Config = () => {
     const [image, setImage] = useState(null);
-    const [rb1, setRb1] = useState(false);
+    const [rb1, setRb1] = useState(null);
     const changeRB1 = () => setRb1(!rb1);
 
-    const [rb2, setRb2] = useState(false);
+    const [rb2, setRb2] = useState(null);
     const changeRB2 = () => setRb2(!rb2);
 
 
