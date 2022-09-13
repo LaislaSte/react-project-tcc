@@ -32,6 +32,10 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         addUser({ name, email, password });
+        setName('');
+        setEmail('');
+        setPassword('');
+        setPasswordConfirm('');
     }
 
     return (
@@ -93,7 +97,7 @@ const Register = () => {
                         type='submit'
                         text='Cadastrar'
                         bg_color='primary'
-                        disable={!formValidRegister()}
+                        disable={formValidRegister()}
                     />
 
                 </form>
