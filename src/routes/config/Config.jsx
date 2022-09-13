@@ -7,6 +7,10 @@ import Input from '../../components/input/Input';
 
 import avatarDefault from '../../assets/img-avatar.png'
 
+// imports storage
+import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
+import { storage } from '../../services/Banco';
+
 const Config = () => {
     const [image, setImage] = useState(null);
     const [rb1, setRb1] = useState(false);
@@ -23,12 +27,35 @@ const Config = () => {
     };
 
 
+    const [imgURL, setImgURL] = useState('');
+    const [progress, setProgress] = useState(0);
 
     //const { configPrefer } = useContext(CostumerContext);
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const file = e.target[0]?.files[0];
+        
+        if(!file) return;
+        
+        const storageRef = ref(storage, `images/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+        
+            'state_changed',
+            snapshot => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progress);
+            },
+        
+            error=>{               
+                console.error(error);                
+            },
+            
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url)})
+            }
+        )
     }
 
     return (
@@ -40,6 +67,7 @@ const Config = () => {
                     className='container-img-profile-preview'
                     imgPreview={image?.preview || avatarDefault}
                     imgPreviewClassName='avatar'
+
                 />
 
                 <div className='radios-button'>
@@ -109,6 +137,7 @@ const Config = () => {
                     type='submit'
                     bg_color='secondary'
                 />
+
 
             </form >
         </div >
