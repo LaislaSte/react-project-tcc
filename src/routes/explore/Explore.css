@@ -1,0 +1,27 @@
+.header-main{
+    background-color: var(--BACKGROUND_DARK);
+    border-bottom: 1px solid var(--TEXT_LIGHT);
+}
+
+.header-content-main{
+    display: flex;
+    gap: 2rem; 
+    width: 80%;
+    background-color: blue;
+}
+
+.logo-header-main{
+    width: 30px;
+    height: 30px;
+}
+
+.search-bar{
+    display: flex;
+    align-items: center;
+}
+.search-bar .search-bar-icon{
+    margin-bottom: 10px;
+}
+.search-bar input{
+    color: var(--TEXT_LIGHT);
+}

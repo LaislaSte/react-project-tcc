@@ -55,28 +55,24 @@ const Profile = () => {
                 </div>
             </header>
 
-            <div className="section-profile profile-posts">
-                <InputImg setImage={setImage} imgPreview={image?.preview} />
-                <Post/>
-                {fakeUser.posts.map(item => {
-                    return (
-                        <Post img_profile={fakeUser.avatar} user_name={fakeUser.name} content={item.userPostContent} />
-
-                    )
-                })}
-                <ul>
-                    <li> <h1>Postagens Realizadas</h1> </li>
-                    {fakeUser.posts.map(item => {
-                        return (
-                            <li key={item.idPost}>
-                                <Post img_profile={fakeUser.avatar} user_name={fakeUser.name} content={item.userPostContent.toString} />
+            <ul>
+                <li>Posts</li>
+                {
+                    fakeUser.map(item => {
+                        return(
+                            <li>
+                                {fakeUser.name}
+                                {item.posts.map(post => {
+                                    return (
+                                        <p key={post.idPost}> {post.userPostContent} </p>
+                                    )
+                                })}
                             </li>
-
                         )
-                    })}
+                    })
+                }
+            </ul>
 
-                </ul>
-            </div>
         </div>
     )
 }
