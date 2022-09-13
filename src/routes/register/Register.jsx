@@ -21,16 +21,14 @@ const Register = () => {
     const { addUser, submiting } = useContext(CostumerContext);
 
     const formValidRegister = () => {
-        if(emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)){
+        if (emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)) {
             return true;
-        }
-        if(submiting){
-            return false
         }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(`usuario cadastrado`);
         addUser({ name, email, password });
         setName('');
         setEmail('');

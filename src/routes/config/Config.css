@@ -32,13 +32,14 @@
 }
 
 .form-rb .rb{
-    border: 1px solid var(--PRIMARY_700);
-    background-color: aqua;
+    border: 1px solid var(--SECONDARY_800);
+    background-color: var(--SECONDARY_700);
     height: .8rem;
     width: .8rem;
     border-radius: 50%;
     cursor: pointer;
 }
+
 .form-rb .rb-false{
     border: 1px solid var(--SECONDARY_700);
     height: .8rem;
@@ -50,7 +51,7 @@
 .config-form-container textarea {
     background: none;
     width: 80%;
-    border: 2px solid var(--SECONDARY_700);
+    border: 2px solid var(--SECONDARY_800);
     border-radius: 1rem;
     padding: 1rem;
     font: var(--REGULAR);
