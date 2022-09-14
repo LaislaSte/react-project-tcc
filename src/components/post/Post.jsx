@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './Post.css';
 import { FaHeart } from 'react-icons/fa';
 import { AiOutlineClose } from 'react-icons/ai';
+import {BiDotsVertical} from 'react-icons/bi'
 // import Explore from '../../assets/Explore.jpg';
 // import Image from "react-bootstrap/esm/Image";
 import Button from "../button/Button";
@@ -33,10 +34,11 @@ export const Post = ({
 
 
     return (
-        <li className="post">
+        <div className="post">
             <div className="header-post">
                 <div className="img-profile"> {img_profile} </div>
                 <h3 className="p-italic"> {user_name} </h3>
+                <div className="options-dots"> <BiDotsVertical/>  </div>
             </div>
             <div className="main-content">
                     {content}
@@ -50,7 +52,7 @@ export const Post = ({
             </div>
 
             <div >
-                <section className={popUp ? 'nav-menu nav-menu-active' : 'nav-menu'}>
+                <section className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>
                     <div className="popup-container">
                         <Link to='#' className='icon-container close-popup'>
                             <AiOutlineClose onClick={showPopUp} />
@@ -66,6 +68,6 @@ export const Post = ({
                 </section>
             </div>
 
-        </li>
+        </div>
     )
 }

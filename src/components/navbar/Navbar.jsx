@@ -32,7 +32,6 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <BsPersonCircle />
             <h1>MemorizeStudio</h1>
 
             <ul className="nav-menu-items">

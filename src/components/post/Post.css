@@ -2,6 +2,7 @@
     width: 100%;
     padding: 1rem;
     border-bottom: 1px solid var(--SECONDARY_900);
+    margin-bottom: 1rem;
 }
 
 .header-post {
@@ -20,6 +21,10 @@
     align-items: center;
     justify-content: center;
     object-fit: cover;
+}
+
+.options-dots{
+    justify-self: flex-end;
 }
 
 .main-content {
@@ -86,63 +91,10 @@
     }
 }
 
-/*==============================
-        POPUP STYLE
-==============================*/
-
-.nav-menu {
-    background: #22457357;
-    height: 100vh;
-    width: 100%;
-    padding: 0 5rem;
-    position: fixed;
-    top: 0;
-    z-index: 2;
-    backdrop-filter: blur(15px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    
-    /*you can hide it with left: -100%*/
-    left: -100%;
-    transition: var(--transition);
-}
-
-.nav-menu-active {
-    left: 0;
-    transition: var(--transition);
-}
-
-.popup-container{
-    width: fit-content;
-    height: 80%;
-    background-color: var(--BACKGROUND_DARK);
-    border-radius: 15px;
-    padding: .5rem;
-    box-shadow: 1px 1px 10px var(--SECONDARY_700);
-}
-
-.popup-content{
-    position: relative;
-    top: 30%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.close-popup{
-    position: relative;
-    top: 0;
-    right: 0;
-    margin: .5rem .5rem 0 0 ;
-}
 
 .btns-popup{
     display: flex;
     justify-content: center;
     gap: 1rem;
+    padding-bottom: 5rem;
 }
