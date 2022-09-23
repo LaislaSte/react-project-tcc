@@ -1,35 +1,40 @@
-.header-main-filter{
+.header-main-filter {
     width: 100%;
     margin-top: 8vh;
     display: flex;
     justify-content: space-around;
     border-bottom: 1px solid var(--TEXT_LIGHT);
-    padding: 1rem 2rem;
+    padding: 0 2rem;
     position: fixed;
 }
 
-.filter-input-text, .filter-input-select{
+.filter-input-text,
+.filter-input-select {
     width: 50%;
+    height: 3rem;
+    margin-bottom: .8rem;
 }
 
-.filter-input-select select{
+.filter-input-select select {
     background: none;
     border: 2px solid var(--SECONDARY_800);
     padding: .7rem;
     border-radius: 1rem;
     width: 80%;
+    height: 90%;
+    text-justify: auto;
     font: var(--LIGHT_ITALIC);
     color: var(--TEXT_LIGHT);
 }
 
-.filter-input-select select option{
+.filter-input-select select option {
     background: none;
     padding: .7rem;
     font: var(--LIGHT_ITALIC);
     color: var(--TEXT_LIGHT);
 }
 
-.posts-container{
+.posts-container {
     margin-top: 22vh;
     padding: .5rem 1rem;
     display: flex;

@@ -63,6 +63,7 @@ const Explore = () => {
                     <Input
                         text='Pesquisar'
                         type='text'
+                        icon={<BsSearch/>}
                         className='input-outline-secondary'
                         value={term}
                         onchange={(e) => {setTerm(e.target.value)}}

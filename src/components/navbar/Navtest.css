@@ -1,14 +1,7 @@
 
-.nav-menu{
-    background: #22457357;
-    backdrop-filter: blur(15px);
-    z-index: 2;
-    position: fixed;
-    bottom: 0;
+.nav-container{
+    background-color: aqua;
     width: 100%;
-    padding: .7rem;
-    display: flex;
-    justify-content: center;
 }
 
 /*my code*/
@@ -33,4 +26,14 @@
     justify-content: space-evenly;
     width: 70%;
     background-color: aqua;
+}
+
+
+
+@media screen and (max-width: 970px) {
+
+    .menu-bars{
+        display: block;
+    }
+
 }
