@@ -52,7 +52,7 @@ const Public = () => {
                     <form className="login-form-container" onSubmit={handleSubmit}>
                         <Input
                             text='E-mail'
-                            className='input-outline-secondary'
+                            className='input-outline-secondary text-dark'
                             type='text'
                             icon={<FaEnvelope />}
                             value={email}
@@ -75,7 +75,7 @@ const Public = () => {
                             type='submit'
                             text='Entrar'
                             bg_color='secondary'
-                            disable={!formValidLogin()}
+                            disable={formValidLogin()}
                         />
 
                         <Button

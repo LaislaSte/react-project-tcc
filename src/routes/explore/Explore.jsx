@@ -56,7 +56,6 @@ const Explore = () => {
 
     return (
         <>
-            <h1>Tela da Home</h1>
             <Navbar />
             <header className="header-main-filter">
                 <div className="filter-input-text">
