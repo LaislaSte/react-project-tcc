@@ -17,7 +17,7 @@
     background: none;
     padding-left: .7rem;
     font: var(--LIGHT_ITALIC);
-    color: var(--TEXT_LIGHT);
+    color: var(--TEXT);
 }
 
 .input-outline-primary{

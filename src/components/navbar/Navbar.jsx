@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Navbar.css';
 import { AiFillHome } from 'react-icons/ai';
-import { FaHeart, FaSearch } from 'react-icons/fa';
-import { MdCreate } from 'react-icons/md';
-import { BsGearFill, BsPersonCircle } from 'react-icons/bs';
-
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
+import { BsPersonCircle } from 'react-icons/bs';
 
 const Navbar = () => {
+
+    const [navbar, setNavbar] = useState(false);
+    const showNavbar = () => setNavbar(!navbar);
 
     const SidebarData = [
         {
@@ -32,9 +34,21 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <h1>MemorizeStudio</h1>
+            <div className="nav-header">
+                <div className="nav-toggle" onClick={showNavbar}>
+                    <GiHamburgerMenu />
+                </div>
+                <h1>MemorizeStudio</h1>
+            </div>
 
-            <ul className="nav-menu-items">
+            <ul className={navbar ? 'nav-menu-items' : 'nav-menu-items nav-menu-items-active'}>
+
+                <div className="nav-header">
+                    <div className="nav-toggle" onClick={showNavbar}>
+                        <GiHamburgerMenu />
+                    </div>
+                    <h1>MemorizeStudio</h1>
+                </div>
 
                 {SidebarData.map((item, index) => {
                     return (

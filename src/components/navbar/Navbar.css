@@ -1,9 +1,27 @@
-
-.navbar-toggle{
+.navbar-toggle {
     display: none;
 }
 
 .navbar {
+    /* background: #22457357;
+    width: 100%;
+    height: 8vh;
+    padding: 1rem 5rem;
+    z-index: 2;
+    position: fixed;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 2rem; */
+    /*apartir dos 770px left fica 20%*/
+    /*apartir dos 1000px left fica 15%*/
+    /* left: 50%;
+    transform: translateX(-50%); */
+    /* top: 0;
+    backdrop-filter: blur(15px); */
+}
+
+/* .navbar {
     background: #22457357;
     width: 100%;
     height: 8vh;
@@ -15,12 +33,13 @@
     align-items: center;
     gap: 2rem;
     /*apartir dos 770px left fica 20%*/
-    /*apartir dos 1000px left fica 15%*/
-    /* left: 50%;
-    transform: translateX(-50%); */
+/*apartir dos 1000px left fica 15%*/
+/* left: 50%;
+    transform: translateX(-50%); 
     top: 0;
     backdrop-filter: blur(15px);
-}
+} */
+
 
 .nav-menu-items {
     display: flex;
@@ -39,26 +58,55 @@
     font-size: 1.1rem;
 }
 
-.nav-text a{
+.nav-text a {
     color: var(--TEXT_LIGHT);
     display: flex;
-    gap: .6rem;;
+    gap: .6rem;
+    ;
     font-size: 1.1rem;
 }
 
-.nav-text a:hover{
+.nav-text a:hover {
     color: var(--SECONDARY_800);
     display: flex;
-    gap: .6rem;;
+    gap: .6rem;
     font-size: 1.1rem;
 }
- 
+
 
 @media screen and (max-width: 830px) {
-    .navbar{
-        left: -100%;
+
+    .nav-header{
+        display: flex;
+        align-items: center;
+        margin-left: 5%;
+        gap: 20%;
+        height: 8vh;
+        position: fixed;
+        top: 0;
+        left: 0;
     }
-    .navbar-toggle{
-        display: block;
+    
+    .nav-header .nav-toggle{
+        display: flex;
+        align-items: center;
+        font: var(--MEDIUM);
+    }
+
+    .nav-menu-items{
+        flex-direction: column;
+        z-index: 2;
+        position: fixed;
+        height: 100vh;
+        background: #22457375;
+        width: 100%;
+        top: 0;
+        backdrop-filter: blur(15px);
+        transform: translateX(0);
+        transition: var(--transition);
+    }
+
+    .nav-menu-items-active{
+        transform: translateX(-100%);
     }
 }
