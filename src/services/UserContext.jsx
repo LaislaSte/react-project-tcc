@@ -21,6 +21,7 @@ export const CostumerProvider = ({ children }) => {
 
     //criado estados
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
 
     const [users, setUsers] = useState(null);
@@ -45,6 +46,7 @@ export const CostumerProvider = ({ children }) => {
             //(com a fun if dessa maneira consigo validar o que esta no seu parametro), se é valido seto o usuario novamente
             if (recoveredGoggleUser && recoveredToken) {
                 setUser(JSON.parse(recoveredGoggleUser));
+                setToken(JSON.parse(recoveredToken));
                 //navegue para a home
                 navigate('/');
             }
@@ -204,7 +206,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated: !!user, user, addUser, updateUser, removeUser, login, loginGoogle, logout, loading, submiting }}>
+        <CostumerContext.Provider value={{ authenticated: !!user, user, token, addUser, updateUser, removeUser, login, loginGoogle, logout, loading, submiting }}>
             {children}
         </CostumerContext.Provider>
     )
