@@ -110,3 +110,40 @@
         transform: translateX(-100%);
     }
 }
+
+@media (min-width: 830px) and (max-width: 985px) {
+
+    .nav-header{
+        display: flex;
+        align-items: center;
+        margin-left: 5%;
+        gap: 20%;
+        height: 8vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    
+    .nav-header .nav-toggle{
+        display: flex;
+        align-items: center;
+        font: var(--MEDIUM);
+    }
+
+    .nav-menu-items{
+        flex-direction: column;
+        z-index: 2;
+        position: fixed;
+        height: 100vh;
+        background: #22457375;
+        width: 50%;
+        top: 0;
+        backdrop-filter: blur(15px);
+        transform: translateX(0);
+        transition: var(--transition);
+    }
+
+    .nav-menu-items-active{
+        transform: translateX(-100%);
+    }
+}
