@@ -1,11 +1,11 @@
 .header-main-filter {
     width: 100%;
-    margin-top: 8vh;
+    margin-top: 10vh;
     display: flex;
     justify-content: space-around;
     border-bottom: 1px solid var(--TEXT_LIGHT);
     padding: 0 2rem;
-    position: fixed;
+    /* position: fixed; */
 }
 
 .filter-input-text,
@@ -20,8 +20,7 @@
     border: 2px solid var(--SECONDARY_800);
     padding: .7rem;
     border-radius: 1rem;
-    width: 80%;
-    height: 90%;
+    width: 100%;
     text-justify: auto;
     font: var(--LIGHT_ITALIC);
     color: var(--TEXT_LIGHT);
@@ -40,4 +39,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.header-main-filter .btn-create{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0 1rem 1rem 0;
+}
+.header-main-filter button:hover{
+    color: var(--TEXT_LIGHT);
+    background-color: var(--SECONDARY_900);
+}
+
+.create-post-container .popup-container{
+    width: 90vw;
+}
+.create-post-container .popup-container .ta-popup-container{
+    width: 100%;
+    background: none;
+    border: 1px solid var(--SECONDARY_800);
+    color: var(--TEXT_LIGHT);
+    font: var(--REGULAR);
+    padding: .5rem;
+    border-radius: 5px;
+}
+.create-post-container .popup-container input{
+    color: var(--TEXT_LIGHT);
+}
+
+.popup-content {
+    top: 5%;
 }

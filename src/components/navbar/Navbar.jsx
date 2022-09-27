@@ -14,7 +14,7 @@ const Navbar = () => {
     const SidebarData = [
         {
             title: 'Home',
-            path: '/',
+            path: '/review',
             icon: <AiFillHome />,
             cName: 'nav-text'
         },
