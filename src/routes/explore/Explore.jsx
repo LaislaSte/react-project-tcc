@@ -1,30 +1,27 @@
 import React, { useState, useContext } from 'react';
-// import { Posts } from './ExploreData';
-import { Post } from '../../components/post/Post';
-import Navbar from '../../components/navbar/Navbar';
-import Input from '../../components/input/Input';
-<<<<<<< HEAD
-import Button from '../../components/button/Button';
-=======
-import InputImg from '../../components/inputImg/InputImg';
-import Button from '../../components/button/Button';
-
->>>>>>> refs/remotes/origin/main
-import './Explore.css';
-import { PostsContext } from '../../services/PostContext';
 // imports storage
 import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 import { storage } from '../../services/Banco';
 import imageDefault from '../../assets/img-camera.png'
 
+import { Post } from '../../components/post/Post';
+import Navbar from '../../components/navbar/Navbar';
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import InputImg from '../../components/inputImg/InputImg';
+
+import './Explore.css';
+import { PostsContext } from '../../services/PostContext';
+
+
 import { BsSearch } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
+import { getQueriesForElement } from '@testing-library/dom';
 
 const Explore = () => {
 
     // const [resulSearch, setResultSearch] = useState([]);
     const [term, setTerm] = useState('');
-    const [content, setContent] = useState('');
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
@@ -88,6 +85,7 @@ const Explore = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(categoryP)
 
         const file = e.target[0]?.files[0];
 
@@ -96,7 +94,7 @@ const Explore = () => {
         const postRef = ref(storage, `postsContent/${file.name}`);
 
         // const pickRef = ref(storage, `profilePick/${file.name}`);
-        
+
         const uploadTask = uploadBytesResumable(postRef, file);
         uploadTask.on(
 
@@ -143,47 +141,7 @@ const Explore = () => {
                         })}
                     </select>
                 </div>
-                <Button
-                    text='Criar'
-                    bg_color='secondary btn-create'
-                    fun={showPopUp}
-                />
 
-                <div className="create-post-container">
-                    <section className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>
-                        <div className="popup-container">
-                            <div className='icon-container close-popup'>
-                                <AiOutlineClose onClick={showPopUp} />
-                            </div>
-                            <div className="popup-content">
-                                <form action="" className="form-create-post">
-                                    <Input
-                                        text='Insira um título'
-                                        type='text'
-                                        className='input-outline-secondary'
-                                        value={content}
-                                        onchange={(e) => { setContent(e.target.value) }}
-                                    />
-                                    <textarea cols="30" rows="10" className='ta-popup-container' placeholder='Faça alguma descrição...'></textarea>
-                                    <div className="filter-input-select">
-                                        <select>
-                                            <option value="Selecione uma Categoria">Selecione uma categoria</option>
-                                            {category.map((item, index) => {
-                                                return (
-                                                    <option value={item} key={index}> {item} </option>
-                                                )
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div className="btns-popup">
-                                        <Button type='button' bg_color='secondary' fun={registerPost} text='Postar' />
-                                        <Button type='button' bg_color='secondary' fun={showPopUp} text='Cancelar' />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </section>
-                </div>
             </header>
 
             <main className="posts-container">
@@ -199,50 +157,74 @@ const Explore = () => {
             </main>
 
             <footer className='create-post-container'>
-                <form onSubmit={handleSubmit}>
-                    <Input
-                        text='E-mail'
-                        className='input-outline-secondary text-dark'
-                        type='text'
-                        value={title}
-                        onchange={(e) => { setTitle(e.target.value) }}
-                    />
 
-                    <textarea
-                        cols="30"
-                        rows="10"
-                        placeholder='escreva algo...'
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    ></textarea>
+                <Button
+                    text='Criar'
+                    bg_color='secondary btn-create'
+                    fun={showPopUp}
+                />
 
-                    <select name="" id="">
-                        <option value="Selecione uma Categoria">Selecione uma categoria</option>
-                        {category.map((item, index) => {
-                            return (
-                                <option value={item} key={index}> {item} </option>
-                            )
-                        })}
-                    </select>
+                <div className="create-post-container">
+                    <section className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>
+                        <div className="popup-container">
+                            <div className='icon-container close-popup'>
+                                <AiOutlineClose onClick={showPopUp} />
+                            </div>
+                            <div className="popup-content">
+                                <form onSubmit={handleSubmit} className="form-create-post">
 
-                    <InputImg
-                        setImage={setImage}
-                        className='container-img-profile-preview'
-                        imgPreview={image?.preview || imageDefault}
-                        imgPreviewClassName='avatar'
+                                    <Input
+                                        text='Título'
+                                        className='input-outline-secondary text-dark'
+                                        type='text'
+                                        value={title}
+                                        onchange={(e) => { setTitle(e.target.value) }}
+                                    />
 
-                    />
+                                    <textarea
+                                        cols="30"
+                                        rows="10"
+                                        placeholder='escreva algo...'
+                                        className='ta-popup-container'
+                                        value={content}
+                                        onChange={(e) => setContent(e.target.value)}
+                                    ></textarea>
 
-                    <Button
-                        text='cancelar'
-                        type='button'
-                    />
-                    <Button
-                        text='enviar'
-                        type='submit'
-                    />
+                                    <select value={categoryP} onChange={e => setCategory(e.target.value)}>
+                                        <option value="Selecione uma Categoria">Selecione uma categoria</option>
+                                        {category.map((item, index) => {
+                                            return (
+                                                <option value={item} key={index}> {item} </option>
+                                            )
+                                        })}
+                                    </select>
 
-                </form>
+                                    <InputImg
+                                        setImage={setImage}
+                                        className='container-img-profile-preview'
+                                        imgPreview={image?.preview || imageDefault}
+                                        imgPreviewClassName='avatar'
+
+                                    />
+
+                                    <div className="btns-popup">
+                                        <Button
+                                            text='Cancelar'
+                                            type='button'
+                                            bg_color='secondary'
+                                            fun={showPopUp}
+                                        />
+                                        <Button
+                                            text='Postar'
+                                            type='submit'
+                                            bg_color='secondary'
+                                        />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </footer>
 
         </>
