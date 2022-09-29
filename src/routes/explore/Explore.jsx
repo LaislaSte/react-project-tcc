@@ -36,6 +36,7 @@ const Explore = () => {
     const [categoryP, setCategory] = useState('');
 
     const addPost = useContext(PostsContext);
+    // const {addPost, posts} = useContext(PostsContext);
 
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
@@ -86,34 +87,35 @@ const Explore = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(categoryP)
-
-        const file = e.target[0]?.files[0];
-
-        if (!file) return;
-
-        const postRef = ref(storage, `postsContent/${file.name}`);
-
-        // const pickRef = ref(storage, `profilePick/${file.name}`);
-
-        const uploadTask = uploadBytesResumable(postRef, file);
-        uploadTask.on(
-
-            'state_changed',
-            snapshot => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setProgress(progress);
-            },
-
-            error => {
-                console.error(error);
-            },
-
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-            }
-        )
-
         addPost({ title, content, categoryP });
+
+        // const file = e.target[0]?.files[0];
+
+        // if (!file) return;
+
+        // const postRef = ref(storage, `postsContent/${file.name}`);
+
+        // // const pickRef = ref(storage, `profilePick/${file.name}`);
+
+        // const uploadTask = uploadBytesResumable(postRef, file);
+        // uploadTask.on(
+
+        //     'state_changed',
+        //     snapshot => {
+        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //         setProgress(progress);
+        //     },
+
+        //     error => {
+        //         console.error(error);
+        //     },
+
+        //     () => {
+        //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+        //     }
+        // )
+
+
     }
 
     return (

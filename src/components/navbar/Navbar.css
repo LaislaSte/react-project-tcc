@@ -79,12 +79,14 @@
     .nav-header{
         display: flex;
         align-items: center;
-        margin-left: 5%;
+        padding-left: 5%;
         gap: 20%;
         height: 8vh;
+        width: 100%;
         position: fixed;
         top: 0;
         left: 0;
+        background-color: var(--BACKGROUND_DARK);
     }
     
     .nav-header .nav-toggle{
@@ -114,7 +116,7 @@
 @media (min-width: 830px) and (max-width: 985px) {
 
     .nav-header{
-        display: flex;
+        display: none;
         align-items: center;
         margin-left: 5%;
         gap: 20%;
