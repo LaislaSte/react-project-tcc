@@ -140,7 +140,7 @@ a:hover {
   background: #22457357;
   height: 100vh;
   width: 100%;
-  padding: 0 5rem;
+  padding: 1rem;
   position: fixed;
   top: 0;
   z-index: 2;
@@ -165,8 +165,19 @@ a:hover {
   height: max-content;
   background-color: var(--BACKGROUND_DARK);
   border-radius: 15px;
-  padding: .5rem;
+  padding: 1rem;
   box-shadow: 1px 1px 10px var(--SECONDARY_700);
+}
+
+.popup-content{
+  position: relative;
+  top: 30%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .popup-content{
@@ -185,6 +196,7 @@ a:hover {
   top: 0;
   right: 0;
   margin: .5rem .5rem 0 0 ;
+  color: var(--TEXT_LIGHT);
 }
 
 
