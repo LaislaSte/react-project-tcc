@@ -1,5 +1,5 @@
 // import React, { useState } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Config.css';
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
@@ -13,18 +13,18 @@ import { storage } from '../../services/Banco';
 
 const Config = () => {
     const [image, setImage] = useState(null);
-    const [rb1, setRb1] = useState(false);
-    const [rb2, setRb2] = useState(false);
+    // const [rb1, setRb1] = useState(false);
+    // const [rb2, setRb2] = useState(false);
 
-    const changeRB1 = () => {
-        if (!rb2) { setRb1(true); }  
-        if(rb2){ setRb1(false); }
-    }
+    // const changeRB1 = () => {
+    //     if (!rb2) { setRb1(true); }  
+    //     if(rb2){ setRb1(false); }
+    // }
 
-    const changeRB2 = () => {
-        if (!rb1) { setRb2(true); } 
-        if(rb1){ setRb2(false); }
-    };
+    // const changeRB2 = () => {
+    //     if (!rb1) { setRb2(true); } 
+    //     if(rb1){ setRb2(false); }
+    // };
 
 
     const [imgURL, setImgURL] = useState('');
@@ -69,7 +69,7 @@ const Config = () => {
                     imgPreviewClassName='avatar'
 
                 />
-
+{/* 
                 <div className='radios-button'>
                     <div className="form-rb">
                         <label htmlFor="prof">Professor(a)</label>
@@ -79,7 +79,7 @@ const Config = () => {
                         <label htmlFor="prof">Aluno(a)</label>
                         <div className={rb2 ? 'rb' : 'rb-false'} onClick={changeRB2}> </div>
                     </div>
-                </div>
+                </div> */}
 
                 <Input
                     type='text'

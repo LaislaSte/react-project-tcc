@@ -21,7 +21,7 @@
     width: 100%;
 }
 
-.radios-button{
+/* .radios-button{
     display: flex;
     gap: 1rem;
 }
@@ -46,12 +46,12 @@
     width: .8rem;
     border-radius: 50%;
     cursor: pointer;
-}
+} */
 
 .config-form-container textarea {
     background: none;
     width: 80%;
-    border: 2px solid var(--SECONDARY_800);
+    border: 1.5px solid var(--SECONDARY_800);
     border-radius: 1rem;
     padding: 1rem;
     font: var(--REGULAR);
@@ -84,6 +84,7 @@
 
 .form-checked-box input {
     width: 1.5rem;
+    cursor: pointer;
 }
 
 .form-checked-box label {
@@ -92,6 +93,9 @@
 
 .config-form-container button{
     width: 20%;
+}
+.config-form-container button:hover{
+    color: var(--TEXT_LIGHT);
 }
 
 /* MEDIA QUERYS */

@@ -47,7 +47,6 @@ const Profile = () => {
                     <div className="img-background">
                         {fakeUser.avatar}
                     </div>
-                    <p>Professor</p>
                     <h2>Salve Jorge</h2>
                 </div>
                 <div className="bios">
@@ -55,23 +54,15 @@ const Profile = () => {
                 </div>
             </header>
 
-            <ul>
-                <li>Posts</li>
-                {
-                    fakeUser.map(item => {
-                        return(
-                            <li>
-                                {fakeUser.name}
-                                {item.posts.map(post => {
-                                    return (
-                                        <p key={post.idPost}> {post.userPostContent} </p>
-                                    )
-                                })}
-                            </li>
-                        )
-                    })
-                }
-            </ul>
+            <main className="section-posts">
+                <ul>
+                    <li> <h1>Postagens Realizadas</h1> </li>
+                    <li>
+                        <Post />
+                    </li>
+
+                </ul>
+            </main>
 
         </div>
     )
