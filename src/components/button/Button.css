@@ -18,16 +18,16 @@
 
 .primary {
     background-color: var(--PRIMARY_700);
-    border: solid 2px var(--PRIMARY_800);
+    border: solid 1.5px var(--PRIMARY_800);
 }
 
 .secondary {
     background-color: var(--SECONDARY_800);
-    border: solid 2px var(--SECONDARY_900);
+    border: solid 1.5px var(--SECONDARY_900);
 }
 
 .google{
     background-color: var(--TEXT_LIGHT);
-    border: solid 2px var(--SECONDARY_800);
+    border: solid 1.5px var(--SECONDARY_800);
     color: var(--TEXT);
 }

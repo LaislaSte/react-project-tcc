@@ -21,12 +21,12 @@
 }
 
 .input-outline-primary{
-    border: 2px solid var(--PRIMARY_700);
+    border: 1.5px solid var(--PRIMARY_700);
     
 }
 
 .input-outline-secondary{
-    border: 2px solid var(--SECONDARY_800);
+    border: 1.5px solid var(--SECONDARY_800);
     
 }
 
