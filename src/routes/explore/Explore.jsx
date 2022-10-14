@@ -9,19 +9,18 @@ import Navbar from '../../components/navbar/Navbar';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import InputImg from '../../components/inputImg/InputImg';
+// import SearchBar from '../../components/searchbar/SearchBar';
 
 import './Explore.css';
 import { PostsContext } from '../../services/PostContext';
 
 
-import { BsSearch } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
-import { getQueriesForElement } from '@testing-library/dom';
+import { IoIosAddCircle } from 'react-icons/io';
+import { BsSearch } from 'react-icons/bs';
+
 
 const Explore = () => {
-
-    // const [resulSearch, setResultSearch] = useState([]);
-    const [term, setTerm] = useState('');
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
@@ -34,9 +33,14 @@ const Explore = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [categoryP, setCategory] = useState('');
+    const [color, setColor] = useState(false);
+    const changeColor = () => setColor(!color);
 
     const addPost = useContext(PostsContext);
     // const {addPost, posts} = useContext(PostsContext);
+
+    // const [resulSearch, setResultSearch] = useState([]);
+    const [term, setTerm] = useState('');
 
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
@@ -120,35 +124,23 @@ const Explore = () => {
 
     return (
         <>
-            <Navbar />
-            <header className="header-main-filter">
-                <div className="filter-input-text">
-                    <Input
-                        text='Pesquisar'
-                        type='text'
-                        icon={<BsSearch />}
-                        className='input-outline-secondary'
-                        value={term}
-                        onchange={(e) => { setTerm(e.target.value) }}
-                    />
+            <header className="header-content">
+                <Navbar
+                />
 
-                </div>
-                <div className="filter-input-select">
-                    <select>
-                        <option value="Selecione uma Categoria">Selecione uma categoria</option>
-                        {category.map((item, index) => {
-                            return (
-                                <option value={item} key={index}> {item} </option>
-                            )
-                        })}
-                    </select>
-                </div>
+                <ul className='menu-item-category'>
+                    {category.map((item, index) => {
+                        return (
+                            <li className='item-category' value={item} key={index} onClick={changeColor}> {item} </li>
+                        )
+                    })}
+                </ul>
 
             </header>
 
             <main className="posts-container">
                 <Post
-                    content='dfdfdssssssssfs'
+                    content='dfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkdfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkssfs'
                 />
                 <Post
                     content='dfdfdssssssssfs'
@@ -158,10 +150,12 @@ const Explore = () => {
                 />
             </main>
 
+            {/*
             <footer className='create-post-container'>
 
+                <IoIosAddCircle onClick={showPopUp} />
                 <Button
-                    text='Criar'
+                    text={<IoIosAddCircle />}
                     bg_color='secondary btn-create'
                     fun={showPopUp}
                 />
@@ -185,7 +179,7 @@ const Explore = () => {
 
                                     <textarea
                                         cols="30"
-                                        rows="10"
+                                        rows="5"
                                         placeholder='escreva algo...'
                                         className='ta-popup-container'
                                         value={content}
@@ -227,7 +221,7 @@ const Explore = () => {
                         </div>
                     </section>
                 </div>
-            </footer>
+            </footer> */}
 
         </>
     )
