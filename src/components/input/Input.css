@@ -14,7 +14,9 @@
 }
 
 .input-outline input{
+    width: 100%;
     background: none;
+    padding-right: .8rem;
     padding-left: .7rem;
     font: var(--LIGHT_ITALIC);
     color: var(--TEXT);

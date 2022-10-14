@@ -87,10 +87,16 @@
     }
 }
 
-
 .btns-popup{
     display: flex;
     justify-content: center;
     gap: 1rem;
     padding-bottom: 5rem;
+    width: 100%;
+}
+.btns-popup button{
+    width: 30%;
+}
+.btns-popup button:hover{
+    color: var(--TEXT_LIGHT);
 }

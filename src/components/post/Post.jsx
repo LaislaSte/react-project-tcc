@@ -35,23 +35,24 @@ export const Post = ({
 
     return (
         <div className="post">
-            <div className="header-post">
+            <header className="header-post">
                 <div className="img-profile"> {img_profile} </div>
                 <h3 className="p-italic"> {user_name} </h3>
                 <div className="options-dots"> <BiDotsVertical/>  </div>
-            </div>
-            <div className="main-content">
+            </header>
+
+            <main className="main-content">
                     {content}
                     <div className="img-content">
                     </div>
-            </div>
-            <div className="footer-post">
+            </main>
+
+            <footer className="footer-post">
                 <Link to='#' className='icon-container'>
                     <FaHeart className="icon" onClick={showPopUp} />
                 </Link>
-            </div>
+            </footer>
 
-            <div >
                 <section className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>
                     <div className="popup-container">
                         <Link to='#' className='icon-container close-popup'>
@@ -66,8 +67,7 @@ export const Post = ({
                         </div>
                     </div>
                 </section>
-            </div>
-
+            
         </div>
     )
 }

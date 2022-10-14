@@ -1,27 +1,62 @@
 import React, { useState } from 'react';
 import './Navbar.css';
-import { AiFillHome } from 'react-icons/ai';
-import { GiHamburgerMenu } from 'react-icons/gi';
+import Input from '../input/Input'
 import { Link } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
-import { BsPersonCircle } from 'react-icons/bs';
+
+import { BiHomeAlt } from 'react-icons/bi';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { RiSearch2Line } from 'react-icons/ri';
+import { BsPersonCircle, BsSearch } from 'react-icons/bs';
 
 const Navbar = () => {
 
     const [navbar, setNavbar] = useState(false);
     const showNavbar = () => setNavbar(!navbar);
 
+    const [resultSearch, setRedultSearch] = useState([]);
+    const [term, setTerm] = useState([]);
+    const onSearch = (e) => {
+        setTerm(e.target.value);
+        setRedultSearch([]);
+        if (term.length < 3) {
+            return
+        }
+        setRedultSearch([
+            {
+                avatar: '',
+                name: 'Sasha',
+                email: 'sashabazanea@gmail.com'
+            },
+            {
+                avatar: '',
+                name: 'Carol',
+                email: 'carol@gmail.com'
+            },
+            {
+                avatar: '',
+                name: 'Cosima',
+                email: 'Cosima@gmail.com'
+            },
+            {
+                categ: 'mat'
+            },
+            {
+                categ: 'mat'
+            }
+        ])
+    }
+
     const SidebarData = [
         {
-            title: 'Home',
+            title: 'Revisão',
             path: '/review',
-            icon: <AiFillHome />,
+            icon: <BiHomeAlt />,
             cName: 'nav-text'
         },
         {
             title: 'Explorar',
             path: '/explore',
-            icon: <FaSearch />,
+            icon: <RiSearch2Line />,
             cName: 'nav-text'
         },
         {
@@ -50,22 +85,72 @@ const Navbar = () => {
                     <h1>MemorizeStudio</h1>
                 </div>
 
+                <li className='item-logo'> <h1>MemorizeStudio</h1> </li>
+
+                <li className='item-searchbar'>
+                    <Input
+                        text='Pesquisar'
+                        type='text'
+                        icon={<BsSearch />}
+                        className='input-outline-secondary'
+                        value={term}
+                        onchange={(e) => { setTerm(e.target.value) }}
+                    />
+                </li>
+
                 {SidebarData.map((item, index) => {
                     return (
                         <li key={index} className={item.cName}>
-                            <Link to={item.path}>
-                                <div className="link-icon">
-                                    {item.icon}
-                                </div>
-                                <div className="link-title">
-                                    {item.title}
-                                </div>
+                            <Link to={item.path} className='item-link'>
+                                {item.icon}
+                                {item.title}
                             </Link>
                         </li>
                     )
                 })}
 
             </ul>
+
+            {resultSearch.length > 0 && (
+                <div className="result-search-container">
+                    {resultSearch.map(result => {
+                        <>
+                            <div className="result-category-container">
+                                <p> {result.categ} </p>
+                                <p> i </p>
+                            </div>
+
+                            <div className="result-profile-container">
+                                <div className="avatar-container">
+                                    photo
+                                </div>
+                                <div className="content-person">
+                                    <p> {result.name} </p>
+                                </div>
+                            </div>
+                        </>
+                    })}
+                </div>
+            )}
+
+            {/* <div className="result-search-container">
+
+                <div className="result-category-container">
+                    <p> categoria </p>
+                    <p> i </p>
+                </div>
+
+                <div className="result-profile-container">
+                    <div className="avatar-container">
+                        photo
+                    </div>
+                    <div className="content-person">
+                        <p> name </p>
+                    </div>
+                </div>
+
+            </div> */}
+
         </nav>
     )
 }
