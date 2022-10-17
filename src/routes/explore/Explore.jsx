@@ -85,7 +85,8 @@ const Explore = () => {
         'Matemática',
         'História',
         'Português',
-        'Química'
+        'Química',
+        'Biologia'
     ]
 
     const handleSubmit = (e) => {
@@ -117,7 +118,7 @@ const Explore = () => {
         //     () => {
         //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
         //     }
-        // )
+        //
 
 
     }
@@ -140,6 +141,7 @@ const Explore = () => {
 
             <main className="posts-container">
                 <Post
+                    user_name='Laisla'
                     content='dfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkdfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkssfs'
                 />
                 <Post
