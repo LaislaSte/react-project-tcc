@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import Input from '../input/Input'
-import { Link } from 'react-router-dom';
+import { Link, useRoutes } from 'react-router-dom';
 
 import { BiHomeAlt } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -15,11 +15,21 @@ const Navbar = () => {
 
     const [resultSearch, setRedultSearch] = useState([]);
     const [term, setTerm] = useState([]);
+
     const onSearch = (e) => {
         setTerm(e.target.value);
         setRedultSearch([]);
+
         if (term.length < 3) {
             return
+        }
+
+        try {
+            // const {data} await usuarioService.pesquisar(term)
+            // console.log(data)
+            // setRedultSearch(data);
+        } catch (error) {
+            console.log(error)
         }
         setRedultSearch([
             {
@@ -44,6 +54,12 @@ const Navbar = () => {
                 categ: 'mat'
             }
         ])
+    }
+
+    const onClickSearch = (id) => {
+        setRedultSearch([]);
+        setTerm('');
+        location.pathname('/profileout/${id}');
     }
 
     const SidebarData = [
@@ -113,9 +129,10 @@ const Navbar = () => {
 
             {resultSearch.length > 0 && (
                 <div className="result-search-container">
-                    {resultSearch.map(result => {
+                    {resultSearch.map((index, result) => {
                         <>
-                            <div className="result-category-container">
+                            <div className="result-category-container"
+                            onClick={onClickSearch(index)}>
                                 <p> {result.categ} </p>
                                 <p> i </p>
                             </div>
