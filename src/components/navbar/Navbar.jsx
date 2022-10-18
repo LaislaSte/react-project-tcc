@@ -150,42 +150,9 @@ const Navbar = () => {
                             )
                         })}
 
-                        {/* <div className="result-category-container"
-                                onClick={onClickSearch(index)}>
-                                <p> {result.categ} </p>
-                                <p> i </p>
-                            </div>
-
-                            <div className="result-profile-container">
-                                <div className="avatar-container">
-                                    photo
-                                </div>
-                                <div className="content-person">
-                                    <p> {result.name} </p>
-                                </div>
-                            </div> */}
-
                     </ul>
                 </div>
             )}
-
-            {/* <div className="result-search-container">
-
-                <div className="result-category-container">
-                    <p> categoria </p>
-                    <p> i </p>
-                </div>
-
-                <div className="result-profile-container">
-                    <div className="avatar-container">
-                        photo
-                    </div>
-                    <div className="content-person">
-                        <p> name </p>
-                    </div>
-                </div>
-
-            </div> */}
 
         </nav>
     )
