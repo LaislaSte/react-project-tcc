@@ -1,65 +1,52 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import Input from '../input/Input'
-import { Link, useRoutes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { BiHomeAlt } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiSearch2Line } from 'react-icons/ri';
-import { BsPersonCircle, BsSearch } from 'react-icons/bs';
+import { BsPersonCircle, BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
 
 const Navbar = () => {
 
     const [navbar, setNavbar] = useState(false);
     const showNavbar = () => setNavbar(!navbar);
 
-    const [resultSearch, setRedultSearch] = useState([]);
+    // const [resultSearch, setRedultSearch] = useState([]);
+
     const [term, setTerm] = useState([]);
 
-    const onSearch = (e) => {
-        setTerm(e.target.value);
-        setRedultSearch([]);
-
-        if (term.length < 3) {
-            return
+    const resultSearch = [
+        {
+            id: '1',
+            name: 'sasha bazanea',
+            email: 'sashabazanea@gmail.com'
+        },
+        {
+            id: '2',
+            name: 'cosima',
+            email: 'cosima@gmail.com'
+        },
+        {
+            id: '3',
+            name: 'lumity blait',
+            email: 'lumityblait@gmail.com'
+        },
+        {
+            id: '4',
+            categ: 'mat'
+        },
+        {
+            id: '5',
+            categ: 'mat'
         }
+    ]
 
-        try {
-            // const {data} await usuarioService.pesquisar(term)
-            // console.log(data)
-            // setRedultSearch(data);
-        } catch (error) {
-            console.log(error)
-        }
-        setRedultSearch([
-            {
-                avatar: '',
-                name: 'Sasha',
-                email: 'sashabazanea@gmail.com'
-            },
-            {
-                avatar: '',
-                name: 'Carol',
-                email: 'carol@gmail.com'
-            },
-            {
-                avatar: '',
-                name: 'Cosima',
-                email: 'Cosima@gmail.com'
-            },
-            {
-                categ: 'mat'
-            },
-            {
-                categ: 'mat'
-            }
-        ])
-    }
-
-    const onClickSearch = (id) => {
-        setRedultSearch([]);
-        setTerm('');
-        location.pathname('/profileout/${id}');
+    const onSearch = (id) => {
+        // setRedultSearch([]);
+        console.log(id)
+        // setTerm('');
     }
 
     const SidebarData = [
@@ -127,12 +114,35 @@ const Navbar = () => {
 
             </ul>
 
-            {resultSearch.length > 0 && (
+            {term.length > 2 && (
                 <div className="result-search-container">
-                    {resultSearch.map((index, result) => {
-                        <>
-                            <div className="result-category-container"
-                            onClick={onClickSearch(index)}>
+                    <ul className='container-result'>
+                        {resultSearch.map((result, index) => {
+                            return (
+                                <li key={index} className="result-profile-container">
+
+                                    <div className="result-profile-container-p" onClick={onSearch(index)}>
+
+                                        <p className='result-name'> {result.name}</p>
+
+                                        <p className='result-email'> {result.email} </p>
+
+                                        <p className='result-categ'> {result.categ} </p>
+
+                                    </div>
+
+                                    <BsBoxArrowInUpRight />
+
+                                    {index > 10 && (
+                                        <Link to='/searchPageResults'>mostrar mais</Link>
+                                    )}
+
+                                </li>
+                            )
+                        })}
+
+                        {/* <div className="result-category-container"
+                                onClick={onClickSearch(index)}>
                                 <p> {result.categ} </p>
                                 <p> i </p>
                             </div>
@@ -144,9 +154,9 @@ const Navbar = () => {
                                 <div className="content-person">
                                     <p> {result.name} </p>
                                 </div>
-                            </div>
-                        </>
-                    })}
+                            </div> */}
+
+                    </ul>
                 </div>
             )}
 
