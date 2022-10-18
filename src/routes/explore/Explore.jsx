@@ -6,9 +6,9 @@ import imageDefault from '../../assets/img-camera.png'
 
 import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
-import Input from '../../components/input/Input';
-import Button from '../../components/button/Button';
-import InputImg from '../../components/inputImg/InputImg';
+import Categorys from '../../components/categorys/Categorys';
+import CreateButton from '../../components/createbutton/CreateButton';
+
 // import SearchBar from '../../components/searchbar/SearchBar';
 
 import './Explore.css';
@@ -33,8 +33,6 @@ const Explore = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [categoryP, setCategory] = useState('');
-    const [color, setColor] = useState(false);
-    const changeColor = () => setColor(!color);
 
     const addPost = useContext(PostsContext);
     // const {addPost, posts} = useContext(PostsContext);
@@ -81,14 +79,6 @@ const Explore = () => {
     //     console.log('ao clicar no btn resultado da pesquisa', { id });
     // }
 
-    const category = [
-        'Matemática',
-        'História',
-        'Português',
-        'Química',
-        'Biologia'
-    ]
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(categoryP)
@@ -129,18 +119,12 @@ const Explore = () => {
                 <Navbar
                 />
 
-                {/* colocar como componente o item a segui */}
-                <ul className='menu-item-category'>
-                    {category.map((item, index) => {
-                        return (
-                            <li className='item-category' value={item} key={index} onClick={changeColor}> {item} </li>
-                        )
-                    })}
-                </ul>
+                <Categorys/>  
+                <CreateButton/>  
 
             </header>
 
-            <main className="posts-container">
+            {/* <main className="posts-container">
                 <Post
                     user_name='Laisla'
                     content='dfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
@@ -151,7 +135,7 @@ const Explore = () => {
                 <Post
                     content='dfdfdssssssssfs'
                 />
-            </main>
+            </main> */}
 
             {/*
             <footer className='create-post-container'>

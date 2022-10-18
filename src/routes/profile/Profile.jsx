@@ -1,9 +1,7 @@
-import React from 'react';
+import React, {useState } from 'react';
 import './Profile.css';
 import { Post } from '../../components/post/Post';
-import Explore from '../../assets/Explore.jpg';
-import InputImg from '../../components/inputImg/InputImg';
-import { useState } from 'react';
+import  Button  from '../../components/button/Button';
 
 const Profile = () => {
     //pegar o id do usuario logado
@@ -43,14 +41,22 @@ const Profile = () => {
     return (
         <div className='Profile'>
             <header className='section-profile'>
+                
                 <div className="profile-container">
                     <div className="img-background">
                         {fakeUser.avatar}
                     </div>
-                    <h2>Salve Jorge</h2>
                 </div>
+
                 <div className="bios">
+                    <h2>Salve Jorge</h2>
                     Tenho 24 anos, sou formado na Unicid em pedagogia e na USP em ciencias humanas, sou um homem gay, casado e com 5 filhos
+                </div>
+
+                <div className="header-button-profile">
+                    <Button
+                        text='Configurações'
+                    />
                 </div>
             </header>
 
