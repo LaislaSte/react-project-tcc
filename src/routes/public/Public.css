@@ -57,8 +57,7 @@
 
 
 .main-section{
-    background: rgb(1,17,64);
-    background: linear-gradient(180deg, rgba(1, 17, 64, 0.524) 10%, rgba(4,157,191,0.47) 90%);
+    background-color: var(--TEXT);
 }
 
 .section-info{

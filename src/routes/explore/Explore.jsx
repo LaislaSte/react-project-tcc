@@ -129,6 +129,7 @@ const Explore = () => {
                 <Navbar
                 />
 
+                {/* colocar como componente o item a segui */}
                 <ul className='menu-item-category'>
                     {category.map((item, index) => {
                         return (
@@ -142,7 +143,7 @@ const Explore = () => {
             <main className="posts-container">
                 <Post
                     user_name='Laisla'
-                    content='dfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkdfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkssfs'
+                    content='dfdfdsssssskkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
                 />
                 <Post
                     content='dfdfdssssssssfs'

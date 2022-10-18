@@ -76,7 +76,16 @@ const Navbar = () => {
                 <div className="nav-toggle" onClick={showNavbar}>
                     <GiHamburgerMenu />
                 </div>
-                <h1>MemorizeStudio</h1>
+                <h1 className='nav-header-logo' >MemorizeStudio</h1>
+                <Input
+                    className='input-outline-secondary nav-header-input'
+                    text='Pesquisar'
+                    type='text'
+                    icon={<BsSearch />}
+                    value={term}
+                    onchange={(e) => { setTerm(e.target.value) }}
+
+                />
             </div>
 
             <ul className={navbar ? 'nav-menu-items' : 'nav-menu-items nav-menu-items-active'}>

@@ -89,6 +89,19 @@
         font: var(--MEDIUM);
     }
 
+    .nav-header .nav-header-logo{
+        display: none;
+    }
+    .nav-header .nav-header-input{
+        margin-top: 1.5%;
+    }
+    .container-result{
+        width: 100%;
+    }
+    .item-searchbar{
+        display: none;
+    }
+
     .nav-menu-items .item-logo{
         display: none;
     }
