@@ -126,51 +126,24 @@ export const CostumerProvider = ({ children }) => {
     //FUNÇÕES DE LOGIN E LOGOUT
 
     const login = async ({ email, password }) => {
-        // console.log("login auth", { email, password });
+        // Create a reference to the users collection
+        const usersRef = collection(db, "users");
 
-        // const userLogged = {
-        //     password,
-        //     email
-        // }
-
-        // const userSelected = doc(db, 'users', email);
+        // Create a query against the collection.
+        const userQuery = query(usersRef, where("email", "==", email), where("password", "==", password));
         
-        // const docRef = doc(db, "users", 'email');
-        // const userSelected = await getDoc(docRef);
-        const userSelected = query(collectionRef, where("email", "==", email));
-        
-        // if (userSelected.exists()) {
-        //     console.log("Document data:", userSelected.data());
-        // } else {
-        //     // doc.data() will be undefined in this case
-        //     console.log("No such document!");
-        // }
+        const querySnapshot = await getDocs(userQuery);
 
-
-        if (userSelected) {
-            console.log('user existente: ', userSelected.converter.toFirestore);
-            console.log('user existente ID: ', userSelected.id);
-
-        //     const token = userSelected.id;
-
-        // if ( password === userSelected.data().password ) {
-        //     const userLogged = {
-        //         email,
-        //         password,
-        //         token
-        //     }
-        //     setUser(userLogged);
-        //     localStorage.setItem('user', JSON.stringify(userLogged));
-        //     //corrigir rotas privadas e públicas
-        //     // navigate('/');
-        // }
-
+        if(!querySnapshot){
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            });
+            navigate('/config');
+        } else {
+            alert("Email ou senha incorretos!!!")
         }
-
-
-        //se existir o e-mail fornecido no banco e se existir uma senha e essa senha for igual à fornecida, set usuário para um usuário logado
-
-    };
+    }
 
     const loginGoogle = () => {
         signInWithPopup(auth, provider)
