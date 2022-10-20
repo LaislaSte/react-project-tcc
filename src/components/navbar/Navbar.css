@@ -25,12 +25,12 @@
     justify-content: space-between;
     padding: 1rem;
     border-bottom: 1px solid var(--TEXT_LIGHT);
+    cursor: pointer;
 }
 .result-profile-container-p{
     display: flex;
     justify-content: space-between;
     gap: 1.5rem;
-    cursor: pointer;
 }
 .result-name{
     width: 10rem;
@@ -87,6 +87,19 @@
         display: flex;
         align-items: center;
         font: var(--MEDIUM);
+    }
+
+    .nav-header .nav-header-logo{
+        display: none;
+    }
+    .nav-header .nav-header-input{
+        margin-top: 1.5%;
+    }
+    .container-result{
+        width: 100%;
+    }
+    .item-searchbar{
+        display: none;
     }
 
     .nav-menu-items .item-logo{

@@ -1,0 +1,19 @@
+.post-like-container {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    left: 95%;
+    z-index: 1;
+}
+
+.post-like-container-i {
+    width: 100%;
+    height: 100%;
+    color: var(--ALERT);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.post-like-container-i:hover {
+    color: var(--SECONDARY_900);
+}

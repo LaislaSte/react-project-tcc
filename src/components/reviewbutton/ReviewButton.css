@@ -1,0 +1,4 @@
+.review-btn:hover {
+    color: var(--TEXT_LIGHT);
+    background: none;
+}

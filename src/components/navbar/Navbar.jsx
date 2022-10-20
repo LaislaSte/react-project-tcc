@@ -43,6 +43,41 @@ const Navbar = () => {
         }
     ]
 
+    // const onSearch = (e) => {
+    //     setTerm(e.target.value);
+    //     setResultSearch([]);
+
+    //     if (term.length < 3) {
+    //         return
+    //     }
+
+    //     setResultSearch([
+    //         {
+    //             avatar: '',
+    //             name: 'fasd',
+    //             email: 'klfasj',
+    //             id: 'kjcs'
+    //         },
+    //         {
+    //             avatar: '',
+    //             name: 'fasdsd',
+    //             email: 'klfssssasj',
+    //             id: 'kasjcs'
+    //         },
+    //         {
+    //             avatar: '',
+    //             name: 'fasffdd',
+    //             email: 'klfasfdsj',
+    //             id: 'kjcasas'
+    //         }
+    //     ]);
+
+    // }
+
+    // const onClickResultSearch = (id) => {
+    //     console.log('ao clicar no btn resultado da pesquisa', { id });
+    // }
+
     const onSearch = (id) => {
         // setRedultSearch([]);
         console.log(id)
@@ -76,7 +111,16 @@ const Navbar = () => {
                 <div className="nav-toggle" onClick={showNavbar}>
                     <GiHamburgerMenu />
                 </div>
-                <h1>MemorizeStudio</h1>
+                <h1 className='nav-header-logo' >MemorizeStudio</h1>
+                <Input
+                    className='input-outline-secondary nav-header-input'
+                    text='Pesquisar'
+                    type='text'
+                    icon={<BsSearch />}
+                    value={term}
+                    onchange={(e) => { setTerm(e.target.value) }}
+
+                />
             </div>
 
             <ul className={navbar ? 'nav-menu-items' : 'nav-menu-items nav-menu-items-active'}>
@@ -141,42 +185,9 @@ const Navbar = () => {
                             )
                         })}
 
-                        {/* <div className="result-category-container"
-                                onClick={onClickSearch(index)}>
-                                <p> {result.categ} </p>
-                                <p> i </p>
-                            </div>
-
-                            <div className="result-profile-container">
-                                <div className="avatar-container">
-                                    photo
-                                </div>
-                                <div className="content-person">
-                                    <p> {result.name} </p>
-                                </div>
-                            </div> */}
-
                     </ul>
                 </div>
             )}
-
-            {/* <div className="result-search-container">
-
-                <div className="result-category-container">
-                    <p> categoria </p>
-                    <p> i </p>
-                </div>
-
-                <div className="result-profile-container">
-                    <div className="avatar-container">
-                        photo
-                    </div>
-                    <div className="content-person">
-                        <p> name </p>
-                    </div>
-                </div>
-
-            </div> */}
 
         </nav>
     )

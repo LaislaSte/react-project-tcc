@@ -1,0 +1,26 @@
+.menu-item-category {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    background-color: var(--SECONDARY_900);
+    font: var(--LIGHT_ITALIC);
+    gap: 1px;
+}
+
+.menu-item-category .item-category {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--SECONDARY_800);
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.menu-item-category .item-category:hover {
+    background: none;
+}
+.menu-item-category .item-category-selected {
+    background: none;
+}

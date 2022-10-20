@@ -1,103 +1,63 @@
-.post {
-    width: 100%;
+.post-container {
+    margin-bottom: 1rem;
     padding: 1rem;
     border-bottom: 1px solid var(--SECONDARY_900);
-    margin-bottom: 1rem;
 }
 
 .header-post {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.img-profile {
-    background-color: var(--ALERT);
-    height: 3rem;
-    width: 3rem;
-    border-radius: 50%;
+.header-content-user {
     display: flex;
     align-items: center;
-    justify-content: center;
-    object-fit: cover;
+    gap: 2rem;
+    margin-left: 1rem;
 }
 
-.main-content {
-    background-color: aqua;
-    width: 100%;
-    height: 30vh;
+.header-content-user P {
     font: var(--REGULAR);
-    line-height: .6rem;
-    display: flex;
-    flex-wrap: wrap;
-    /* flex-direction: column; */
+    cursor: pointer;
 }
-.main-content .content-container{
-    background-color: whitesmoke;
-    position: absolute;
-    width: 300px;
+
+.header-user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.header-user-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.header-show-more {
+    cursor: pointer;
+}
+
+/* --------end of header---------- */
+
+.post-container .content-post {
+    background-color: var(--SECONDARY_800);
+    margin-bottom: .5rem;
+    text-align: justify;
+    padding: 1rem;
+}
+
+.img-content-container {
+    width: 100%;
+    text-align: center;
+    margin-top: .5rem;
 }
 
 .img-content {
-    background-color: var(--WARNING);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 70%;
+    object-fit: cover;
 }
 
-.footer-post {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    gap: 1rem;
-}
-
-.footer-post .icon {
-    cursor: pointer;
-    font-size: 2.3rem;
-    color: var(--ALERT);
-    transition: var(--transition);
-}
-
-.footer-post .icon:hover {
-    color: var(--SECONDARY_900);
-}
-
-
-@media (min-width: 870px) {
-    .post {
-        width: 80%;
-        padding: 1.5rem;
-        background-color: var(--BACKGROUND_DARK);
-        border-radius: 2rem;
-        justify-self: center;
-    }
-
-    .main-content p {
-        font-size: 1.5rem;
-    }
-
-    .img-content {
-        width: 80%;
-    }
-
-    .footer-post .icon {
-        font-size: 3rem;
-    }
-}
-
-.btns-popup{
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding-bottom: 5rem;
-    width: 100%;
-}
-.btns-popup button{
-    width: 30%;
-}
-.btns-popup button:hover{
-    color: var(--TEXT_LIGHT);
-}
+/* --------end of content---------- */
