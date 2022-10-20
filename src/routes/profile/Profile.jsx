@@ -16,7 +16,7 @@ const Profile = () => {
     //mapear id e conteudo das postagens atreladas ao usuario logado na lista não ordenada retornando uma li com o componente post e suas props conteudo referente ao post, foto de perfil e nome do usuario logado
 
     // const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
-    console.log(image);
+    // console.log(image);
 
     const fakeUser = {
         id: 1,
