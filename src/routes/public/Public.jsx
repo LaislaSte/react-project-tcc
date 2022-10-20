@@ -28,7 +28,7 @@ const Public = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, password });
+        // console.log('dados do form', { email, password });
 
         login({email, password});
     }
@@ -107,8 +107,7 @@ const Public = () => {
                         <div className="my-card">
                             <h2>Repetição Espaçada</h2>
                             <p className="p-italic">
-                                Consiste em repetir assuntos já aprendidos, ou seja, fazer revisões de tempos em
-                                tempos até tê-lo de maneira consolidada no seu cérebro.
+                                Consiste em repetir assuntos já aprendidos, ou seja, fazer revisões com uma determinada frequência até consolida-lo no seu cérebro.
                             </p>
                             <h1><FaBrain className="my-icon" /></h1>
                         </div>
