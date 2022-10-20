@@ -10,6 +10,7 @@ import Register from './routes/register/Register';
 import Explore from './routes/explore/Explore';
 import Create from './routes/create/Create';
 import Profile from './routes/profile/Profile';
+import Review from './routes/review/Review';
 import Config from './routes/config/Config';
 // import Notification from './routes/notification/Notification';
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="/explore" element={ <Private> <Explore /> </Private>} />
           {/* <Route path="/notification" element={<Notification />} /> */}
           <Route path="/profile" element={ <Private> <Profile /> </Private> } />
+          <Route path="/review" element={ <Private> <Review /> </Private> } />
         </Routes>
       </CostumerProvider>
     </>
