@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Navbar.css';
+import { SidebarData, SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
 import Input from '../input/Input'
 import { Link } from 'react-router-dom';
 
@@ -17,31 +18,8 @@ const Navbar = () => {
 
     const [term, setTerm] = useState([]);
 
-    const resultSearch = [
-        {
-            id: '1',
-            name: 'sasha bazanea',
-            email: 'sashabazanea@gmail.com'
-        },
-        {
-            id: '2',
-            name: 'cosima',
-            email: 'cosima@gmail.com'
-        },
-        {
-            id: '3',
-            name: 'lumity blait',
-            email: 'lumityblait@gmail.com'
-        },
-        {
-            id: '4',
-            categ: 'mat'
-        },
-        {
-            id: '5',
-            categ: 'mat'
-        }
-    ]
+    //caso o usuario esteja autenticado as informações exibidas no navbar mudam
+    const autenticated = false
 
     // const onSearch = (e) => {
     //     setTerm(e.target.value);
@@ -84,26 +62,6 @@ const Navbar = () => {
         // setTerm('');
     }
 
-    const SidebarData = [
-        {
-            title: 'Revisão',
-            path: '/review',
-            icon: <BiHomeAlt />,
-            cName: 'nav-text'
-        },
-        {
-            title: 'Explorar',
-            path: '/explore',
-            icon: <RiSearch2Line />,
-            cName: 'nav-text'
-        },
-        {
-            title: 'Meu Perfil',
-            path: '/profile',
-            icon: <BsPersonCircle />,
-            cName: 'nav-text'
-        },
-    ]
 
     return (
         <nav className="navbar">
@@ -145,16 +103,30 @@ const Navbar = () => {
                     />
                 </li>
 
-                {SidebarData.map((item, index) => {
-                    return (
-                        <li key={index} className={item.cName}>
-                            <Link to={item.path} className='item-link'>
-                                {item.icon}
-                                {item.title}
-                            </Link>
-                        </li>
-                    )
-                })}
+                {autenticated && (
+                    SidebarData.map((item, index) => {
+                        return (
+                            <li key={index} className={item.cName}>
+                                <Link to={item.path} className='item-link'>
+                                    {item.icon}
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    })
+                )}
+
+                {autenticated == false && (
+                    SidebarDataPublic.map((item, index) => {
+                        return (
+                            <li key={index} className={item.cName}>
+                                <Link to={item.path} className='item-link'>
+                                    {item.icon}
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    }))}
 
             </ul>
 
