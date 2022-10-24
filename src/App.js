@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes, Navigate } from "react-router-dom";
 import { CostumerProvider, CostumerContext } from './services/UserContext';
 
@@ -31,15 +31,15 @@ function App() {
       <CostumerProvider>
         <Routes>
           <Route path="/" element={<Public />} />
-          {/* <Route path="/login" element={<Login />} /> */}
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          <Route path="/config" element={ <Private> <Config /> </Private>} />
-          <Route path="/create" element={ <Private> <Create /> </Private>} />
-          <Route path="/explore" element={ <Private> <Explore /> </Private>} />
+          <Route path="/config" element={<Private> <Config /> </Private>} />
+          <Route path="/create" element={<Private> <Create /> </Private>} />
+          <Route path="/explore" element={<Private> <Explore /> </Private>} />
           {/* <Route path="/notification" element={<Notification />} /> */}
-          <Route path="/profile" element={ <Private> <Profile /> </Private> } />
-          <Route path="/review" element={ <Private> <Review /> </Private> } />
+          <Route path="/profile" element={<Private> <Profile /> </Private>} />
+          <Route path="/review" element={<Private> <Review /> </Private>} />
         </Routes>
       </CostumerProvider>
     </>
