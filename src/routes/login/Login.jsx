@@ -1,69 +1,104 @@
 
-import React,  { useState } from 'react';
-import './Login.css'
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+
+import './Login.css';
+import { CostumerContext } from '../../services/UserContext';
+import { emailValid, passwordValid } from '../../utils/validadores';
+
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+
+import { FaEnvelope } from 'react-icons/fa';
+import { RiLockPasswordFill } from 'react-icons/ri';
+
+
+
 
 const Login = ({
     PropriedadeOnSubmit
 }) => {
+    const { login, authenticated, loginGoogle } = useContext(CostumerContext);
+
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [password, setPassword] = useState('');
+
+    const formValidLogin = () => {
+        return emailValid(email) && passwordValid(password)
+    }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        loginGoogle();
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, senha })
-        PropriedadeOnSubmit = {email, senha}
+        console.log('dados do form', { email, password })
+        PropriedadeOnSubmit = { email, password }
     }
 
     return (
         <div className='login'>
 
-            <form action="" class="container-log" onSubmit={handleSubmit}>
-                <div class="top-card ">
-                    <p> Acesse com seu Email ou Usuário </p>
-                </div>
-                <div class="d-flex flex-column align-content-around gap-4 mb-3">
-
-                    <div class="um-so">
-                        <label class="mx-5" htmlFor='email'>Insira seu email ou nome de usuário</label>
-                        <input
-                            type="email"
-                            name='email'
-                            id='email'
-                            className='my-input'
-                            placeholder="Email"
+            <section className="section-brand" id='public-header'>
+                <div className="brand-content">
+                    <h2>Faça seu login para começar ou se cadastre.</h2>
+                    <div className="brand-content-item">
+                        <h1>Acesse</h1>
+                        <p className="p-italic">Insira seus dados</p>
+                        <p> Autenticado: {String(authenticated)} </p>
+                    </div>
+                    <form className="login-form-container" onSubmit={handleSubmit}>
+                        <Input
+                            text='E-mail'
+                            className='input-outline-secondary text-dark'
+                            type='text'
+                            icon={<FaEnvelope />}
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onchange={(e) => { setEmail(e.target.value) }}
+                            message='E-mail inválido'
+                            showMessage={email && !emailValid(email)}
                         />
+                        <Input
+                            text='Senha'
+                            className='input-outline-secondary'
+                            type='password'
+                            icon={<RiLockPasswordFill />}
+                            value={password}
+                            onchange={(e) => { setPassword(e.target.value) }}
+                            message='Senha inválida'
+                            showMessage={password && !passwordValid(password)}
+                        />
+
+                        <Button
+                            type='submit'
+                            text='Entrar'
+                            bg_color='secondary'
+                            disable={formValidLogin()}
+                        />
+
+                        <Button
+                            type='button'
+                            text='Entrar com Google'
+                            bg_color='google'
+                            fun={handleClick}
+                        />
+
+                    </form>
+
+                    <div className="footer">
+                        <h3 className='label'>
+                            Não possui uma conta?
+                            <Link to={'/register'} className=' colorfull-text' >Cadastre-se</Link>
+                        </h3>
+                        <h3 className='label'>
+                            Esqueceu sua senha?
+                            <Link to={'/forgetpassword'} className=' colorfull-text' >Clique aqui</Link>
+                        </h3>
                     </div>
-
-                    <div class="um-so">
-                        <label class="mx-5" htmlFor='password'>Insira sua Senha</label>
-                        <input
-                            type="password"
-                            name='password'
-                            id='password'
-                            className='my-input'
-                            placeholder="Senha"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)} />
-                    </div>
-
-                    <input type="submit" id="enviar" value="Entrar" class="btn" />
-
                 </div>
-            </form>
-
-            <div className="container-log">
-                <div className="top-card top-card-fg">
-                    <p> Ou Acesse pela conta </p>
-                </div>
-                <button class="ms-lg-4 btn-face " type="submit">
-                    Facebook
-                </button>
-                <button class="btn-google " type="submit">
-                    Google
-                </button>
-            </div>
+            </section>
 
         </div>
     )
