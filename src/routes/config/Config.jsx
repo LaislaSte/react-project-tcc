@@ -1,6 +1,8 @@
 // import React, { useState } from 'react';
 import React, { useState } from 'react';
 import './Config.css';
+import { nameValid, biosValid } from '../../utils/validators';
+
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
@@ -13,47 +15,73 @@ import { storage } from '../../services/Banco';
 
 const Config = () => {
     const [image, setImage] = useState(null);
-    // const [rb1, setRb1] = useState(false);
-    // const [rb2, setRb2] = useState(false);
-
-    // const changeRB1 = () => {
-    //     if (!rb2) { setRb1(true); }  
-    //     if(rb2){ setRb1(false); }
-    // }
-
-    // const changeRB2 = () => {
-    //     if (!rb1) { setRb2(true); } 
-    //     if(rb1){ setRb2(false); }
-    // };
-
-
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
+    const [userName, setUserName] = useState('');
+    const [bios, setBios] = useState('');
+
+    const [message, setMessage] = useState(null);
+    const [checked, setChecked] = useState([]);
+
+
+
+    // const onChange = (objValue) => {
+    //     setChecked(
+    //         () => { return { checked: objValue } }
+    //     )
+    // }
+    // const isDisabled = (id) => {
+    //     return (
+    //         checked.length > 2 && checked.indexOf(id) === -1
+    //     );
+    // }
+    const onChange = (objValue) => {
+        var max = 2;
+        // counter = 0;
+        if (checked.length < max) {
+            setMessage(true);
+            checked.push(objValue);
+            // counter++
+        }
+        if (checked.length > 3) {
+            setMessage(false)
+        }
+        // setChecked(
+        //     () => { return { checked: objValue } }
+        // )
+    }
+    // const isDisabled = (id) => {
+    //     return (
+    //         checked.length > 2 && checked.indexOf(id) === -1
+    //     );
+    // }
+
     //const { configPrefer } = useContext(CostumerContext);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const file = e.target[0]?.files[0];
-        
-        if(!file) return;
-        
+
+        if (!file) return;
+
         const storageRef = ref(storage, `images/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(
-        
+
             'state_changed',
             snapshot => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress(progress);
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setProgress(progress);
             },
-        
-            error=>{               
-                console.error(error);                
+
+            error => {
+                console.error(error);
             },
-            
+
             () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url)})
+                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
             }
         )
     }
@@ -69,47 +97,70 @@ const Config = () => {
                     imgPreviewClassName='avatar'
 
                 />
-{/* 
-                <div className='radios-button'>
-                    <div className="form-rb">
-                        <label htmlFor="prof">Professor(a)</label>
-                        <div className={rb1 ? 'rb' : 'rb-false'} onClick={changeRB1}> </div>
-                    </div>
-                    <div className="form-rb">
-                        <label htmlFor="prof">Aluno(a)</label>
-                        <div className={rb2 ? 'rb' : 'rb-false'} onClick={changeRB2}> </div>
-                    </div>
-                </div> */}
 
                 <Input
                     type='text'
                     text='Nome de Usuário'
                     className='input-outline-secondary'
+                    value={userName}
+                    onchange={(e) => { setUserName(e.target.value) }}
+                    message='Este nome não é válido'
+                    showMessage={userName && !nameValid(userName)}
                 />
 
-                <textarea name="" id="" cols="10" rows="6" placeholder='Adicione uma descrição...'></textarea>
+                <textarea
+                    cols="10"
+                    rows="6"
+                    text='Adicione uma descrição...'
+                    value={bios}
+                    onChange={(e) => setBios(e.target.value)}
+                    message='este é o limite de caracter'
+                    showMessage={bios && !biosValid(bios)}></textarea>
 
                 <div className="selects-container">
                     <p>Selecione quais assuntos de interesse (até 5)</p>
+                    <p> {checked} </p>
 
-                    <div className='form-checked-boxes'>
+                    <div className='form-checked-boxes' onChange={onChange} >
                         <div className="form-checked-box">
-                            <input type="checkbox" id='historia' />
+                            <input
+                                type="checkbox"
+                                id='historia'
+                                value={'historia'}
+                                disabled={message}
+                                onChange={(e) => { onChange(e.target.value) }}
+                            />
                             <label htmlFor="historia">Historia</label>
                         </div>
                         <div className="form-checked-box">
-                            <input type="checkbox" id='matematica' />
+                            <input
+                                type="checkbox"
+                                id='matematica'
+                                value={'matematica'}
+                                disabled={message}
+                                onChange={(e) => { onChange(e.target.value) }} />
                             <label htmlFor="matematica">Matemática</label>
                         </div>
                         <div className="form-checked-box">
-                            <input type="checkbox" id='portugues' />
+                            <input
+                                type="checkbox"
+                                id='portugues'
+                                value={'portugues'}
+                                disabled={message}
+                                onChange={(e) => { onChange(e.target.value) }} />
                             <label htmlFor="portugues">Português</label>
                         </div>
                         <div className="form-checked-box">
-                            <input type="checkbox" id='sociologia' />
+                            <input
+                                type="checkbox"
+                                id='sociologia'
+                                value={'sociologia'}
+                                disabled={message}
+                                onChange={(e) => { onChange(e.target.value) }} />
                             <label htmlFor="sociologia">Sociologia</label>
                         </div>
-                        <div className="form-checked-box">
+                        <p> {message} </p>
+                        {/* <div className="form-checked-box">
                             <input type="checkbox" id='quimica' />
                             <label htmlFor="quimica">Química</label>
                         </div>
@@ -128,7 +179,7 @@ const Config = () => {
                         <div className="form-checked-box">
                             <input type="checkbox" id='livre' />
                             <label htmlFor="livre">Outros</label>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

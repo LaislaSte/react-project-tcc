@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Profile.css';
 import imageContent from '../../assets/Explore.jpg';
 import LikeButton from '../../components/likebutton/LikeButton';
@@ -81,7 +82,9 @@ const Profile = () => {
                 </div>
 
                 <div className="header-button-profile">
-                    <BsGearFill className='header-profile-icon' />
+                    <Link to='/config'>
+                        <BsGearFill className='header-profile-icon' />
+                    </Link>
                 </div>
             </header>
 

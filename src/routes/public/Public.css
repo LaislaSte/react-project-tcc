@@ -78,46 +78,128 @@
 }
 
 
-@media screen and (max-width:750px) {
-    .footer-section {
-        padding-top: 3vh;
+
+/* ========== DESKTOP ============= */
+@media (max-width: 876px) {
+
+    .first-s-header p {
+        font-size: 2rem;
     }
 
-    .footer-section h1 {
-        font-size: 1.2rem;
+    .first-s-header h1 {
+        font-size: 3rem;
     }
 
-    .footer-section h1 .footer-icon {
-        display: none;
+    .first-s-paragraph p {
+        font-size: 1rem;
     }
-}
 
-@media screen and (max-width: 830px) {
-    .brand-content {
+    .first-s-paragraph {
         width: 100%;
-        padding: 0 .2rem;
+    }
+
+    .first-s-header2 {
+        left: 5vw;
+    }
+
+    .first-s-header2 h1 {
+        font-size: 1.5rem;
     }
 
     .first-s-img {
         display: none;
     }
 
-    .first-s-header-container,
-    .first-s-header2,
+    .first-s-header-container {
+        width: 90%;
+    }
+
     .first-s-header3 {
         width: 100%;
+        left: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+}
+
+@media (max-width: 500px) and (min-height: 600px) {
+    .first-s-header2 {
+        width: 100%;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        top: -5vh;
+    }
+
+    .first-s-header p {
+        font-size: 1.5rem;
+    }
+
+    .first-s-header h1 {
+        font-size: 2rem;
     }
 
     .first-s-paragraph {
-        width: 75%;
+        font-size: .5rem;
+        height: 50vh;
     }
 
-    .first-s-header3 {
-        left: 0;
-        margin-left: 1rem;
+    .first-s-header2 h1 {
+        font-size: 1.2rem;
     }
+
+    .first-s-img {
+        display: none;
+    }
+
+    .first-s-header3 h1 {
+        font-size: 1.2rem;
+        top: 5vh;
+    }
+
+    .first-s-header3 .footer-icon {
+        display: none;
+    }
+
 }
 
+@media (max-width: 500px) {
+
+    .first-s-header3 .footer-icon {
+        display: none;
+    }
+
+    .first-s-header3 h1 {
+        font-size: 1.5rem;
+    }
+
+}
+
+@media (max-height: 600px) {
+    .first-s-header p {
+        font-size: 2rem;
+    }
+
+    .first-s-header h1 {
+        font-size: 3rem;
+    }
+
+    .first-s-paragraph p {
+        font-size: 1rem;
+    }
+
+    .first-s-header2 {
+        left: 5vw;
+    }
+
+}
+
+/* ========== MOBILE ============= */
+
+
+
+/* ----------------- END FIRST SECTION ------------ */
 
 /* SECOND SECTION */
 
@@ -195,7 +277,7 @@
 .my-icon {
     width: 50%;
     height: 50%;
-    color: var(--SECONDARY_700);
+    color: var(--PRIMARY_700);
 }
 
 

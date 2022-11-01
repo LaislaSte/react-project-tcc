@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -6,18 +6,16 @@ import './Public.css';
 import CurlyHairWoman from '../../assets/woman-with-curly-hair-and-yellow-shirt.jpg';
 import WomanStraighHair from '../../assets/woman-with-yellow-shirt.jpg';
 import WhiteGuyStuduing from '../../assets/white-guy-studing.jpg';
-import brainMen from '../../assets/icons/brain-2029363.svg'
-import { CostumerContext } from '../../services/UserContext';
+import brainMen from '../../assets/icons/brain-2029363.svg';
 
 import Button from '../../components/button/Button';
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/footer/Footer';
 
-import { FaBrain, FaEnvelope } from 'react-icons/fa';
+import { FaBrain } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { MdPermMedia } from 'react-icons/md'
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
-import { RiLockPasswordFill } from 'react-icons/ri';
 
 
 const Public = () => {
@@ -26,7 +24,7 @@ const Public = () => {
     return (
         <div className='container public-container'>
             <Navbar />
-            {/* 
+
             <section className="first-section" id="first-section">
 
                 <div className="first-s-header-container">
@@ -100,7 +98,7 @@ const Public = () => {
                     </div>
                 </div>
 
-            </section> */}
+            </section>
 
             <section className="section third-section">
                 <h1 className="section-header">
@@ -110,35 +108,41 @@ const Public = () => {
                 <div className="section-info-content">
 
                     <div className="my-card my-card-img">
-                        <img src={CurlyHairWoman} alt="card-image" className='card-img' />
+                        <img src={CurlyHairWoman} alt="card" className='card-img' />
 
                         <div className="my-card-content">
                             <h2>Explorar diversos conteúdos feitos por outros alunos</h2>
-                            <Button
-                                text='Verificar'
-                                bg_color='primary'
-                            />
+                            <Link to='about-us'>
+                                <Button
+                                    text='Verificar'
+                                    bg_color='primary'
+                                />
+                            </Link>
                         </div>
                     </div>
                     <div className="my-card my-card-img">
-                        <img src={WomanStraighHair} alt="card-image" className='card-img' />
+                        <img src={WomanStraighHair} alt="card" className='card-img' />
                         <div className="my-card-content">
                             <h2>Criar seus próprio posts para memorizar</h2>
-                            <Button
-                                text='Verificar'
-                                bg_color='primary'
-                            />
+                            <Link to='about-us'>
+                                <Button
+                                    text='Verificar'
+                                    bg_color='primary'
+                                />
+                            </Link>
                         </div>
                     </div>
                     <div className="my-card my-card-img">
-                        <img src={WhiteGuyStuduing} alt="card-image" className='card-img' />
+                        <img src={WhiteGuyStuduing} alt="card" className='card-img' />
 
                         <div className="my-card-content">
                             <h2>Crie, e manipule uma rotina de estudos mais eficiente e menos cansativa</h2>
-                            <Button
-                                text='Verificar'
-                                bg_color='primary'
-                            />
+                            <Link to='about-us'>
+                                <Button
+                                    text='Verificar'
+                                    bg_color='primary'
+                                />
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -4,15 +4,14 @@ import { Link } from 'react-router-dom';
 
 import './Login.css';
 import { CostumerContext } from '../../services/UserContext';
-import { emailValid, passwordValid } from '../../utils/validadores';
+import { emailValid, passwordValid } from '../../utils/validators';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
+import Footer from '../../components/footer/Footer';
 
 import { FaEnvelope } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
-
-
 
 
 const Login = ({
@@ -99,6 +98,8 @@ const Login = ({
                     </div>
                 </div>
             </section>
+
+            <Footer />
 
         </div>
     )

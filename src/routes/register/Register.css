@@ -1,4 +1,4 @@
-.register{
+.register {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,22 +6,22 @@
     padding: 0 2rem;
 }
 
-.brand-img-register{
+.brand-img-register {
     background-color: var(--PRIMARY_600);
     width: 50%;
     height: 70vh;
-    border-radius: 5%;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     padding: 1.5rem 0;
 }
 
-.brand-img-register img{
+.brand-img-register img {
     object-fit: cover;
 }
 
 
-.register-container{
+.register-container {
     background: none;
     width: 50%;
     height: 85vh;
@@ -34,27 +34,29 @@
     color: var(--TEXT_LIGHT);
 }
 
-.register-container input{
-    color: var(--TEXT_LIGHT);
-}
-.register-container button:hover{
+.register-container input {
     color: var(--TEXT_LIGHT);
 }
 
-.register-container h1{
+.register-container button:hover {
+    color: var(--TEXT_LIGHT);
+}
+
+.register-container h1 {
     color: var(--PRIMARY_600);
 }
 
-.register-container h3{
+.register-container h3 {
     display: flex;
     gap: .5rem;
     font-weight: 500;
 }
-.register-container h3 a:hover{
+
+.register-container h3 a:hover {
     color: var(--TEXT_LIGHT);
 }
 
-.register-form-container{
+.register-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -62,9 +64,12 @@
     gap: 1.5rem;
     width: 100%;
 }
-.register-form-container  input, .register-form-container button {
+
+.register-form-container input,
+.register-form-container button {
     width: 100%;
 }
+
 .register-form-container button {
     width: 45%;
 }
@@ -72,21 +77,34 @@
 
 
 @media screen and (max-width: 970px) {
-    .brand-img-register{
+    .brand-img-register {
         display: none;
     }
-    .register-container{
+
+    .register-container {
         width: 100%;
+    }
+
+    .footer .label link {
+        font-size: 1rem;
     }
 }
 
 @media screen and (max-width: 420px) {
     .register-form-container button {
-        width: max-content;
+        width: 30%;
         padding: auto 1rem;
     }
+
     .register-container h3 {
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+}
+
+@media (max-width: 821px) {
+    .register-container .footer .label .colorfull-text {
+        font-size: 1rem;
     }
 }
