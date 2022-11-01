@@ -15,7 +15,7 @@ import { RiLockPasswordFill } from 'react-icons/ri';
 
 
 const Login = ({
-    PropriedadeOnSubmit
+    //PropriedadeOnSubmit
 }) => {
     const { login, authenticated, loginGoogle } = useContext(CostumerContext);
 
@@ -23,7 +23,7 @@ const Login = ({
     const [password, setPassword] = useState('');
 
     const formValidLogin = () => {
-        return emailValid(email) && passwordValid(password)
+        return emailValid(email) && passwordValid(password);
     }
 
     const handleClick = (e) => {
@@ -33,8 +33,9 @@ const Login = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('dados do form', { email, password })
-        PropriedadeOnSubmit = { email, password }
+        // console.log('dados do form', { email, password });
+        //PropriedadeOnSubmit = { email, password }
+        login({email, password});
     }
 
     return (
@@ -74,7 +75,7 @@ const Login = ({
                             type='submit'
                             text='Entrar'
                             bg_color='secondary'
-                            disable={formValidLogin()}
+                            //disable={formValidLogin()}
                         />
 
                         <Button

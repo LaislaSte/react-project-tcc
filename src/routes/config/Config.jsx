@@ -105,7 +105,7 @@ const Config = () => {
                     value={userName}
                     onchange={(e) => { setUserName(e.target.value) }}
                     message='Este nome não é válido'
-                    showMessage={userName && !nameValid(userName)}
+                    showmessage={userName && !nameValid(userName)}
                 />
 
                 <textarea
@@ -115,7 +115,7 @@ const Config = () => {
                     value={bios}
                     onChange={(e) => setBios(e.target.value)}
                     message='este é o limite de caracter'
-                    showMessage={bios && !biosValid(bios)}></textarea>
+                    showmessage={bios && !biosValid(bios)}></textarea>
 
                 <div className="selects-container">
                     <p>Selecione quais assuntos de interesse (até 5)</p>

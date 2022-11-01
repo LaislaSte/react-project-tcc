@@ -24,15 +24,15 @@ export const CostumerProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
 
-    const [users, setUsers] = useState(null);
+    // const [users, setUsers] = useState(null);
 
     const [image, setImage] = useState(null);
     const [bios, setBios] = useState('');
     const [studentProfessor, setStudentProfessor] = useState('');
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [name, setName] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
 
     //Ao renderizar meu componente, verifica se há algum usuário logado, pegando os item do localstorage e os validando
@@ -134,7 +134,7 @@ export const CostumerProvider = ({ children }) => {
         
         const querySnapshot = await getDocs(userQuery);
 
-        if(!querySnapshot){
+        if(querySnapshot){
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
