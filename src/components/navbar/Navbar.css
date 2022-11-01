@@ -2,44 +2,69 @@
     display: none;
 }
 
-.result-search-container{
+
+/* ------------------ RESULT OF RESEARCH CONTAINER ---------------- */
+
+.result-search-container {
     width: 100%;
     height: 100vh;
     position: absolute;
     z-index: 3;
     display: flex;
     justify-content: center;
+    margin-top: 10vh;
 }
-.container-result{
+
+.container-result {
     background-color: var(--BACKGROUND_DARK);
+    width: 70%;
     height: 80vh;
-    width: 60%;
+    overflow-y: auto;
     position: fixed;
     z-index: 3;
     top: 10vh;
-    border-radius: 0 0 5px 5px;
 }
 
-.result-profile-container{
+.result-profile {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem;
     border-bottom: 1px solid var(--TEXT_LIGHT);
     cursor: pointer;
 }
-.result-profile-container-p{
+
+.result-profile-content,
+.result-categ-content {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     gap: 1.5rem;
+    width: 50%;
 }
-.result-name{
-    width: 10rem;
+
+.result-categ-content {
+    width: max-content;
+    margin-left: -5rem;
 }
+
+.result-categ-container {
+    font-size: 2rem;
+}
+
+.result-avatar-container {
+    width: 2rem;
+}
+
+/* ------------ END RESULT OF RESEARCH CONTAINER ----------- */
+
+
+/* ------------------ NAVBAR CONTAINER ---------------- */
 
 .nav-menu-items {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    justify-content: center;
     /* width: 70%; */
 }
 
@@ -58,6 +83,7 @@
     display: flex;
     gap: .6rem;
     font-size: 1.1rem;
+    align-items: center;
 }
 
 .nav-text a:hover {
@@ -68,9 +94,10 @@
 }
 
 
+/* MOBILE */
 @media screen and (max-width: 830px) {
 
-    .nav-header{
+    .nav-header {
         display: flex;
         align-items: center;
         padding-left: 5%;
@@ -80,57 +107,74 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-color: var(--BACKGROUND_DARK);
+        background: #22457375;
+        backdrop-filter: blur(15px);
+        z-index: 2;
     }
-    
-    .nav-header .nav-toggle{
+
+    .nav-header .nav-toggle {
         display: flex;
         align-items: center;
         font: var(--MEDIUM);
+        cursor: pointer;
     }
 
-    .nav-header .nav-header-logo{
+    .nav-header .nav-header-logo {
         display: none;
     }
-    .nav-header .nav-header-input{
-        margin-top: 1.5%;
+
+    .nav-header .input-container {
+        margin-top: 0;
     }
-    .container-result{
+
+    .nav-header .nav-header-input {
+        margin-top: 1.5%;
+        height: 2.3rem;
+    }
+
+    .nav-header .input-container input {
+        color: var(--TEXT_LIGHT);
+    }
+
+    .container-result {
         width: 100%;
     }
-    .item-searchbar{
+
+    .item-searchbar {
         display: none;
     }
 
-    .nav-menu-items .item-logo{
+    .nav-menu-items .item-logo {
         display: none;
     }
 
-    .nav-menu-items{
+    .nav-menu-items {
         flex-direction: column;
         z-index: 2;
+        justify-content: space-evenly;
         position: fixed;
         height: 100vh;
-        background: #22457375;
         width: 100%;
         top: 0;
+        background: #22457375;
         backdrop-filter: blur(15px);
         transform: translateX(0);
         transition: var(--transition);
     }
 
-    .nav-menu-items-active{
+    .nav-menu-items-active {
         transform: translateX(-100%);
     }
 }
 
-@media (min-width: 830px) {
+/* DESKTOP */
+@media (min-width: 831px) {
 
-    .nav-header{
+    .nav-header {
         display: none;
     }
 
-    .nav-menu-items{
+    .nav-menu-items {
         flex-direction: row;
         z-index: 2;
         position: fixed;
@@ -139,31 +183,41 @@
         width: 100%;
         top: 0;
         backdrop-filter: blur(15px);
-        justify-content: flex-start;
+        justify-content: center;
         padding-left: 5%;
     }
-    .item-link{
+
+    .item-link {
         align-items: center;
     }
 
-    .nav-menu-items .item-searchbar{
+    .nav-menu-items .item-searchbar .input-container {
+        height: 2.3rem;
+        margin: 0;
+        width: 95%;
+    }
+
+    .nav-menu-items .item-searchbar {
         transform: translateY(10%);
         width: 50%;
         margin-left: 1.5rem;
         color: var(--TEXT_LIGHT);
     }
-    .nav-menu-items .item-searchbar input{
+
+    .nav-menu-items .item-searchbar input {
+        height: 2.3rem;
         color: var(--TEXT_LIGHT);
     }
 }
 
 @media (max-width: 1280px) {
-    .nav-menu-items .item-searchbar{
+    .nav-menu-items .item-searchbar {
         width: 40%;
     }
 }
+
 @media (max-width: 1063px) {
-    .nav-menu-items .item-searchbar{
+    .nav-menu-items .item-searchbar {
         width: 35%;
     }
 }

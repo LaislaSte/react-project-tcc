@@ -1,4 +1,4 @@
-.create-button-container{
+.create-button-container {
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 3.5rem;
@@ -10,8 +10,10 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 2;
 }
-.create-button-container .create-button-icon{
+
+.create-button-container .create-button-icon {
     width: 100%;
     height: 100%;
     color: aqua;
@@ -22,7 +24,8 @@
 .create-post-container .popup-container {
     height: max-content;
 }
-.popup-container .input-outline-secodary{
+
+.popup-container .input-outline-secodary {
     width: 100%;
 }
 
@@ -57,7 +60,7 @@
 }
 
 
-.container-img-upload-preview{
+.container-img-upload-preview {
     background: var(--SECONDARY_800);
     border: 1px solid var(--SECONDARY_800);
     width: 5rem;
@@ -70,7 +73,8 @@
     align-items: center;
     cursor: pointer;
 }
-.container-img-upload-preview .upload-preview{
+
+.container-img-upload-preview .upload-preview {
     border-radius: 50%;
     height: 4rem;
     width: 4rem;

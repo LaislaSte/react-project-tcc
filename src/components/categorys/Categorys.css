@@ -6,6 +6,7 @@
     background-color: var(--SECONDARY_900);
     font: var(--LIGHT_ITALIC);
     gap: 1px;
+    margin-top: 10vh;
 }
 
 .menu-item-category .item-category {
@@ -18,9 +19,11 @@
     cursor: pointer;
     transition: var(--transition);
 }
+
 .menu-item-category .item-category:hover {
     background: none;
 }
+
 .menu-item-category .item-category-selected {
     background: none;
 }

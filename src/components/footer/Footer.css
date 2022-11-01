@@ -28,7 +28,51 @@
 
 .footer-info-pt1,
 .footer-info-pt2 {
-    /* width: 10%; */
     display: flex;
     gap: 1.5rem;
+}
+
+@media (max-width: 1108px) {
+    .footer-info {
+        width: 60%;
+    }
+}
+
+@media (max-width: 820px) {
+
+    .footer-info p,
+    :link,
+    .footer-header-logo p {
+        font-size: .8rem;
+    }
+
+    .footer-container {
+        padding: .5rem;
+    }
+
+    .footer-header-logo {
+        gap: .8rem;
+    }
+
+}
+
+@media (max-width: 670px) {
+
+    .footer-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .footer-info,
+    .footer-header-logo {
+        align-items: center;
+        width: 100%;
+    }
+
+    .footer-info-pt2,
+    .footer-info-pt1 {
+        justify-content: center;
+        text-align: center;
+    }
+
 }

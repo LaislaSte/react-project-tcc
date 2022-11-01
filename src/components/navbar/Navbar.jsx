@@ -4,10 +4,8 @@ import { SidebarData, SidebarDataPublic, resultSearch } from '../../utils/arrays
 import Input from '../input/Input'
 import { Link } from 'react-router-dom';
 
-import { BiHomeAlt } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { RiSearch2Line } from 'react-icons/ri';
-import { BsPersonCircle, BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
+import { BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
 
 const Navbar = () => {
 
@@ -116,7 +114,7 @@ const Navbar = () => {
                     })
                 )}
 
-                {autenticated == false && (
+                {autenticated === false && (
                     SidebarDataPublic.map((item, index) => {
                         return (
                             <li key={index} className={item.cName}>
@@ -132,26 +130,32 @@ const Navbar = () => {
 
             {term.length > 2 && (
                 <div className="result-search-container">
+
                     <ul className='container-result'>
                         {resultSearch.map((result, index) => {
                             return (
                                 <li key={index} className="result-profile-container">
 
-                                    <div className="result-profile-container-p" onClick={onSearch(index)}>
+                                    <div className="result-profile">
+                                        <div className="result-profile-content">
 
-                                        <p className='result-name'> {result.name}</p>
+                                            <img className='result-avatar-container' src={result.avatar} alt="" />
+                                            <p> {result.name} </p>
 
-                                        <p className='result-email'> {result.email} </p>
+                                            <div className="result-categ-content">
 
-                                        <p className='result-categ'> {result.categ} </p>
+                                                <div className="result-categ-container">
+                                                    {result.imgDefault}
+                                                </div>
+
+                                                <p>{result.categ}</p>
+                                            </div>
+
+                                        </div>
+
+                                        <BsBoxArrowInUpRight />
 
                                     </div>
-
-                                    <BsBoxArrowInUpRight />
-
-                                    {index > 10 && (
-                                        <Link to='/searchPageResults'>mostrar mais</Link>
-                                    )}
 
                                 </li>
                             )
