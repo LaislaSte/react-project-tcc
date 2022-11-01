@@ -1,8 +1,9 @@
 import React from 'react';
 import { BiHomeAlt } from 'react-icons/bi';
 import { RiSearch2Line } from 'react-icons/ri';
-import { BsPersonCircle, BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
-
+import { BsPersonCircle } from 'react-icons/bs';
+import avatarDefault from '../assets/icons/avatarDefault.svg'
+import { FaGraduationCap } from 'react-icons/fa';
 
 export const SidebarDataPublic = [
     {
@@ -56,24 +57,41 @@ export const resultSearch = [
     {
         id: '1',
         name: 'sasha bazanea',
-        email: 'sashabazanea@gmail.com'
+        avatar: avatarDefault
     },
     {
         id: '2',
         name: 'cosima',
-        email: 'cosima@gmail.com'
+        avatar: avatarDefault
     },
     {
         id: '3',
         name: 'lumity blait',
-        email: 'lumityblait@gmail.com'
+        avatar: avatarDefault
     },
     {
         id: '4',
-        categ: 'mat'
+        name: 'sofia manfano',
+        avatar: avatarDefault
     },
     {
         id: '5',
-        categ: 'mat'
+        name: 'evelyn hugo',
+        avatar: avatarDefault
+    },
+    {
+        id: '1',
+        categ: 'Matemática',
+        imgDefault: <FaGraduationCap />
+    },
+    {
+        id: '2',
+        categ: 'Portugues',
+        imgDefault: <FaGraduationCap />
+    },
+    {
+        id: '3',
+        categ: 'Ingles',
+        imgDefault: <FaGraduationCap />
     }
 ]

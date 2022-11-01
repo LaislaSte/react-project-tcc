@@ -15,9 +15,19 @@ const passConfValid = (password, passConf) => {
 	return passwordValid(password) && password === passConf
 }
 
+const biosValid = (bio) => {
+	return bio?.toString().length < 300;
+}
+
+const postContentValid = (postContent) => {
+	return postContent?.toString().length < 1000;
+}
+
 export {
-	nameValid, 
-    emailValid, 
-    passwordValid, 
-    passConfValid
+	nameValid,
+	emailValid,
+	passwordValid,
+	passConfValid,
+	biosValid,
+	postContentValid
 }
