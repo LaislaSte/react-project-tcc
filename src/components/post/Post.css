@@ -62,13 +62,19 @@
 
 /* --------end of content---------- */
 
-.header-show-more .show-more-content {
+.show-more-content {
     background-color: var(--BACKGROUND_DARK);
     border-radius: 1rem;
     padding: .5rem;
     position: absolute;
     right: 2rem;
     z-index: 2;
+    border: 1px solid var(--SECONDARY_900);
+    display: block;
+    transition: var(--transition);
+}
+
+.show-more-content-active {
     display: none;
     transition: var(--transition);
 }
@@ -80,12 +86,19 @@
     transition: var(--transition);
 }
 
-.header-show-more .show-more-content li:hover {
-    background-color: var(--PRIMARY_700);
-}
-
-.active {
-    display: block;
-}
-
 /* --------end of show-more---------- */
+
+@media (min-width: 800px) {
+    .post-container {
+        background-color: var(--BACKGROUND_DARK);
+        width: 75%;
+        border-radius: 1rem;
+        margin-left: calc((100% - 75%)/2);
+    }
+
+    .img-content {
+        width: 60%;
+    }
+}
+
+/* --------end of media querys---------- */

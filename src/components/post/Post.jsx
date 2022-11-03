@@ -1,20 +1,38 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Post.css';
-import { morePostE, moreReviewI, morePostI } from '../../utils/arraysHeader';
+import { morePostE, morePostI } from '../../utils/arraysHeader';
+
 import { BiDotsVertical } from 'react-icons/bi';
 import { useState } from 'react';
 
 export const Post = ({
     content,
     user_name,
+    user_id, //será usado para redirecionar a página para o perfil recebido pelo id/token
     avatar,
     img_content,
     click_type,
-    page
+    userPostedIt
 }) => {
 
     const [showMore, setShowMore] = useState(false);
     const onChange = () => setShowMore(!showMore);
+
+    const navigate = useNavigate();
+
+    const handleClick = (index) => {
+        // if (index == 'Editar Postagem') {
+        //     console.log(index)
+        // }
+        // if (index == 'Excluir Postagem') {
+        //     console.log(index)
+        // }
+        // if (index == 'Adicionar às revisões') {
+        //     console.log(index)
+        // }
+        console.log('clicado')
+    }
 
     return (
         <>
@@ -22,7 +40,7 @@ export const Post = ({
 
                 <div className="header-post">
 
-                    <div className="header-content-user">
+                    <div className="header-content-user" >
                         <div className="header-user-avatar">
                             <img src={avatar} alt="avatar do usuário do post" className='header-user-avatar-img' />
                         </div>
@@ -31,13 +49,26 @@ export const Post = ({
 
                     <div className="header-show-more">
                         <BiDotsVertical onClick={onChange} />
-                        <div className={showMore ? "show-more-content active" : 'show-more-content'}>
+
+                        <div className={showMore ? 'show-more-content ' : 'show-more-content show-more-content-active'}>
                             <ul>
-                                {morePostI.map((item, index) => {
-                                    return (
-                                        <li key={index}> {item} </li>
-                                    )
-                                })}
+                                {userPostedIt
+                                    ? morePostI.map((item, index) => {
+                                        return (
+                                            <li key={index} >  <p> {item} </p>  </li>
+                                        )
+                                    })
+                                    : morePostE.map((item, index) => {
+                                        return (
+                                            <li key={index} >  <p> {item} </p>  </li>
+                                        )
+                                    })
+                                }
+
+                                {/* <li onClick={handleClick(this)}>Excluir Postagem</li>
+                                <li>Editar Postagem</li>
+                                <li>Adicionar às revisões</li>
+                                <li>Remover das revisões</li> */}
                             </ul>
                         </div>
                     </div>
@@ -54,6 +85,7 @@ export const Post = ({
                 </div>
 
                 {click_type}
+
 
             </div>
 

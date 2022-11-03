@@ -19,7 +19,7 @@ const ReviewButton = () => {
     }
 
     return (
-        <>
+        <div className='post-review-container'>
             <Button
                 text='Já revisei'
                 fun={showPopUp}
@@ -40,7 +40,7 @@ const ReviewButton = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './LikeButton.css';
+import { onChangeHeart } from '../../utils/profileFunctions';
 
-import { AiOutlineClose } from 'react-icons/ai';
-import { FaHeart } from 'react-icons/fa';
 
+import { AiOutlineClose, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import Button from '../button/Button';
 
-const LikeButton = () => {
+const LikeButton = ({ postId }) => {
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
@@ -19,7 +19,14 @@ const LikeButton = () => {
     return (
         <>
             <div className="post-like-container">
-                <FaHeart className='post-like-container-i' onClick={showPopUp} />
+                {
+                    onChangeHeart(postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
+                }
+                {/* <FaHeart
+                    // className='post-like-container-icon post-like-container-true'
+                    className={onChangeHeart(postId) ? 'post-like-container-icon post-like-container-true' : 'post-like-container-icon post-like-container-false'}
+                    onClick={showPopUp}
+                /> */}
             </div>
 
             <div className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>

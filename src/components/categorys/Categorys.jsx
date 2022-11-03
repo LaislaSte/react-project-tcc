@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Categorys.css';
-import { category } from '../../utils/arraysHeader';
+import { userCategorys } from '../../utils/arraysHeader';
 
 const Categorys = () => {
 
@@ -10,7 +10,7 @@ const Categorys = () => {
     return (
         <ul className='menu-item-category'>
             {
-                category.map((item, index) => {
+                userCategorys.map((item, index) => {
                     return (
                         <li className='item-category' value={item} key={index} onClick={changeColor}> {item} </li>
                     )

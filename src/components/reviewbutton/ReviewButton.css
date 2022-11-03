@@ -2,3 +2,9 @@
     color: var(--TEXT_LIGHT);
     background: none;
 }
+
+.post-review-container {
+    position: relative;
+    left: 85%;
+    z-index: 1;
+}

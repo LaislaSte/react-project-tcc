@@ -5,6 +5,8 @@ const TxtArea = ({
     text,
     onchange,
     value,
+    cols,
+    rows,
     message,
     showMessage
 
@@ -12,17 +14,19 @@ const TxtArea = ({
 
     return (
         <div className="TxtArea-container">
-            <div className={`TxtArea-outline ${className}`}>
-
+            <div className={`TxtArea-content`}>
                 <textarea
                     placeholder={text}
                     onChange={onchange}
                     value={value}
-                />
-
+                    cols={cols}
+                    rows={rows}
+                ></textarea>
             </div>
-            {showMessage && <p className='TxtArea-error-message'> {message} </p>}
-        </div>
+            <div>
+                {showMessage && <p className='TxtArea-error-message'> {message} </p>}
+            </div >
+        </div >
     )
 }
 
