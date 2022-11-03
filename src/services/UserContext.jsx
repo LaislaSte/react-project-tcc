@@ -97,15 +97,16 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //função para atualizar um usuário na coleção user
-    const updateUser = async (id) => {
+    const updateUser = async (id, img_user, bios_user, name_user, favCategory_user) => {
         const userSelected = doc(db, 'users', id);
 
         if (userSelected) {
             try {
                 await updateDoc(userSelected, {
-                    avatar: image,
-                    biosDB: bios,
-                    studentProfessorDB: studentProfessor
+                    avatar: img_user,
+                    biosDB: bios_user,
+                    name: name_user,
+                    favoriteCategory: favCategory_user
                 });
                 console.log('usuario atualizado');
             } catch (error) {
@@ -131,10 +132,10 @@ export const CostumerProvider = ({ children }) => {
 
         // Create a query against the collection.
         const userQuery = query(usersRef, where("email", "==", email), where("password", "==", password));
-        
+
         const querySnapshot = await getDocs(userQuery);
 
-        if(!querySnapshot){
+        if (!querySnapshot) {
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
