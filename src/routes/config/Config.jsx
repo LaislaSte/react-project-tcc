@@ -1,63 +1,68 @@
 // import React, { useState } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './Config.css';
 import { nameValid, biosValid } from '../../utils/validators';
+import { categorys } from '../../utils/arraysHeader';
+import { CostumerContext } from '../../services/UserContext';
+import avatarDefault from '../../assets/img-avatar.png';
 
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
-
-import avatarDefault from '../../assets/img-avatar.png'
+import TxtArea from '../../components/txtarea/TxtArea';
+import CheckBox from '../../components/checkbox/CheckBox';
 
 // imports storage
 import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 import { storage } from '../../services/Banco';
+import { clearIndexedDbPersistence } from 'firebase/firestore';
+
 
 const Config = () => {
     const [image, setImage] = useState(null);
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
-    const [userName, setUserName] = useState('');
-    const [bios, setBios] = useState('');
+    const { updateUser, user } = useContext(CostumerContext);
 
-    const [message, setMessage] = useState(null);
-    const [checked, setChecked] = useState([]);
+    const [name_user, setUserName] = useState('');
+    const [bios_user, setBios] = useState('');
+    const [favCategory_user, setCategorys] = useState([]);
+    const [img_user, setImgUser] = useState(null);
+    const [userLoged_id, setIdUser] = useState('');
 
+    const [isItLimited, setItIsLimited] = useState(false);
 
-
-    // const onChange = (objValue) => {
-    //     setChecked(
-    //         () => { return { checked: objValue } }
-    //     )
+    // const onChangeCB = (item) => {
+    //     favCategory_user.push(item);
+    //     console.log(favCategory_user)
+    // if (favCategory_user > 1) {
+    //     setCategorys(...favCategory_user + item);
+    //     console.log(favCategory_user)
     // }
-    // const isDisabled = (id) => {
-    //     return (
-    //         checked.length > 2 && checked.indexOf(id) === -1
-    //     );
+    //     let arrSelecteds = { ...favCategory_user };
+    //     arrSelecteds.splice(1, 0, item);
+    //     console.log(favCategory_user)
+
+    // let couter = 0;
+    // let max = 2;
+
+    // let index = favCategory_user.findIndex(equalto);
+    // const equalto = (i) => {
+    //     return i === couter
     // }
-    const onChange = (objValue) => {
-        var max = 2;
-        // counter = 0;
-        if (checked.length < max) {
-            setMessage(true);
-            checked.push(objValue);
-            // counter++
-        }
-        if (checked.length > 3) {
-            setMessage(false)
-        }
-        // setChecked(
-        //     () => { return { checked: objValue } }
-        // )
-    }
-    // const isDisabled = (id) => {
-    //     return (
-    //         checked.length > 2 && checked.indexOf(id) === -1
-    //     );
+    // // let arrSelecteds = { ...favCategory_user };
+
+    // if (index !== -1) {
+    //     arrSelecteds.splice(item, 1);
+    // } else {
+    //     arrSelecteds.push(id);
     // }
 
-    //const { configPrefer } = useContext(CostumerContext);
+    // setCategorys(arrSelecteds);
+    // }
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,21 +74,22 @@ const Config = () => {
         const storageRef = ref(storage, `images/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(
-
             'state_changed',
             snapshot => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setProgress(progress);
             },
-
             error => {
                 console.error(error);
             },
-
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
             }
         )
+
+        setIdUser(user.token);
+
+        updateUser(userLoged_id, img_user, bios_user, name_user, favCategory_user);
     }
 
     return (
@@ -102,84 +108,43 @@ const Config = () => {
                     type='text'
                     text='Nome de Usuário'
                     className='input-outline-secondary'
-                    value={userName}
+                    value={name_user}
                     onchange={(e) => { setUserName(e.target.value) }}
                     message='Este nome não é válido'
-                    showMessage={userName && !nameValid(userName)}
+                    showMessage={name_user && !nameValid(name_user)}
                 />
 
-                <textarea
-                    cols="10"
-                    rows="6"
-                    text='Adicione uma descrição...'
-                    value={bios}
-                    onChange={(e) => setBios(e.target.value)}
-                    message='este é o limite de caracter'
-                    showMessage={bios && !biosValid(bios)}></textarea>
+                <div className="txt-area-container">
+                    <TxtArea
+                        cols="10"
+                        rows="6"
+                        text='Adicione uma descrição...'
+                        value={bios_user}
+                        onChange={(e) => { setBios(e.target.value) }}
+                        message='este é o limite de caracter'
+                        showMessage={bios_user && !biosValid(bios_user)}
+                    />
+                </div>
 
                 <div className="selects-container">
-                    <p>Selecione quais assuntos de interesse (até 5)</p>
-                    <p> {checked} </p>
+                    <p>Escolha a quantidade de caralhos que quiser seu arrombado</p>
 
-                    <div className='form-checked-boxes' onChange={onChange} >
-                        <div className="form-checked-box">
-                            <input
-                                type="checkbox"
-                                id='historia'
-                                value={'historia'}
-                                disabled={message}
-                                onChange={(e) => { onChange(e.target.value) }}
-                            />
-                            <label htmlFor="historia">Historia</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input
-                                type="checkbox"
-                                id='matematica'
-                                value={'matematica'}
-                                disabled={message}
-                                onChange={(e) => { onChange(e.target.value) }} />
-                            <label htmlFor="matematica">Matemática</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input
-                                type="checkbox"
-                                id='portugues'
-                                value={'portugues'}
-                                disabled={message}
-                                onChange={(e) => { onChange(e.target.value) }} />
-                            <label htmlFor="portugues">Português</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input
-                                type="checkbox"
-                                id='sociologia'
-                                value={'sociologia'}
-                                disabled={message}
-                                onChange={(e) => { onChange(e.target.value) }} />
-                            <label htmlFor="sociologia">Sociologia</label>
-                        </div>
-                        <p> {message} </p>
-                        {/* <div className="form-checked-box">
-                            <input type="checkbox" id='quimica' />
-                            <label htmlFor="quimica">Química</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input type="checkbox" id='biologia' />
-                            <label htmlFor="biologia">Biologia</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input type="checkbox" id='filosofia' />
-                            <label htmlFor="filosofia">Filosofia</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input type="checkbox" id='ingles' />
-                            <label htmlFor="ingles">Inglês</label>
-                        </div>
-                        <div className="form-checked-box">
-                            <input type="checkbox" id='livre' />
-                            <label htmlFor="livre">Outros</label>
-                        </div> */}
+                    <div className='form-checked-boxes' >
+                        {categorys.map((item, index) => {
+                            return (
+                                <div className="form-checked-box" key={index}>
+
+                                    <input type="checkbox" value={item.name} id={item.id} />
+
+                                    <label htmlFor={item.id}>{item.name}</label>
+
+                                </div>
+                            )
+                        })}
+                        {/* <CheckBox
+                            options={categorys}
+                            onChange={(option) => console.log(option)}
+                        /> */}
                     </div>
                 </div>
 

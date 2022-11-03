@@ -1,19 +1,22 @@
-.container-form{
+.container-form {
     height: auto;
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.config-form-container{
+.config-form-container {
     display: flex;
     flex-direction: column;
     width: 60%;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-    align-self: center;
     padding: 1rem 0;
     gap: 1rem;
+}
+
+.txt-area-container {
+    width: 100%;
 }
 
 .config-form-container input {
@@ -21,49 +24,17 @@
     width: 100%;
 }
 
-/* .radios-button{
-    display: flex;
-    gap: 1rem;
-}
-.form-rb{
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-
-.form-rb .rb{
+/* CHECKBOXES STYLES */
+.check-container {
     border: 1px solid var(--SECONDARY_800);
-    background-color: var(--SECONDARY_700);
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
+    /* background-color: aqua; */
+    height: 1rem;
+    width: 1rem;
+    color: var(--TEXT_LIGHT);
     cursor: pointer;
-}
-
-.form-rb .rb-false{
-    border: 1px solid var(--SECONDARY_700);
-    height: .8rem;
-    width: .8rem;
-    border-radius: 50%;
-    cursor: pointer;
-} */
-
-.config-form-container textarea {
-    background: none;
-    width: 80%;
-    border: 1.5px solid var(--SECONDARY_800);
-    border-radius: 1rem;
-    padding: 1rem;
-    font: var(--REGULAR);
-    color: var(--TEXT_LIGTH);
-}
-
-.selects-container{
-    width: 80%;
-}
-.selects-container p{
-    text-align: center;
-    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-checked-boxes {
@@ -91,20 +62,43 @@
     font-size: 1.2rem;
 }
 
-.config-form-container button{
+/* END CHECKBOXES STYLES */
+
+.config-form-container textarea {
+    background: none;
+    width: 80%;
+    border: 1.5px solid var(--SECONDARY_800);
+    border-radius: 1rem;
+    padding: 1rem;
+    font: var(--REGULAR);
+    color: var(--TEXT_LIGTH);
+}
+
+.selects-container {
+    width: 80%;
+}
+
+.selects-container p {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.config-form-container button {
     width: 20%;
 }
-.config-form-container button:hover{
+
+.config-form-container button:hover {
     color: var(--TEXT_LIGHT);
 }
 
 /* MEDIA QUERYS */
 
 @media screen and (max-width:970px) {
-    .config-form-container{
+    .config-form-container {
         width: 100%;
     }
-    .config-form-container button{
+
+    .config-form-container button {
         width: 40%;
     }
 }

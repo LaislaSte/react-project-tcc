@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Profile.css';
-import imageContent from '../../assets/Explore.jpg';
+import { morePostI } from '../../utils/arraysHeader';
+import { fakeReviews } from '../../utils/profileFunctions';
+import { post, fakeUser } from '../../utils/profileFunctions';
+
 import LikeButton from '../../components/likebutton/LikeButton';
 import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import CreateButton from '../../components/createbutton/CreateButton';
+
 import { BsGearFill, BsFillArrowDownCircleFill } from 'react-icons/bs';
 
 const Profile = () => {
@@ -19,51 +23,6 @@ const Profile = () => {
     // const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
     // console.log(image);
 
-    const fakeUser = {
-        id: 1,
-        name: 'laisla',
-        avatar: 'IP',
-        posts: [
-            {
-                idPost: '1',
-                userPostContent: 'blabablabalbalbalbalalskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkblabablabalbalbalbalalskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkblabablabalbalbalbalalskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk',
-                userPostImg: 'imagem da postagem do usuario'
-            },
-            {
-                idPost: '2',
-                userPostContent: 'blabablabalbalbalbal',
-                userPostImg: 'imagem da postagem do usuario'
-            },
-            {
-                idPost: '3',
-                userPostContent: 'blabablabalbalbalbal',
-                userPostImg: 'imagem da postagem do usuario'
-            }
-        ]
-    }
-
-    const user = [
-        {
-            name: 'laisla',
-            icon: imageContent,
-            texto: 'A Microsoft e nossos fornecedores terceirizados usam cookies para armazenar e acessar informações tais como IDs exclusivas para fornecer, manter e melhorar nossos serviços e anúncios. Se você'
-        },
-        {
-            name: 'laisla',
-            icon: imageContent,
-            imageContent,
-            texto: 'A Microsoft e nossos fornecedores terceirizados usam cookies para armazenar e acessar informações tais como IDs exclusivas para fornecer, manter e melhorar nossos serviços e anúncios. Se você concordar, o MSN e o Microsoft Bing personalizarão o conteúdo e os anúncios que você vê. Você pode selecionar Aceito para consentir com esses usos ou clicar em Gerenciar preferências para revisar suas opções e exercer seu direito de se opor ao Interesse Legítimo quando usado. Você pode alterar sua seleção em Gerenciar Preferências na parte inferior desta página.Declaração de Privacidade'
-        },
-        {
-            name: 'laisla',
-            icon: imageContent,
-            imageContent,
-            texto: 'A Microsoft e nossos fornecedores terceirizados usam cookies para armazenar e acessar informações tais como IDs exclusivas para fornecer, manter e melhorar nossos serviços e anúncios. Se você concordar, o MSN e o Microsoft Bing personalizarão o conteúdo e os anúncios que você vê. Você pode selecionar Aceito para consentir com esses usos ou clicar em Gerenciar preferências para revisar suas opções e exercer seu direito de se opor ao Interesse Legítimo quando usado. Você pode alterar sua seleção em Gerenciar Preferências na parte inferior desta página.Declaração de Privacidade'
-        }
-    ]
-
-
-
     return (
         <div className='Profile'>
             <Navbar />
@@ -72,7 +31,7 @@ const Profile = () => {
 
                 <div className="profile-container">
                     <div className="img-background">
-                        {fakeUser.avatar}
+                        <img src={fakeUser.avatar} alt="" />
                     </div>
                 </div>
 
@@ -91,15 +50,18 @@ const Profile = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
                 <div className="posts-container">
-                    {user.map((item, index) => {
+                    {post.map((item, index) => {
                         return (
                             <Post
                                 key={index}
-                                content={item.texto}
-                                user_name={item.name}
-                                img_content={item.imageContent}
-                                avatar={item.icon}
-                                click_type={<LikeButton />}
+                                content={item.description}
+                                user_name={item.user_name}
+                                img_content={item.post_archive}
+                                user_id={item.user_id}
+                                avatar={item.user_vatar}
+
+                                click_type={<LikeButton postId={item.id} />}
+                                moreContent={morePostI}
                             />
                         )
                     })}
