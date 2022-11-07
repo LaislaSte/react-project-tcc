@@ -1,13 +1,12 @@
 import React from 'react';
 import './Review.css';
-import { post, findPostsOfUser, fakeUser } from '../../utils/profileFunctions';
+import { post, findPostsOfUser, fakeUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
 
 
 import Navbar from '../../components/navbar/Navbar';
 import ReviewButton from '../../components/reviewbutton/ReviewButton';
 import { Post } from '../../components/post/Post';
-import CreateButton from '../../components/createbutton/CreateButton';
-import imageContent from '../../assets/Explore.jpg';
+import Categorys from '../../components/categorys/Categorys';
 
 function verifiedLoginAndReview(id_post, arrPost) {
     //há um post atribuido a revisao? se sim return true 
@@ -22,9 +21,9 @@ const Review = () => {
 
     return (
         <>
-            <Navbar />
             <header className="header-main-filter">
-                <CreateButton />
+                <Navbar />
+                <Categorys />
 
             </header>
 
@@ -38,6 +37,8 @@ const Review = () => {
                             user_id={item.user_id}
                             avatar={item.user_vatar}
                             img_content={item.post_archive}
+                            category={item.category}
+                            title={item.title}
                             click_type={< ReviewButton />}
                             userLoged={verifiedLoginAndReview(item.id, fakeUser.arrIdsPost)}
                         />

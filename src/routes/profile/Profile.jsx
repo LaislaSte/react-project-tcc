@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Profile.css';
 import { morePostI } from '../../utils/arraysHeader';
-import { fakeReviews } from '../../utils/profileFunctions';
-import { post, fakeUser } from '../../utils/profileFunctions';
+import { fakeReviews } from '../../utils/ArraysAndFunctions';
+import { post, fakeUser } from '../../utils/ArraysAndFunctions';
 
 import LikeButton from '../../components/likebutton/LikeButton';
 import { Post } from '../../components/post/Post';
@@ -26,7 +26,7 @@ const Profile = () => {
     return (
         <div className='Profile'>
             <Navbar />
-            <CreateButton />
+
             <header className='section-profile'>
 
                 <div className="profile-container">
@@ -36,8 +36,8 @@ const Profile = () => {
                 </div>
 
                 <div className="bios">
-                    <h2>Salve Jorge</h2>
-                    Tenho 24 anos, sou formado na Unicid em pedagogia e na USP em ciencias humanas, sou um homem gay, casado e com 5 filhos
+                    <h2>{fakeUser.name}</h2>
+                    {fakeUser.bios}
                 </div>
 
                 <div className="header-button-profile">
@@ -59,7 +59,8 @@ const Profile = () => {
                                 img_content={item.post_archive}
                                 user_id={item.user_id}
                                 avatar={item.user_vatar}
-
+                                category={item.category}
+                                title={item.title}
                                 click_type={<LikeButton postId={item.id} />}
                                 moreContent={morePostI}
                             />

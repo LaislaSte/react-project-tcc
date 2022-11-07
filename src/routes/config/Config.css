@@ -1,104 +1,118 @@
-.container-form {
-    height: auto;
-    width: 100%;
+.Config {
     display: flex;
+    align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
-.config-form-container {
+.config-container {
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 100%;
+    height: max-content;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.config-container .config-form-container {
+    margin-top: 2rem;
+}
+
+.config-container .close-icon-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 1rem 0 0 1rem;
+}
+
+.config-container .close-icon-container .config-link {
+    font: var(--MEDIUM);
+}
+
+.config-form-container .user-img-container {
     display: flex;
-    flex-direction: column;
-    width: 60%;
-    /* justify-content: center; */
     align-items: center;
-    padding: 1rem 0;
+    margin-bottom: 1rem;
     gap: 1rem;
 }
 
-.txt-area-container {
-    width: 100%;
-}
-
-.config-form-container input {
+.config-form-container .user-img-container input {
     color: var(--TEXT_LIGHT);
-    width: 100%;
 }
 
-/* CHECKBOXES STYLES */
-.check-container {
+.config-form-container .user-img-container img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.config-container .config-form-container textarea {
     border: 1px solid var(--SECONDARY_800);
-    /* background-color: aqua; */
-    height: 1rem;
-    width: 1rem;
-    color: var(--TEXT_LIGHT);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-checked-boxes {
-    display: flex;
-    height: max-content;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: .5rem 0;
-}
-
-.form-checked-box {
-    display: flex;
-    width: 10rem;
-    gap: .8rem;
-    margin: .5rem 0;
-}
-
-.form-checked-box input {
-    width: 1.5rem;
-    cursor: pointer;
-}
-
-.form-checked-box label {
-    font-size: 1.2rem;
-}
-
-/* END CHECKBOXES STYLES */
-
-.config-form-container textarea {
-    background: none;
-    width: 80%;
-    border: 1.5px solid var(--SECONDARY_800);
     border-radius: 1rem;
     padding: 1rem;
-    font: var(--REGULAR);
-    color: var(--TEXT_LIGTH);
+    margin-bottom: 1rem;
+    font: var(--LIGHT_ITALIC);
+    color: var(--TEXT_LIGHT);
+    width: 100%;
+    background: none;
 }
 
-.selects-container {
-    width: 80%;
+.config-container .config-form-container .save-button {
+    width: 6rem;
 }
 
-.selects-container p {
-    text-align: center;
-    font-size: 1.2rem;
+.config-container .config-form-container .checked-boxes-container {
+    border: 1px solid var(--SECONDARY_800);
+    border-radius: 1rem;
+    padding: 1rem;
+    font: var(--LIGHT);
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: .5rem 0 1rem 0;
 }
 
-.config-form-container button {
-    width: 20%;
+.config-form-container .checked-boxes-container .form-checked-box {
+    display: flex;
+    gap: 1rem;
+    width: 25%;
+    font-size: 1.8rem;
 }
 
-.config-form-container button:hover {
+.config-form-container .checked-boxes-container .form-checked-box input {
+    width: 1.5rem;
+}
+
+.config-container .config-form-container .config-btns-container {
+    margin: 2.5rem 0 1rem 0;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.config-container .config-form-container button:hover {
     color: var(--TEXT_LIGHT);
 }
 
 /* MEDIA QUERYS */
 
-@media screen and (max-width:970px) {
-    .config-form-container {
-        width: 100%;
+@media (max-width: 670px) {
+
+    .config-container {
+        max-width: 100%;
     }
 
-    .config-form-container button {
-        width: 40%;
+}
+
+@media (max-width: 475px) {
+
+    .config-container .config-form-container .input-img-container {
+        justify-content: center;
+        gap: 1rem;
     }
 }

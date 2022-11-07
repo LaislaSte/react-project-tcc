@@ -9,13 +9,14 @@ import avatarDefault from '../../assets/img-avatar.png';
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
-import TxtArea from '../../components/txtarea/TxtArea';
+// import TxtArea from '../../components/txtarea/TxtArea';
 import CheckBox from '../../components/checkbox/CheckBox';
 
 // imports storage
 import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 import { storage } from '../../services/Banco';
-import { clearIndexedDbPersistence } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { AiOutlineClose } from 'react-icons/ai';
 
 
 const Config = () => {
@@ -93,69 +94,95 @@ const Config = () => {
     }
 
     return (
-        <div className='container-form'>
-            <form onSubmit={handleSubmit} className="config-form-container">
+        <div className='Config'>
 
-                <InputImg
-                    setImage={setImage}
-                    className='container-img-profile-preview'
-                    imgPreview={image?.preview || avatarDefault}
-                    imgPreviewClassName='avatar'
+            <div className="config-container">
 
-                />
-
-                <Input
-                    type='text'
-                    text='Nome de Usuário'
-                    className='input-outline-secondary'
-                    value={name_user}
-                    onchange={(e) => { setUserName(e.target.value) }}
-                    message='Este nome não é válido'
-                    showMessage={name_user && !nameValid(name_user)}
-                />
-
-                <div className="txt-area-container">
-                    <TxtArea
-                        cols="10"
-                        rows="6"
-                        text='Adicione uma descrição...'
-                        value={bios_user}
-                        onChange={(e) => { setBios(e.target.value) }}
-                        message='este é o limite de caracter'
-                        showMessage={bios_user && !biosValid(bios_user)}
-                    />
+                <div className="close-icon-container">
+                    <Link to='/profile'> <AiOutlineClose className='config-link' /> </Link>
                 </div>
 
-                <div className="selects-container">
-                    <p>Escolha a quantidade de caralhos que quiser seu arrombado</p>
+                <form onSubmit={handleSubmit} className="config-form-container">
 
-                    <div className='form-checked-boxes' >
-                        {categorys.map((item, index) => {
-                            return (
-                                <div className="form-checked-box" key={index}>
+                    <div className="user-img-container">
 
-                                    <input type="checkbox" value={item.name} id={item.id} />
+                        <div className="config-user-avatar-container">
 
-                                    <label htmlFor={item.id}>{item.name}</label>
+                            <InputImg
+                                setImage={setImage}
+                                className='container-img-profile-preview'
+                                imgPreview={image?.preview || avatarDefault}
+                                imgPreviewClassName='avatar'
+                            />
+                            <p>Tirar foto</p>
+                        </div>
 
-                                </div>
-                            )
-                        })}
-                        {/* <CheckBox
-                            options={categorys}
-                            onChange={(option) => console.log(option)}
-                        /> */}
+                        <Input
+                            type='text'
+                            text='Nome de Usuário'
+                            className='input-outline-secondary'
+                            value={name_user}
+                            onchange={(e) => { setUserName(e.target.value) }}
+                            message='Este nome não é válido'
+                            showMessage={name_user && !nameValid(name_user)}
+                        />
                     </div>
-                </div>
-
-                <Button
-                    text='Salvar'
-                    type='submit'
-                    bg_color='secondary'
-                />
 
 
-            </form >
+                    <div className="txt-area-container">
+                        <textarea
+                            cols="30"
+                            rows="5"
+                            placeholder='Adicione uma descrição...'
+                            className='ta-popup-container'
+                            value={bios_user}
+                            onChange={(e) => setBios(e.target.value)}
+                        ></textarea>
+                    </div>
+
+                    <div className="selects-container">
+                        <p>Escolha suas preferências de estudo (até 5) </p>
+
+                        <div className='checked-boxes-container' >
+                            {categorys.map((item, index) => {
+                                return (
+                                    <div className="form-checked-box" key={index}>
+
+                                        <input type="checkbox" value={item.name} id={item.id} />
+
+                                        <label htmlFor={item.id}>{item.name}</label>
+
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+
+                    <Button
+                        text='Salvar'
+                        type='submit'
+                        bg_color='secondary save-button'
+                    />
+
+                    <div className="config-btns-container">
+                        <Link to='/changepassword1'>
+                            <Button text='Editar Senha' type='button' bg_color='primary' />
+                        </Link>
+
+                        <Link to='/changeemail1'>
+                            <Button text='Editar E-mail' type='button' bg_color='primary' />
+                        </Link>
+
+                        <Link to='/deleteaccount'>
+                            <Button text='Excluir Contar' type='button' bg_color='primary' />
+                        </Link>
+
+                    </div>
+
+
+                </form >
+
+            </div>
         </div >
     )
 }
