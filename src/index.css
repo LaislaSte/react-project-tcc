@@ -52,12 +52,15 @@
   text-decoration: none;
   list-style: none;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
+
 body {
   background-color: var(--BACKGROUND_DARK_DARKER);
   color: var(--TEXT_LIGHT);
@@ -69,7 +72,8 @@ body {
   width: var(--container-width-lg);
   margin: 0 auto;
 }
-.section{
+
+.section {
   margin-top: 8rem;
 }
 
@@ -79,22 +83,25 @@ h1 {
   font: var(--BOLD);
   color: var(--SECONDARY_700);
 }
+
 h2 {
   font: var(--MEDIUM);
 }
 
-h3, h4, h4{
+h3,
+h4 {
   font: var(--REGULAR);
 }
 
-label{
-  font:var(--REGULAR);
+label {
+  font: var(--REGULAR);
 }
 
-p{
+p {
   font: var(--LIGHT);
 }
-.p-italic{
+
+.p-italic {
   font: var(--LIGHT_ITALIC);
 }
 
@@ -120,13 +127,14 @@ a:hover {
   transition: var(--transition);
   padding: .7rem;
 }
-.btn:hover{
+
+.btn:hover {
   background-color: var(--PRIMARY_800);
   transform: scaleY(.6rem);
 }
 
 /* util */
-.input-message{
+.input-message {
   color: var(--ALERT);
   display: block;
 }
@@ -149,7 +157,7 @@ a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
   /*you can hide it with left: -100%*/
   left: -100%;
   transition: var(--transition);
@@ -160,16 +168,16 @@ a:hover {
   transition: var(--transition);
 }
 
-.popup-container{
+.popup-container {
   width: fit-content;
   height: max-content;
   background-color: var(--BACKGROUND_DARK);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 1rem 1rem 2.5rem 1rem;
   box-shadow: 1px 1px 10px var(--SECONDARY_700);
 }
 
-.popup-content{
+.popup-content {
   position: relative;
   top: 30%;
   text-align: center;
@@ -180,11 +188,17 @@ a:hover {
   gap: 1rem;
 }
 
-.close-popup{
+.btns-popup {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.close-popup {
   position: relative;
   top: 0;
   right: 0;
-  margin: .5rem .5rem 0 0 ;
+  margin: .5rem .5rem 0 0;
   color: var(--TEXT_LIGHT);
 }
 
@@ -193,13 +207,13 @@ a:hover {
   MEDIA QUERYS
 =================*/
 @media screen and (max-width: 991.98px) {
-  .section{
+  .section {
     margin-top: 6rem;
   }
 }
 
 @media screen and (max-width: 767.98px) {
-  .section{
+  .section {
     margin-top: 4rem;
   }
 }
