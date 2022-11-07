@@ -1,15 +1,11 @@
-.post-like-container {
-    position: relative;
+.post-like-container-icon {
     width: 2rem;
     height: 2rem;
-    left: 95%;
-    z-index: 1;
-}
-
-.post-like-container-icon {
-    width: 100%;
-    height: 100%;
     cursor: pointer;
     transition: var(--transition);
     color: var(--ALERT);
+}
+
+.popup-content .btns-popup-review button {
+    width: 5rem;
 }

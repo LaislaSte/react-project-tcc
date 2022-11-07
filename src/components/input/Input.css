@@ -1,11 +1,11 @@
-.input-container{
+.input-container {
     width: 80%;
     border-radius: 10px;
     height: 3rem;
     margin-bottom: .8rem;
 }
 
-.input-outline{
+.input-outline {
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -13,7 +13,7 @@
     padding-left: 1rem;
 }
 
-.input-outline input{
+.input-outline input {
     width: 100%;
     background: none;
     padding-right: .8rem;
@@ -22,17 +22,17 @@
     color: var(--TEXT);
 }
 
-.input-outline-primary{
+.input-outline-primary {
     border: 1.5px solid var(--PRIMARY_700);
-    
+
 }
 
-.input-outline-secondary{
+.input-outline-secondary {
     border: 1.5px solid var(--SECONDARY_800);
-    
+
 }
 
-.input-error-message{
+.input-error-message {
     color: var(--ALERT);
     margin: .5rem auto;
 }

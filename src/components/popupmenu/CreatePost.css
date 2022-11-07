@@ -1,0 +1,115 @@
+.Create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    position: fixed;
+    background: #22457375;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    backdrop-filter: blur(15px);
+}
+
+.create-post-container {
+    background-color: var(--BACKGROUND_DARK);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 100%;
+    height: max-content;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.create-post-container .form-create-post {
+    margin-top: 2rem;
+}
+
+.create-post-container .close-icon-container {
+    position: relative;
+    left: -47%;
+    font: var(--MEDIUM);
+    cursor: pointer;
+}
+
+.form-create-post .user-img-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.form-create-post .user-img-container input {
+    color: var(--TEXT_LIGHT);
+}
+
+.form-create-post .user-img-container img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.create-post-container .form-create-post textarea {
+    border: 1px solid var(--SECONDARY_800);
+    border-radius: 1rem;
+    padding: 1rem;
+    font: var(--LIGHT_ITALIC);
+    color: var(--TEXT_LIGHT);
+    width: 100%;
+    background: none;
+}
+
+.create-post-container .form-create-post .checked-boxes-container {
+    border: 1px solid var(--SECONDARY_800);
+    border-radius: 1rem;
+    padding: 1rem;
+    font: var(--LIGHT);
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: .5rem 0 1rem 0;
+}
+
+.create-post-container .form-create-post .input-img-container {
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.create-post-container .form-create-post .input-img-container img {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    position: relative;
+    top: .5rem;
+}
+
+.create-post-container .form-create-post .input-img-container button:hover {
+    color: var(--TEXT_LIGHT);
+}
+
+/* MEDIA QUERYS */
+
+@media (max-width: 670px) {
+
+    .create-post-container {
+        border-radius: 0;
+        height: 100vh;
+        position: fixed;
+        max-width: 100%;
+    }
+
+}
+
+@media (max-width: 475px) {
+
+    .create-post-container .form-create-post .input-img-container {
+        justify-content: center;
+        gap: 1rem;
+    }
+}

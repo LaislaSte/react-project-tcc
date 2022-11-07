@@ -11,6 +11,8 @@ export const Post = ({
     user_name,
     user_id, //será usado para redirecionar a página para o perfil recebido pelo id/token
     avatar,
+    category,
+    title,
     img_content,
     click_type,
     userPostedIt
@@ -47,6 +49,8 @@ export const Post = ({
                         <p> {user_name} </p>
                     </div>
 
+                    <h3 > {title} </h3>
+
                     <div className="header-show-more">
                         <BiDotsVertical onClick={onChange} />
 
@@ -79,12 +83,20 @@ export const Post = ({
                         {content}
                     </p>
                     <div className="img-content-container">
-                        <img src={img_content} alt="imagem do conteúdo do post" className='img-content' />
+                        {img_content && (
+                            <img src={img_content} alt="imagem do conteúdo do post" className='img-content' />
+                        )}
                     </div>
 
                 </div>
 
-                {click_type}
+                <div className="footer-post">
+
+                    <p> {category} </p>
+                    {click_type}
+
+                </div>
+
 
 
             </div>

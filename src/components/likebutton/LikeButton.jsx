@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LikeButton.css';
-import { onChangeHeart } from '../../utils/profileFunctions';
+import { onChangeHeart } from '../../utils/ArraysAndFunctions';
 
 
 import { AiOutlineClose, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
@@ -36,7 +36,7 @@ const LikeButton = ({ postId }) => {
                     </div>
                     <div className="popup-content">
                         <h1>Deseja registrar este post nas suas revisões?</h1>
-                        <div className="btns-popup">
+                        <div className="btns-popup btns-popup-review">
                             <Button type='button' bg_color='secondary' fun={registerReview} text='sim' />
                             <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
                         </div>

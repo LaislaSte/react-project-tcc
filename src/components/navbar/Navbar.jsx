@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Navbar.css';
+import { CostumerContext } from '../../services/UserContext';
 import { SidebarData, SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
 import Input from '../input/Input'
 import { Link } from 'react-router-dom';
@@ -12,12 +13,11 @@ const Navbar = () => {
     const [navbar, setNavbar] = useState(false);
     const showNavbar = () => setNavbar(!navbar);
 
-    // const [resultSearch, setRedultSearch] = useState([]);
+    //caso o usuario esteja autenticado as informações exibidas no navbar mudam
+    const { authenticated } = useContext(CostumerContext)
 
     const [term, setTerm] = useState([]);
 
-    //caso o usuario esteja autenticado as informações exibidas no navbar mudam
-    const autenticated = false
 
     // const onSearch = (e) => {
     //     setTerm(e.target.value);
@@ -55,9 +55,7 @@ const Navbar = () => {
     // }
 
     const onSearch = (id) => {
-        // setRedultSearch([]);
         console.log(id)
-        // setTerm('');
     }
 
 
@@ -67,7 +65,9 @@ const Navbar = () => {
                 <div className="nav-toggle" onClick={showNavbar}>
                     <GiHamburgerMenu />
                 </div>
-                <h1 className='nav-header-logo' >MemorizeStudio</h1>
+                <h1 className='nav-header-logo' >
+                    <BsSearch />
+                </h1>
                 <Input
                     className='input-outline-secondary nav-header-input'
                     text='Pesquisar'
@@ -85,7 +85,7 @@ const Navbar = () => {
                     <div className="nav-toggle" onClick={showNavbar}>
                         <GiHamburgerMenu />
                     </div>
-                    <h1>MemorizeStudio</h1>
+                    <h1><BsSearch /></h1>
                 </div>
 
                 <li className='item-logo'> <h1>MemorizeStudio</h1> </li>
@@ -101,7 +101,7 @@ const Navbar = () => {
                     />
                 </li>
 
-                {autenticated && (
+                {authenticated && (
                     SidebarData.map((item, index) => {
                         return (
                             <li key={index} className={item.cName}>
@@ -114,7 +114,7 @@ const Navbar = () => {
                     })
                 )}
 
-                {autenticated === false && (
+                {authenticated === false && (
                     SidebarDataPublic.map((item, index) => {
                         return (
                             <li key={index} className={item.cName}>

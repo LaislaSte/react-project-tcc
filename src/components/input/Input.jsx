@@ -16,9 +16,7 @@ const Input = ({
     return (
         <div className="input-container">
             <div className={`input-outline ${className}`}>
-                <div className="img-input">
-                    {icon}
-                </div>
+                {icon}
 
                 <input
                     type={type}
@@ -28,7 +26,7 @@ const Input = ({
                 />
 
             </div>
-                {showMessage && <p className='input-error-message'> {message} </p>}
+            {showMessage && <p className='input-error-message'> {message} </p>}
         </div>
     )
 }

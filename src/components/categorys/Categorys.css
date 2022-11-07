@@ -3,6 +3,7 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
+    height: 5vh;
     background-color: var(--SECONDARY_900);
     font: var(--LIGHT_ITALIC);
     gap: 1px;

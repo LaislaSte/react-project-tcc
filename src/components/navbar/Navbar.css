@@ -95,7 +95,7 @@
 
 
 /* MOBILE */
-@media screen and (max-width: 830px) {
+@media screen and (max-width: 970px) {
 
     .nav-header {
         display: flex;
@@ -168,7 +168,7 @@
 }
 
 /* DESKTOP */
-@media (min-width: 831px) {
+@media (min-width: 971px) {
 
     .nav-header {
         display: none;
@@ -194,12 +194,11 @@
     .nav-menu-items .item-searchbar .input-container {
         height: 2.3rem;
         margin: 0;
-        width: 95%;
     }
 
     .nav-menu-items .item-searchbar {
         transform: translateY(10%);
-        width: 50%;
+        width: 30%;
         margin-left: 1.5rem;
         color: var(--TEXT_LIGHT);
     }
