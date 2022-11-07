@@ -1,9 +1,11 @@
 import React from 'react';
-import { BiHomeAlt } from 'react-icons/bi';
+import avatarDefault from '../assets/icons/avatarDefault.svg';
+
+import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
 import { RiSearch2Line } from 'react-icons/ri';
-import { BsPersonCircle } from 'react-icons/bs';
-import avatarDefault from '../assets/icons/avatarDefault.svg'
+import { BsPersonCircle, BsFillPlusCircleFill } from 'react-icons/bs';
 import { FaGraduationCap } from 'react-icons/fa';
+import { IoMdCreate, IoLogOutOutline } from 'react-icons/io'
 
 export const SidebarDataPublic = [
     {
@@ -28,27 +30,34 @@ export const SidebarDataPublic = [
 
 export const SidebarData = [
     {
-        title: 'Revisão',
-        path: '/review',
-        icon: <BiHomeAlt />,
-        cName: 'nav-text'
-    },
-    {
         title: 'Explorar',
         path: '/explore',
         icon: <RiSearch2Line />,
         cName: 'nav-text'
     },
     {
-        title: 'Meu Perfil',
+        title: 'Criar',
+        path: '/create',
+        icon: <IoMdCreate />,
+        cName: 'nav-text'
+    },
+
+    {
+        title: 'Revisão',
+        path: '/review',
+        icon: <BiHomeAlt />,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Perfil',
         path: '/profile',
         icon: <BsPersonCircle />,
         cName: 'nav-text'
     },
     {
-        title: 'Log out',
+        title: 'Sair',
         path: '/',
-        icon: <BsPersonCircle />,
+        icon: <BiLogOut />,
         cName: 'nav-text'
     }
 ]
