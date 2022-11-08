@@ -1,8 +1,11 @@
 import './App.css';
-import React, { useContext } from 'react';
-import { Route, Routes, Navigate } from "react-router-dom";
+import React, { useContext, useEffect } from 'react';
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import { CostumerProvider, CostumerContext } from './services/UserContext';
 import { PostProvider } from './services/PostContext';
+
+import ProtectedRoute from './ProtectedRoute';
+
 
 /*IMPORT THE PAGES */
 import Public from './routes/public/Public';
@@ -18,17 +21,50 @@ import Explore from './routes/explore/Explore';
 import Profile from './routes/profile/Profile';
 import Review from './routes/review/Review';
 import Config from './routes/config/Config';
+import { auth } from './services/Banco';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function App() {
 
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  useEffect(
+    () => {
+      if (loading) {
+        //a loading screen/component
+        return;
+      }
+      if (user) navigate('/explore');
+
+    },
+    [user, loading]
+  );
+
   const Private = ({ children }) => {
-    const { authenticated } = useContext(CostumerContext)
+    const { authenticated } = useContext(CostumerContext);
+    
 
-    if (!authenticated) {
-      return <Navigate to='/' />
-    }
+    // useEffect(
+    //   () => {
+    //     if (loading) {
+    //       //a loading screen/component
+    //       return;
+    //     }
+    //     if (user) return children;
 
-    return children
+    //   },
+    //   [user, loading]
+    // )
+
+    // if (user) return children;
+    if (user) return children;
+    // if (!user) {
+    //   console.log(user);
+    //   return <Navigate to='/' />
+    // }
+
+    // return children
   }
 
   return (
@@ -46,10 +82,11 @@ function App() {
           <Route path="/deleteaccount" element={<DeleteAccount />} />
           <Route path="/successechange" element={<SuccessePage />} />
 
-          <Route path="/config" element={<Private> <Config /> </Private>} />
-          <Route path="/explore" element={<Private> <Explore /> </Private>} />
-          <Route path="/profile" element={<Private> <Profile /> </Private>} />
-          <Route path="/review" element={<Private> <Review /> </Private>} />
+          {/* private routes: */}
+          <Route path="/config" element={<ProtectedRoute> <Config /> </ProtectedRoute>} />
+          <Route path="/explore" element={<ProtectedRoute> <Explore /> </ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
+          <Route path="/review" element={<ProtectedRoute> <Review /> </ProtectedRoute>} />
         </Routes>
       </CostumerProvider>
 

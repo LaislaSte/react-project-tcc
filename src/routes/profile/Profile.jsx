@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { query, collection, getDocs, where } from "firebase/firestore";
+import { db } from '../../services/Banco';
 import './Profile.css';
 import { morePostI } from '../../utils/arraysHeader';
 import { fakeReviews } from '../../utils/ArraysAndFunctions';
@@ -11,6 +13,8 @@ import Navbar from '../../components/navbar/Navbar';
 import CreateButton from '../../components/createbutton/CreateButton';
 
 import { BsGearFill, BsFillArrowDownCircleFill } from 'react-icons/bs';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../services/Banco';
 
 const Profile = () => {
     //pegar o id do usuario logado
@@ -22,6 +26,28 @@ const Profile = () => {
 
     // const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
     // console.log(image);
+
+    const [name, setName] = useState("");
+    const [user, loading, error] = useAuthState(auth);
+    const navigate = useNavigate();
+
+    const fetchUserName = async () => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+            const doc = await getDocs(q);
+            const data = doc.docs[0].data();
+            setName(data.name);
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
+        }
+    };
+
+    useEffect(() => {
+        if (loading) return;
+        if (!user) return navigate("/");
+        fetchUserName();
+    }, [user, loading]);
 
     return (
         <div className='Profile'>
@@ -36,7 +62,7 @@ const Profile = () => {
                 </div>
 
                 <div className="bios">
-                    <h2>{fakeUser.name}</h2>
+                    <h2>{name}</h2>
                     {fakeUser.bios}
                 </div>
 

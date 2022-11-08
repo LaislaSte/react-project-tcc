@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'; //tem q instalar**
 import { auth } from '../../services/Banco';
 import { registerWithEmailAndPassword, signInWithGoogle } from '../../services/googleAuthenticatios';
 import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validators';
-import { CostumerContext } from '../../services/UserContext';
+import { UserAuth } from '../../services/UserAuth';
 
 import './Register.css';
 import Explore from '../../assets/image-girl-holding-phone.png';
@@ -26,7 +26,9 @@ const Register = () => {
     const [user, loading, error] = useAuthState(auth);
     const history = useNavigate();
 
-    const { addUser, submiting } = useContext(CostumerContext);
+    // const { addUser, submiting } = useContext(UserAuth);
+    const { registerWithEmailAndPassword } = UserAuth();
+    // const { registerWithEmailAndPassword } = useContext(UserAuth);
 
     const formValidRegister = () => {
         if (emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)) {
@@ -50,7 +52,7 @@ const Register = () => {
                 //a loading screen/component
                 return;
             }
-            if (user) history.replaceState('/explore');
+            if (user) history('/explore');
 
         },
         [user, loading]

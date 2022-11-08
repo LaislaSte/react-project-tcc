@@ -9,23 +9,29 @@ import './Login.css';
 import { CostumerContext } from '../../services/UserContext';
 import { emailValid, passwordValid } from '../../utils/validators';
 
+import signIn from '../../services/UserAuth';
+import { UserAuth } from '../../services/UserAuth';
+
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import Footer from '../../components/footer/Footer';
 
 import { FaEnvelope } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
+import { async } from '@firebase/util';
 
 
 const Login = ({
     //PropriedadeOnSubmit
 }) => {
-    const { login, authenticated, loginGoogle } = useContext(CostumerContext);
+    const { logInWithEmailAndPassword, authenticated, loginGoogle } = useContext(CostumerContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
+    // const { logInWithEmailAndPassword } = UserAuth();
 
     useEffect(
         () => {
@@ -43,10 +49,10 @@ const Login = ({
         return emailValid(email) && passwordValid(password);
     }
 
-    // const handleClick = (e) => {
-    //     e.preventDefault();
-    //     loginGoogle();
-    // }
+    const handleClick = () => {
+        logInWithEmailAndPassword(email, password);
+        navigate('/explore');
+    }
 
     // const handleSubmit = (e) => {
     //     e.preventDefault();
@@ -64,7 +70,7 @@ const Login = ({
                     <div className="brand-content-item">
                         <h1>Acesse</h1>
                         <p className="p-italic">Insira seus dados</p>
-                        <p> Autenticado: {String(authenticated)} </p>
+                        <p> Autenticado: {String(user)} </p>
                     </div>
                     <form className="login-form-container" >
                         <Input
@@ -92,8 +98,8 @@ const Login = ({
                             type='button'
                             text='Entrar'
                             bg_color='secondary'
-                            fun={() => logInWithEmailAndPassword(email, password)}
-                            disable={formValidLogin()}
+                            fun={handleClick}
+                            disable={!formValidLogin()}
                         />
 
                         <Button
