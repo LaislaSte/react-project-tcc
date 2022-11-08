@@ -1,5 +1,9 @@
-import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth'; //tem q instalar**
+
+import { auth } from '../../services/Banco';
+import { registerWithEmailAndPassword, signInWithGoogle } from '../../services/googleAuthenticatios';
 import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validators';
 import { CostumerContext } from '../../services/UserContext';
 
@@ -19,6 +23,9 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [user, loading, error] = useAuthState(auth);
+    const history = useNavigate();
+
     const { addUser, submiting } = useContext(CostumerContext);
 
     const formValidRegister = () => {
@@ -30,12 +37,24 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(`usuario cadastrado`);
-        addUser({ name, email, password });
+        registerWithEmailAndPassword(name, email, password);
         setName('');
         setEmail('');
         setPassword('');
         setPasswordConfirm('');
     }
+
+    useEffect(
+        () => {
+            if (loading) {
+                //a loading screen/component
+                return;
+            }
+            if (user) history.replaceState('/explore');
+
+        },
+        [user, loading]
+    )
 
     return (
         <>
@@ -97,6 +116,7 @@ const Register = () => {
                             type='submit'
                             text='Cadastrar'
                             bg_color='primary'
+                            fun={handleSubmit}
                             disable={formValidRegister()}
                         />
 
@@ -104,7 +124,7 @@ const Register = () => {
                             type='button'
                             text='Entrar com Google'
                             bg_color='google'
-                            fun={handleSubmit}
+                            fun={signInWithGoogle}
                         />
 
                     </form>

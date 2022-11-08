@@ -1,7 +1,10 @@
 
-import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth'; //tem q instalar**
 
+import { auth } from '../../services/Banco';
+import { logInWithEmailAndPassword, signInWithGoogle } from '../../services/googleAuthenticatios';
 import './Login.css';
 import { CostumerContext } from '../../services/UserContext';
 import { emailValid, passwordValid } from '../../utils/validators';
@@ -21,22 +24,36 @@ const Login = ({
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [user, loading, error] = useAuthState(auth);
+    const navigate = useNavigate();
+
+    useEffect(
+        () => {
+            if (loading) {
+                //a loading screen/component
+                return;
+            }
+            if (user) navigate('/explore');
+
+        },
+        [user, loading]
+    )
 
     const formValidLogin = () => {
         return emailValid(email) && passwordValid(password);
     }
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        loginGoogle();
-    }
+    // const handleClick = (e) => {
+    //     e.preventDefault();
+    //     loginGoogle();
+    // }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // console.log('dados do form', { email, password });
-        //PropriedadeOnSubmit = { email, password }
-        login({email, password});
-    }
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     // console.log('dados do form', { email, password });
+    //     //PropriedadeOnSubmit = { email, password }
+    //     login({email, password});
+    // }
 
     return (
         <div className='login'>
@@ -49,7 +66,7 @@ const Login = ({
                         <p className="p-italic">Insira seus dados</p>
                         <p> Autenticado: {String(authenticated)} </p>
                     </div>
-                    <form className="login-form-container" onSubmit={handleSubmit}>
+                    <form className="login-form-container" >
                         <Input
                             text='E-mail'
                             className='input-outline-secondary text-dark'
@@ -72,17 +89,18 @@ const Login = ({
                         />
 
                         <Button
-                            type='submit'
+                            type='button'
                             text='Entrar'
                             bg_color='secondary'
-                            //disable={formValidLogin()}
+                            fun={() => logInWithEmailAndPassword(email, password)}
+                            disable={formValidLogin()}
                         />
 
                         <Button
                             type='button'
                             text='Entrar com Google'
                             bg_color='google'
-                            fun={handleClick}
+                            fun={signInWithGoogle}
                         />
 
                     </form>

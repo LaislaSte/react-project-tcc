@@ -1,8 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, setDoc, getDocFromServer, query, where } from "firebase/firestore";
+import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
+
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where } from "firebase/firestore";
 import { db, app } from './Banco';
 // import   from './Banco';
 
@@ -23,6 +24,7 @@ export const CostumerProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
+    const [authenticated, setAuthenticated] = useState(false);
 
     // const [users, setUsers] = useState(null);
 
@@ -41,17 +43,19 @@ export const CostumerProvider = ({ children }) => {
             //pego devolta o user do localStorage
             const recoveredToken = localStorage.getItem('@google:token');
             const recoveredGoggleUser = localStorage.getItem('@google:user');
-            const recoveredUser = localStorage.getItem('user');
+            const recoveredUser = localStorage.getItem('user:');
 
             //(com a fun if dessa maneira consigo validar o que esta no seu parametro), se é valido seto o usuario novamente
             if (recoveredGoggleUser && recoveredToken) {
                 setUser(JSON.parse(recoveredGoggleUser));
                 setToken(JSON.parse(recoveredToken));
+                setAuthenticated(true);
                 //navegue para a home
                 navigate('/');
             }
             if (recoveredUser) {
                 setUser(JSON.parse(recoveredUser));
+                setAuthenticated(true);
                 navigate('/');
             }
             //quando o validar os itens, set o carregamento da info (loading) para false
@@ -139,10 +143,13 @@ export const CostumerProvider = ({ children }) => {
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
+                setUser(doc.data());
+                localStorage.setItem('user:', JSON.stringify(doc.data()));
+                // navigate('/config');
             });
-            navigate('/config');
+            console.log(user);
         } else {
-            alert("Email ou senha incorretos!!!")
+            alert("Email ou senha incorretos!")
         }
     }
 
@@ -154,9 +161,10 @@ export const CostumerProvider = ({ children }) => {
                 const userG = result.user;
                 console.log(userG);
                 setUser(userG);
-                localStorage.setItem('@google:user ', JSON.stringify(user));
-                localStorage.setItem('@google:token ', token);
-                navigate('/config');
+                setAuthenticated(true);
+                localStorage.setItem('@google:user', JSON.stringify(user));
+                localStorage.setItem('@google:token', token);
+                navigate('/explore');
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
@@ -169,6 +177,7 @@ export const CostumerProvider = ({ children }) => {
     const logout = () => {
         if (user) {
             setUser(null);
+            setAuthenticated(false);
             localStorage.removeItem('user');
             localStorage.removeItem('@google:user ');
             localStorage.removeItem('@google:token ');
@@ -180,7 +189,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated: !!user, user, token, addUser, updateUser, removeUser, login, loginGoogle, logout, loading, submiting }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, addUser, updateUser, removeUser, login, loginGoogle, logout, loading, submiting }}>
             {children}
         </CostumerContext.Provider>
     )

@@ -9,8 +9,8 @@ import Public from './routes/public/Public';
 import Login from './routes/login/Login';
 import Register from './routes/register/Register';
 
-import { ChangePassword1, ChangePassword2 } from './routes/changeinfuser/ChangePassword';
-import { ChangeEmail1, ChangeEmail2 } from './routes/changeinfuser/ChangeEmail';
+import { ChangePassword1 } from './routes/changeinfuser/ChangePassword';
+// import { ChangeEmail1, ChangeEmail2 } from './routes/changeinfuser/ChangeEmail';
 import SuccessePage from './routes/changeinfuser/SuccessePage';
 import DeleteAccount from './routes/changeinfuser/DeleteAccount';
 
@@ -40,9 +40,9 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/changepassword1" element={<ChangePassword1 />} />
-          <Route path="/changepassword2" element={<ChangePassword2 />} />
+          {/* <Route path="/changepassword2" element={<ChangePassword2 />} />
           <Route path="/changeemail1" element={<ChangeEmail1 />} />
-          <Route path="/changeemail2" element={<ChangeEmail2 />} />
+          <Route path="/changeemail2" element={<ChangeEmail2 />} /> */}
           <Route path="/deleteaccount" element={<DeleteAccount />} />
           <Route path="/successechange" element={<SuccessePage />} />
 
