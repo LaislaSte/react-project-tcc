@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
-import {db} from './Banco';
+import { db } from './Banco';
 
-import {CostumerContext} from '../services/UserContext';
+import { CostumerContext } from '../services/UserContext';
 
 //instanciado um objeto com o Hook do react createContext
 export const PostsContext = createContext();
@@ -18,7 +18,7 @@ export const PostProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(true);
 
-    const {user, token} = useContext(CostumerContext);
+    const { user, token } = useContext(CostumerContext);
 
 
     //Ao renderizar meu componente, traga junto os meus dados do banco
@@ -47,8 +47,8 @@ export const PostProvider = ({ children }) => {
     // }
 
     //função para cadastrar um post na coleção posts
-    
-    const addPost = async ({title, content, category}) => {
+
+    const addPost = async ({ title, content, category }) => {
         const post = await addDoc(collectionRef, {
             title,
             content,

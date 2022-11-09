@@ -17,14 +17,16 @@ import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 import { storage } from '../../services/Banco';
 import { Link } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
-
+import { updateProfile } from 'firebase/auth';
+import uploadFile from '../../services/uploadFile';
+import { async } from '@firebase/util';
 
 const Config = () => {
     const [image, setImage] = useState(null);
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
-    const { updateUser, user } = useContext(CostumerContext);
+    const { user, updateUser } = useContext(CostumerContext);
 
     const [name_user, setUserName] = useState('');
     const [bios_user, setBios] = useState('');
@@ -65,33 +67,52 @@ const Config = () => {
 
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const file = e.target[0]?.files[0];
 
         if (!file) return;
 
-        const storageRef = ref(storage, `images/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-            'state_changed',
-            snapshot => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setProgress(progress);
-            },
-            error => {
-                console.error(error);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+        let userObj = { displayName: name_user }
+        let imagesObj = { uName: name_user }
+        try {
+            if (file) {
+                const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
+                const url = await uploadFile(file, `profile/${user?.uid}/${imageName}`);
+                //todo: delete the previous profile image od the user
+
+                userObj = { ...userObj, photoURL: url }
+                imagesObj = { ...imagesObj, uURL: url }
             }
-        )
 
-        setIdUser(user.token);
+            await updateProfile(user, userObj);
+            console.log('user updated');
+        } catch (error) {
+            console.log(error);
 
-        updateUser(userLoged_id, img_user, bios_user, name_user, favCategory_user);
+            // updateUser(imgURL, bios_user, name_user);
+        }
+
+        // const storageRef = ref(storage, `images/${file.name}`);
+        // const uploadTask = uploadBytesResumable(storageRef, file);
+        // uploadTask.on(
+        //     'state_changed',
+        //     snapshot => {
+        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //         setProgress(progress);
+        //     },
+        //     error => {
+        //         console.error(error);
+        //     },
+        //     () => {
+        //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+        //     }
+        // )
+
     }
+
+
 
     return (
         <div className='Config'>
