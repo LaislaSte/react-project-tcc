@@ -28,3 +28,23 @@
 .menu-item-category .item-category-selected {
     background: none;
 }
+
+@media (max-width: 670px) {
+    .menu-item-category {
+        justify-content: flex-start;
+        background: none;
+        /* gap: .5rem; */
+        overflow-x: scroll;
+        background-color: var(--SECONDARY_900);
+        position: fixed;
+        top: 0;
+    }
+
+    .menu-item-category .item-category {
+        width: 8rem;
+        /* border-right: 1px solid var(--SECONDARY_900); */
+        /* border-left: 1px solid var(--SECONDARY_900); */
+        padding: .8rem;
+    }
+
+}

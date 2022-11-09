@@ -1,12 +1,17 @@
 import React, { useState, useContext } from 'react';
 import './Navbar.css';
 import { CostumerContext } from '../../services/UserContext';
-import { SidebarData, SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
+import { SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
 import Input from '../input/Input'
 import { Link } from 'react-router-dom';
 
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
+import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
+import { RiSearch2Line } from 'react-icons/ri';
+import { BsPersonCircle, BsFillPlusCircleFill } from 'react-icons/bs';
+import { FaGraduationCap } from 'react-icons/fa';
+import { IoMdCreate, IoLogOutOutline } from 'react-icons/io'
 
 const Navbar = () => {
 
@@ -14,7 +19,7 @@ const Navbar = () => {
     const showNavbar = () => setNavbar(!navbar);
 
     //caso o usuario esteja autenticado as informações exibidas no navbar mudam
-    const { authenticated } = useContext(CostumerContext)
+    const { user, logout } = useContext(CostumerContext)
 
     const [term, setTerm] = useState([]);
 
@@ -85,7 +90,7 @@ const Navbar = () => {
                     <div className="nav-toggle" onClick={showNavbar}>
                         <GiHamburgerMenu />
                     </div>
-                    <h1><BsSearch /></h1>
+                    <h1>MemorizeStudio</h1>
                 </div>
 
                 <li className='item-logo'> <h1>MemorizeStudio</h1> </li>
@@ -101,21 +106,37 @@ const Navbar = () => {
                     />
                 </li>
 
-                {authenticated && (
-                    SidebarData.map((item, index) => {
-                        return (
-                            <li key={index} className={item.cName}>
-                                <Link to={item.path} className='item-link'>
-                                    {item.icon}
-                                    {item.title}
+                {user
+                    ? (
+                        <>
+                            <li className='nav-text'>
+                                <Link to='/explore' className='item-link'>
+                                    <RiSearch2Line />
+                                    Explorar
                                 </Link>
                             </li>
-                        )
-                    })
-                )}
+                            <li className='nav-text'>
+                                <Link to='/review' className='item-link'>
+                                    <BiHomeAlt />
+                                    Revisão
+                                </Link>
+                            </li>
+                            <li className='nav-text'>
+                                <Link to='/profile' className='item-link'>
+                                    <BsPersonCircle />
+                                    Perfil
+                                </Link>
+                            </li>
+                            <li className='nav-text'>
+                                <div className='item-link' onClick={() => { logout() }}>
+                                    <BiLogOut />
+                                    Logout
+                                </div>
+                            </li>
+                        </>
+                    )
 
-                {authenticated === false && (
-                    SidebarDataPublic.map((item, index) => {
+                    : (SidebarDataPublic.map((item, index) => {
                         return (
                             <li key={index} className={item.cName}>
                                 <Link to={item.path} className='item-link'>
@@ -124,7 +145,34 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         )
-                    }))}
+                    }))
+                }
+                {/* {user
+                    ? (SidebarData.map((item, index) => {
+                        return (
+                            <li key={index} className={item.cName} onClick={item.functionLogout}>
+                                <Link to={item.path} className='item-link'>
+                                    {item.icon}
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    }))
+
+                    : (SidebarDataPublic.map((item, index) => {
+                        return (
+                            <li key={index} className={item.cName}>
+                                <Link to={item.path} className='item-link'>
+                                    {item.icon}
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    }))
+                } */}
+
+                {/* {user === false && (
+                    )} */}
 
             </ul>
 

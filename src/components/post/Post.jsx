@@ -41,15 +41,20 @@ export const Post = ({
             <div className='post-container'>
 
                 <div className="header-post">
+                    <div className="header-user-post">
 
-                    <div className="header-content-user" >
-                        <div className="header-user-avatar">
-                            <img src={avatar} alt="avatar do usuário do post" className='header-user-avatar-img' />
+                        <div className="header-content-user" >
+                            <div className="header-user-avatar">
+                                <img src={avatar} alt="avatar do usuário do post" className='header-user-avatar-img' />
+                            </div>
+                            <p> {user_name} </p>
                         </div>
-                        <p> {user_name} </p>
-                    </div>
 
-                    <h3 > {title} </h3>
+                        <h3 >
+                            <p> {title} </p> - <p className='p-italic'>{category}</p>
+                        </h3>
+
+                    </div>
 
                     <div className="header-show-more">
                         <BiDotsVertical onClick={onChange} />
@@ -92,7 +97,6 @@ export const Post = ({
 
                 <div className="footer-post">
 
-                    <p> {category} </p>
                     {click_type}
 
                 </div>
