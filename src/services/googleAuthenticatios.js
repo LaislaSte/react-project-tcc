@@ -16,6 +16,11 @@ const signInWithGoogle = async () => {
                 authProvider: "google",
                 email: user.email,
             });
+
+            //         setUser(user);
+            //         localStorage.setItem('@google:user', JSON.stringify(user));
+            //         localStorage.setItem('@google:token', token);
+            //         navigate('/explore');
         }
     } catch (err) {
         console.error(err);
@@ -49,6 +54,18 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     }
 };
 
+//função para cadastrar um usuário na coleção user
+// const addUser = async ({ name, email, password }) => {
+//     setSubmiting(true);
+//     const user = await addDoc(collectionRef, {
+//         name,
+//         email,
+//         password
+//     });
+//     console.log("usuario cadastrado", user);
+//     setSubmiting(false)
+// }
+
 const sendPasswordReset = async (email) => {
     try {
         await sendPasswordResetEmail(auth, email);
@@ -61,6 +78,30 @@ const sendPasswordReset = async (email) => {
 const logout = () => {
     signOut(auth);
 };
+
+//função para pegar os usuários do banco da coleção user
+// function getUsers() {
+//     getDocs(collectionRef)
+//         .then(response => {
+//             const usersDB = response.docs.map(doc => (
+//                 {
+//                     data: doc.data(),
+//                     nameDB: doc.data().nome,
+//                     emailDB: doc.data().email,
+//                     passwordDB: doc.data().password,
+//                     id: doc.id
+//                 }))
+//             setUsers(usersDB);
+//         })
+//         .catch(error => { console.log(error.message) })
+// }
+
+//Ao renderizar meu componente, traga junto os meus dados do banco
+// useEffect(() => {
+//     getUsers();
+// },
+//     []
+// );
 
 
 export {
