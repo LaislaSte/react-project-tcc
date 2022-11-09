@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
 
 import { db, auth, provider } from './Banco';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where } from "firebase/firestore";
@@ -21,23 +21,16 @@ export const CostumerProvider = ({ children }) => {
 
     //criado estados
     const [user, setUser] = useState(null);
+    // const [users, setUsers] = useState(null);
     const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
-    const [authenticated, setAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    // const [currentUser, setCurrentUser] = useState(null);
-    const [modal, setModal] = useState({ isOpen: false, title: '', content: '' });
-
-    // const [users, setUsers] = useState(null);
 
     const [image, setImage] = useState(null);
     const [bios, setBios] = useState('');
     const [name, setName] = useState('');
 
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(true);
 
     //Ao renderizar meu componente, verifica se há algum usuário logado, pegando os item do localstorage e os validando
     // useEffect(
@@ -70,6 +63,7 @@ export const CostumerProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             console.log(currentUser);
             setUser(currentUser);
+            setToken(user?.getIdToken());
             console.log('user status changed: ', currentUser);
         });
         return () => {
@@ -77,44 +71,8 @@ export const CostumerProvider = ({ children }) => {
         };
     }, []);
 
-    //Ao renderizar meu componente, traga junto os meus dados do banco
-    // useEffect(() => {
-    //     getUsers();
-    // },
-    //     []
-    // );
-
-    //função para pegar os usuários do banco da coleção user
-    // function getUsers() {
-    //     getDocs(collectionRef)
-    //         .then(response => {
-    //             const usersDB = response.docs.map(doc => (
-    //                 {
-    //                     data: doc.data(),
-    //                     nameDB: doc.data().nome,
-    //                     emailDB: doc.data().email,
-    //                     passwordDB: doc.data().password,
-    //                     id: doc.id
-    //                 }))
-    //             setUsers(usersDB);
-    //         })
-    //         .catch(error => { console.log(error.message) })
-    // }
-
-    //função para cadastrar um usuário na coleção user
-
-    // const addUser = async ({ name, email, password }) => {
-    //     setSubmiting(true);
-    //     const user = await addDoc(collectionRef, {
-    //         name,
-    //         email,
-    //         password
-    //     });
-    //     console.log("usuario cadastrado", user);
-    //     setSubmiting(false)
-    // }
-
     const registerWithEmailAndPassword = async (name, email, password) => {
+        setLoading(true);
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const user = res.user;
@@ -129,6 +87,8 @@ export const CostumerProvider = ({ children }) => {
             console.error(err);
             alert(err.message);
         }
+
+        setLoading(false);
     };
 
     const fetchUserName = async () => {
@@ -144,11 +104,14 @@ export const CostumerProvider = ({ children }) => {
         }
     };
 
-    //função para deletar um usuário na coleção user
-    const removeUser = async (id) => {
-        const userDeleted = doc(db, 'users', id);
-        await deleteDoc(userDeleted);
-        console.log("usuario deletado");
+    const revomeUser = () => {
+        deleteUser(user).then(() => {
+            // User deleted.
+            console.log('usuário deletado');
+        }).catch((error) => {
+            // An error ocurred
+            console.log(error);
+        });
     }
 
     //FUNÇÕES DE LOGIN E LOGOUT
@@ -161,30 +124,6 @@ export const CostumerProvider = ({ children }) => {
             alert(err.message);
         }
     };
-
-    // const signInWithGoogle = async () => {
-    //     try {
-    //         const res = await signInWithPopup(auth, provider);
-    //         const user = res.user;
-    //         const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    //         const docs = await getDocs(q);
-    //         if (docs.docs.length === 0) {
-    //             await addDoc(collection(db, "users"), {
-    //                 uid: user.uid,
-    //                 name: user.displayName,
-    //                 authProvider: "google",
-    //                 email: user.email,
-    //             });
-    //         }
-    //         setAuthenticated(true);
-    //         localStorage.setItem('@google:user', JSON.stringify(user));
-    //         localStorage.setItem('@google:token', token);
-    //         navigate('/explore');
-    //     } catch (err) {
-    //         console.error(err);
-    //         alert(err.message);
-    //     }
-    // };
 
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider)
@@ -206,7 +145,6 @@ export const CostumerProvider = ({ children }) => {
 
                 console.log(userGoogle);
                 setUser(userGoogle);
-                setAuthenticated(true);
                 localStorage.setItem('@google:user', JSON.stringify(user));
                 localStorage.setItem('@google:token', token);
                 navigate('/explore');
@@ -243,33 +181,82 @@ export const CostumerProvider = ({ children }) => {
 
     // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
     //função para atualizar um usuário na coleção user
-    const updateUser = (img_user, bios_user, name_user, favCategory_user) => {
+    const updateUserProfile = (img_user, name_user) => {
+
+        updateProfile(user, {
+            displayName: name_user,
+            photoURL: img_user
+        }).then(() => {
+            // Profile updated!
+            console.log('foto de perfil e nome de usuário atualizado');
+        }).catch((error) => {
+            // An error occurred
+            console.log("An error occured while fetching user data", error);
+        });
+
         try {
             const q = query(collection(db, "users"), where("uid", "==", user.uid));
             const docs = getDocs(q);
             if (docs.docs.length === 0) {
                 updateDoc(collection(db, "users"), {
                     uid: user.uid,
-                    name: user.displayName,
-                    authProvider: "google",
-                    email: user.email,
+                    authProvider: "google teste",
                     bios: bios_user,
-                    userName: name_user,
-                    avatar: img_user
-                });
-                console.log('user updated');
+                    categorys: user_categorys,
+                }).then(() => {
+                    console.log('atualização com query');
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
-
-        } catch (err) {
-            console.error(err);
-            alert("An error occured while fetching user data");
+            console.log('user updated');
+        } catch (error) {
+            console.log(error)
         }
+
+    }
+
+    const updateUserEmail = (user_email) => {
+        updateEmail(user, user_email).then(() => {
+            // Email updated!
+            console.log('e-mail de usuário atualizado');
+        }).catch((error) => {
+            // An error occurred
+            console.log(error);
+        });
+    }
+
+    const verifiedUserEmail = () => {
+        sendEmailVerification(user)
+            .then((result) => {
+                // Email verification sent!
+                console.log('e-mail de verificação enviado', result);
+                return 'success';
+            }).catch((error) => {
+                console.log(error);
+                return 'failed';
+            })
+    }
+
+
+    const reathenticateUserCredentials = () => {
+
+        // TODO(you): prompt the user to re-provide their sign-in credentials
+        const credential = promptForCredentials();
+
+        reauthenticateWithCredential(user, credential).then(() => {
+            // User re-authenticated.
+            console.log('feita reautenticação');
+        }).catch((error) => {
+            // An error ocurred
+            console.log(error);
+        });
     }
 
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUser, removeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, submiting, name, modal, setModal }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail, reathenticateUserCredentials, name }}>
             {children}
         </CostumerContext.Provider>
     )

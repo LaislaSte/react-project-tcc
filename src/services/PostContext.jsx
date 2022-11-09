@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
-import { db } from './Banco';
+import { auth, db } from './Banco';
 
 import { CostumerContext } from '../services/UserContext';
+import { updateCurrentUser } from 'firebase/auth';
 
 //instanciado um objeto com o Hook do react createContext
 export const PostsContext = createContext();
@@ -13,13 +14,13 @@ const collectionRef = collection(db, 'posts');
 export const PostProvider = ({ children }) => {
 
     //criado estados
-    const [posts, setPosts] = useState(null);
+    // const [posts, setPosts] = useState(null);
+    const [post, setPost] = useState(null);
     const [likes, setLikes] = (null);
 
     const [loading, setLoading] = useState(true);
 
     const { user, token } = useContext(CostumerContext);
-
 
     //Ao renderizar meu componente, traga junto os meus dados do banco
     // useEffect(() => {
@@ -49,32 +50,50 @@ export const PostProvider = ({ children }) => {
     //função para cadastrar um post na coleção posts
 
     const addPost = async ({ title, content, category }) => {
-        const post = await addDoc(collectionRef, {
-            title,
-            content,
-            user,
-            token,
-            category
-        });
-        console.log("post cadastrado", post);
+        try {
+            const post = await addDoc(collectionRef, {
+                title: title,
+                description: content,
+                user: user,
+                userToken: token,
+                categorys: category,
+                likes: 0
+            });
+            console.log("post cadastrado", post.id, post);
+            // updateCurrentUser(auth, user)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     //função para atualizar um post na coleção posts para quando ele receber um like (A FAZER)
-    const updatePost = async (id) => {
-        const postSelected = doc(db, 'posts', id);
+    const updatePost = async (id, update_title, update_description, update_category, update_img) => {
+        try {
+            const q = query(collection(db, "post"), where("id", "==", id));
+            const doc = await getDocs(q);
+            const data = doc?.docs[0]?.data();
 
-        if (postSelected) {
-            try {
-                await updateDoc(postSelected, {
-                    likesDB: likes
-                });
-                console.log('post atualizado');
-            } catch (error) {
-                console.log(error, error.message);
+            if (data) {
+                const docData = {
+                    title: update_title,
+                    description: update_description,
+                    category: update_category,
+                    imgURL: update_img,
+                };
+
+                try {
+                    setDoc(doc, docData);
+                    console.log('post atualizado');
+                } catch (error) {
+                    console.log(error, error.message);
+                }
             }
-        }
 
-        return;
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
+        }
     }
 
     //função para deletar um post na coleção posts
