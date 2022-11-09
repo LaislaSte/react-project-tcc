@@ -19,23 +19,30 @@ const Explore = () => {
     const [user, loading, error] = useAuthState(auth);
     const [name, setName] = useState("");
     const navigate = useNavigate();
-    const fetchUserName = async () => {
+    const fetchUserInfo = async () => {
         try {
-            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            const doc = await getDocs(q);
-            const data = doc.docs[0].data();
-            setName(data.name);
+            // const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+            // const doc = await getDocs(q);
+            // const data = doc.docs[0].data();
+            const userBios = user?.bios;
+            const uid = user?.uid;
+            const token = user?.getIdToken();
+            const userName = user?.email;
+            const userAvatar = user?.photoURL;
+            setName(userName);
+            setImgURL(userAvatar);
+            setBios(userBios);
         } catch (err) {
             console.error(err);
             alert("An error occured while fetching user data");
         }
     };
 
-    // useEffect(() => {
-    //     if (loading) return;
-    //     if (!user) return navigate("/");
-    //     fetchUserName();
-    // }, [user, loading]);
+    useEffect(() => {
+        if (loading) return;
+        if (!user) return navigate("/");
+        fetchUserInfo();
+    }, [user, loading]);
 
     return (
         <>
