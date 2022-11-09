@@ -1,35 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import './CheckBox.css'
-import { category, categorys } from '../../utils/arraysHeader';
-import { BsCheck } from 'react-icons/bs';
+import React, { useState } from "react";
+import { toppings } from "../../utils/arraysHeader";
+// import "./styles.css";
+import './CheckBox.css';
 
-const CheckBox = ({ options = [], onChange }) => {
+const getFormattedPrice = (price) => `$${price.toFixed(2)}`;
 
+export default function CheckBox() {
+  const [checkedState, setCheckedState] = useState(
+    new Array(toppings.length).fill(false)
+  );
 
-    const [isItLimited, setItIsLimited] = useState(false);
-    const [aa, setAA] = useState(false);
-    const changeA = () => setAA(!aa);
+  const [total, setTotal] = useState(0);
 
-    const [favCategory_user, setCategorys] = useState([]);
+  const [disable, setDisable] = useState(0);
 
-    return (
-        <div className='cb-group'>
-            {options.map((item, index) => {
-                return (
-                    <div className="form-checked-box" onClick={() => changeA()}>
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
+    );
 
-                        <div className="check-container">
-                            <BsCheck className={aa ? 'check-show' : 'check-hide'} />
-                        </div>
+    setCheckedState(updatedCheckedState);
 
-                        <label htmlFor={index}>{item.name}</label>
-                    </div>
-                )
-            })
-            }
+    const totalPrice = updatedCheckedState.reduce(
+      (sum, currentState, index) => {
+        if (currentState === true) {
+          return sum + toppings[index].price;
+        }
+        return sum;
+      },
+      0
+    );
 
-        </div>
-    )
+    setTotal(totalPrice);
+  };
+
+  return (
+    <div className="App">
+      <h3>Select Toppings</h3>
+      <ul className="toppings-list">
+        {toppings.map(({ name, price }, index) => {
+          return (
+            <li key={index}>
+              <div className="toppings-list-item">
+                <div className="left-section">
+                  <input
+                    type="checkbox"
+                    id={`custom-checkbox-${index}`}
+                    name={name}
+                    value={name}
+                    checked={checkedState[index]}
+                    onChange={() => handleOnChange(index)}
+                  />
+                  <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
+                </div>
+                <div className="right-section">{getFormattedPrice(price)}</div>
+              </div>
+            </li>
+          );
+        })}
+        <li>
+          <div className="toppings-list-item">
+            <div className="left-section">Total:</div>
+            <div className="right-section">{getFormattedPrice(total)}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  );
 }
-
-export default CheckBox;

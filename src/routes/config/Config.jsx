@@ -65,6 +65,14 @@ const Config = () => {
     // setCategorys(arrSelecteds);
     // }
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleOnChange = (value) => {
+        setIsChecked(!isChecked);
+        const arrCat = [];
+        arrCat.push(value);
+        setCategorys(arrCat);
+    };
 
 
     const handleSubmit = async (e) => {
@@ -176,7 +184,29 @@ const Config = () => {
                                     </div>
                                 )
                             })}
+
+                                Select your pizza topping:
+                                <div className="topping">
+                                    <input
+                                        type="checkbox"
+                                        id="topping"
+                                        name="topping"
+                                        value="Paneer"
+                                        checked={isChecked}
+                                        onChange={(e) => handleOnChange(e.target.value)}
+                                    />
+                                    Paneer
+                                </div>
+
+                                <div className="result">
+                                    Above checkbox is {isChecked ? "checked" : "un-checked"}.
+                                    the value on the input: {favCategory_user}
+                                </div>
+                            
                         </div>
+
+
+                        <CheckBox/>
                     </div>
 
                     <Button

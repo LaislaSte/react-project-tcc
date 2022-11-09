@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, query, where, setDoc } from "firebase/firestore";
 import { auth, db } from './Banco';
 
 import { CostumerContext } from '../services/UserContext';
@@ -106,7 +106,7 @@ export const PostProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD
     return (
-        <PostsContext.Provider value={{ posts, addPost, updatePost, removePost, loading }}>
+        <PostsContext.Provider value={{ post, addPost, updatePost, removePost, loading }}>
             {children}
         </PostsContext.Provider>
     )

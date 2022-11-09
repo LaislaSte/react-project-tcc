@@ -18,6 +18,8 @@ const Explore = () => {
 
     const [user, loading, error] = useAuthState(auth);
     const [name, setName] = useState("");
+    const [bios, setBios] = useState("");
+    const [imgURL, setImgURL] = useState("");
     const navigate = useNavigate();
     const fetchUserInfo = async () => {
         try {

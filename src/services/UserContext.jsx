@@ -25,6 +25,7 @@ export const CostumerProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [authenticated, setAuthenticated] = useState(false);
 
 
     const [image, setImage] = useState(null);
@@ -181,7 +182,7 @@ export const CostumerProvider = ({ children }) => {
 
     // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
     //função para atualizar um usuário na coleção user
-    const updateUserProfile = (img_user, name_user) => {
+    const updateUserProfile = (img_user, name_user, bios_user, user_categorys) => {
 
         updateProfile(user, {
             displayName: name_user,
@@ -240,17 +241,16 @@ export const CostumerProvider = ({ children }) => {
 
 
     const reathenticateUserCredentials = () => {
-
         // TODO(you): prompt the user to re-provide their sign-in credentials
-        const credential = promptForCredentials();
+        // const credential = promptForCredentials();
 
-        reauthenticateWithCredential(user, credential).then(() => {
-            // User re-authenticated.
-            console.log('feita reautenticação');
-        }).catch((error) => {
-            // An error ocurred
-            console.log(error);
-        });
+        // reauthenticateWithCredential(user, credential).then(() => {
+        //     // User re-authenticated.
+        //     console.log('feita reautenticação');
+        // }).catch((error) => {
+        //     // An error ocurred
+        //     console.log(error);
+        // });
     }
 
 
