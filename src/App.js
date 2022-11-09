@@ -41,31 +41,31 @@ function App() {
     [user, loading]
   );
 
-  const Private = ({ children }) => {
-    const { authenticated } = useContext(CostumerContext);
-    
+  // const Private = ({ children }) => {
+  //   const { authenticated } = useContext(CostumerContext);
 
-    // useEffect(
-    //   () => {
-    //     if (loading) {
-    //       //a loading screen/component
-    //       return;
-    //     }
-    //     if (user) return children;
 
-    //   },
-    //   [user, loading]
-    // )
+  //   // useEffect(
+  //   //   () => {
+  //   //     if (loading) {
+  //   //       //a loading screen/component
+  //   //       return;
+  //   //     }
+  //   //     if (user) return children;
 
-    // if (user) return children;
-    if (user) return children;
-    // if (!user) {
-    //   console.log(user);
-    //   return <Navigate to='/' />
-    // }
+  //   //   },
+  //   //   [user, loading]
+  //   // )
 
-    // return children
-  }
+  //   // if (user) return children;
+  //   if (user) return children;
+  //   // if (!user) {
+  //   //   console.log(user);
+  //   //   return <Navigate to='/' />
+  //   // }
+
+  //   // return children
+  // }
 
   return (
     <>
@@ -75,12 +75,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          <Route path="/changepassword1" element={<ChangePassword1 />} />
+          <Route path="/forgetpassword" element={<ChangePassword1 />} />
           {/* <Route path="/changepassword2" element={<ChangePassword2 />} />
           <Route path="/changeemail1" element={<ChangeEmail1 />} />
           <Route path="/changeemail2" element={<ChangeEmail2 />} /> */}
           <Route path="/deleteaccount" element={<DeleteAccount />} />
-          <Route path="/successechange" element={<SuccessePage />} />
+          <Route path="/successepage" element={<SuccessePage />} />
 
           {/* private routes: */}
           <Route path="/config" element={<ProtectedRoute> <Config /> </ProtectedRoute>} />

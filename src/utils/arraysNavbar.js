@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import avatarDefault from '../assets/icons/avatarDefault.svg';
 
 import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
@@ -6,6 +6,12 @@ import { RiSearch2Line } from 'react-icons/ri';
 import { BsPersonCircle, BsFillPlusCircleFill } from 'react-icons/bs';
 import { FaGraduationCap } from 'react-icons/fa';
 import { IoMdCreate, IoLogOutOutline } from 'react-icons/io'
+// import { logout } from '../services/googleAuthenticatios';
+import { signOut } from 'firebase/auth';
+import { auth } from '../services/Banco';
+// import { CostumerContext } from '../services/UserContext';
+
+// const { logout } = useContext(CostumerContext);
 
 export const SidebarDataPublic = [
     {
@@ -57,10 +63,17 @@ export const SidebarData = [
     {
         title: 'Sair',
         path: '/',
+        // functionLogout: logout(),
         icon: <BiLogOut />,
         cName: 'nav-text'
     }
 ]
+// const logout = () => {
+//     signOut(auth);
+// };
+// const functionLogout = () => {
+//     logout()
+// }
 
 export const resultSearch = [
     {

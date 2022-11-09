@@ -6,6 +6,7 @@ import './Profile.css';
 import { morePostI } from '../../utils/arraysHeader';
 import { fakeReviews } from '../../utils/ArraysAndFunctions';
 import { post, fakeUser } from '../../utils/ArraysAndFunctions';
+import avatarDefault from '../../assets/img-avatar.png';
 
 import LikeButton from '../../components/likebutton/LikeButton';
 import { Post } from '../../components/post/Post';
@@ -17,17 +18,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../services/Banco';
 
 const Profile = () => {
-    //pegar o id do usuario logado
-    //pegar foto de perfil deste usuario e colocar como foto de perfil
-    //pegar nome do usuario e colocar no nome de usuario
-    //pegar biografia do usuario e colocar em bios (biografia)
-    //puxar postagens realizadas pelo usuario
-    //mapear id e conteudo das postagens atreladas ao usuario logado na lista não ordenada retornando uma li com o componente post e suas props conteudo referente ao post, foto de perfil e nome do usuario logado
-
-    // const imgProfile = <img src={Explore} alt="foto de perfil do usuario" className='avatar'/>
-    // console.log(image);
 
     const [name, setName] = useState("");
+    const [imgURL, setImgURL] = useState("");
+    const [bios, setBios] = useState("");
+
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -37,33 +32,43 @@ const Profile = () => {
             const doc = await getDocs(q);
             const data = doc.docs[0].data();
             setName(data.name);
+            setImgURL(data.photoURL);
+            setBios(data.bios);
         } catch (err) {
             console.error(err);
             alert("An error occured while fetching user data");
         }
     };
 
-    useEffect(() => {
-        if (loading) return;
-        if (!user) return navigate("/");
-        fetchUserName();
-    }, [user, loading]);
+    // useEffect(
+    //     () => {
+    //         fetchUserName();
+    //     },
+    //     [user, loading]
+    // )
+
+    // useEffect(() => {
+    //     if (loading) return;
+    //     if (!user) return navigate("/");
+    //     fetchUserName();
+    // }, [user, loading]);
 
     return (
         <div className='Profile'>
             <Navbar />
+            <CreateButton />
 
             <header className='section-profile'>
 
                 <div className="profile-container">
                     <div className="img-background">
-                        <img src={fakeUser.avatar} alt="" />
+                        <img src={imgURL ? imgURL : avatarDefault} alt="" />
                     </div>
                 </div>
 
                 <div className="bios">
                     <h2>{name}</h2>
-                    {fakeUser.bios}
+                    {bios}
                 </div>
 
                 <div className="header-button-profile">

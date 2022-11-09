@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
 
 import { db, auth, provider } from './Banco';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where } from "firebase/firestore";
@@ -25,11 +25,14 @@ export const CostumerProvider = ({ children }) => {
     const [submiting, setSubmiting] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
 
+    // const [currentUser, setCurrentUser] = useState(null);
+    const [modal, setModal] = useState({ isOpen: false, title: '', content: '' });
+
     // const [users, setUsers] = useState(null);
 
     const [image, setImage] = useState(null);
     const [bios, setBios] = useState('');
-    const [studentProfessor, setStudentProfessor] = useState('');
+    const [name, setName] = useState('');
 
     // const [name, setName] = useState('');
     // const [email, setEmail] = useState('');
@@ -67,6 +70,7 @@ export const CostumerProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             console.log(currentUser);
             setUser(currentUser);
+            console.log('user status changed: ', currentUser);
         });
         return () => {
             unsubscribe();
@@ -127,26 +131,18 @@ export const CostumerProvider = ({ children }) => {
         }
     };
 
-    //função para atualizar um usuário na coleção user
-    const updateUser = async (id, img_user, bios_user, name_user, favCategory_user) => {
-        const userSelected = doc(db, 'users', id);
-
-        if (userSelected) {
-            try {
-                await updateDoc(userSelected, {
-                    avatar: img_user,
-                    biosDB: bios_user,
-                    name: name_user,
-                    favoriteCategory: favCategory_user
-                });
-                console.log('usuario atualizado');
-            } catch (error) {
-                console.log(error, error.message);
-            }
+    const fetchUserName = async () => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+            const doc = await getDocs(q);
+            const data = doc.docs[0].data();
+            console.log(data);
+            setName(data.name);
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
         }
-
-        return;
-    }
+    };
 
     //função para deletar um usuário na coleção user
     const removeUser = async (id) => {
@@ -166,60 +162,74 @@ export const CostumerProvider = ({ children }) => {
         }
     };
 
-    const signInWithGoogle = async () => {
-        try {
-            const res = await signInWithPopup(auth, provider);
-            const user = res.user;
-            const q = query(collection(db, "users"), where("uid", "==", user.uid));
-            const docs = await getDocs(q);
-            if (docs.docs.length === 0) {
-                await addDoc(collection(db, "users"), {
-                    uid: user.uid,
-                    name: user.displayName,
-                    authProvider: "google",
-                    email: user.email,
-                });
-            }
-            setAuthenticated(true);
-            localStorage.setItem('@google:user', JSON.stringify(user));
-            localStorage.setItem('@google:token', token);
-            navigate('/explore');
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
-    };
+    // const signInWithGoogle = async () => {
+    //     try {
+    //         const res = await signInWithPopup(auth, provider);
+    //         const user = res.user;
+    //         const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    //         const docs = await getDocs(q);
+    //         if (docs.docs.length === 0) {
+    //             await addDoc(collection(db, "users"), {
+    //                 uid: user.uid,
+    //                 name: user.displayName,
+    //                 authProvider: "google",
+    //                 email: user.email,
+    //             });
+    //         }
+    //         setAuthenticated(true);
+    //         localStorage.setItem('@google:user', JSON.stringify(user));
+    //         localStorage.setItem('@google:token', token);
+    //         navigate('/explore');
+    //     } catch (err) {
+    //         console.error(err);
+    //         alert(err.message);
+    //     }
+    // };
 
-    // const loginGoogle = () => {
-    //     signInWithPopup(auth, provider)
-    //         .then((result) => {
-    //             const credential = GoogleAuthProvider.credentialFromResult(result);
-    //             const token = credential.accessToken;
-    //             const userG = result.user;
-    //             console.log(userG);
-    //             setUser(userG);
-    //             setAuthenticated(true);
-    //             localStorage.setItem('@google:user', JSON.stringify(user));
-    //             localStorage.setItem('@google:token', token);
-    //             navigate('/explore');
-    //         }).catch((error) => {
-    //             const errorCode = error.code;
-    //             const errorMessage = error.message;
-    //             const email = error.customData.email;
-    //             const credential = GoogleAuthProvider.credentialFromError(error);
-    //             console.log(errorCode, errorMessage, email, credential);
-    //         });
-    // }
+    const signInWithGoogle = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const userGoogle = result.user;
+
+                const q = query(collection(db, "users"), where("uid", "==", userGoogle.uid));
+                const docs = getDocs(q);
+                if (docs.docs.length === 0) {
+                    addDoc(collection(db, "users"), {
+                        uid: user.uid,
+                        name: user.displayName,
+                        authProvider: "google",
+                        email: user.email,
+                    });
+                }
+
+                console.log(userGoogle);
+                setUser(userGoogle);
+                setAuthenticated(true);
+                localStorage.setItem('@google:user', JSON.stringify(user));
+                localStorage.setItem('@google:token', token);
+                navigate('/explore');
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.customData.email;
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                console.log(errorCode, errorMessage, email, credential);
+            });
+    }
 
     const sendPasswordReset = async (email) => {
         try {
             await sendPasswordResetEmail(auth, email);
             alert("Password reset link sent!");
+            navigate('/login');
         } catch (err) {
             console.error(err);
             alert(err.message);
         }
     };
+
     const logout = () => {
         signOut(auth);
         setUser(null);
@@ -231,22 +241,35 @@ export const CostumerProvider = ({ children }) => {
         navigate('/login');
     };
 
-    // const logout = () => {
-    //     if (user) {
-    //         setUser(null);
-    //         setAuthenticated(false);
-    //         localStorage.removeItem('user');
-    //         localStorage.removeItem('@google:user ');
-    //         localStorage.removeItem('@google:token ');
-    //         //navegue para página pública inicial
-    //         navigate('/login');
-    //     }
-    // };
+    // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
+    //função para atualizar um usuário na coleção user
+    const updateUser = (img_user, bios_user, name_user, favCategory_user) => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", user.uid));
+            const docs = getDocs(q);
+            if (docs.docs.length === 0) {
+                updateDoc(collection(db, "users"), {
+                    uid: user.uid,
+                    name: user.displayName,
+                    authProvider: "google",
+                    email: user.email,
+                    bios: bios_user,
+                    userName: name_user,
+                    avatar: img_user
+                });
+                console.log('user updated');
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
+        }
+    }
 
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUser, removeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, submiting }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUser, removeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, submiting, name, modal, setModal }}>
             {children}
         </CostumerContext.Provider>
     )

@@ -14,7 +14,7 @@ import { BiArrowBack } from 'react-icons/bi';
 
 export const ChangePassword1 = () => {
 
-    const [confirmCod, setConfirmCod] = useState('');
+    const [confirmEmail, setConfirmEmail] = useState('');
     const [email, setEmail] = useState("");
     const [user, loading, error] = useAuthState(auth);
 
@@ -27,7 +27,7 @@ export const ChangePassword1 = () => {
     function sendEmail(e) {
         e.preventDefault();
 
-        if (confirmCod === '') {
+        if (confirmEmail === '') {
             alert('preencha corretamente o formulário');
             return
         }
@@ -54,20 +54,20 @@ export const ChangePassword1 = () => {
             <h1 className="title">Altere sua senha</h1>
 
             <form className="form" onSubmit={sendEmail}>
-                <p>Confirme seu e-mail inserindo o código enviado</p>
+                <p>Insira seu e-mail cadastrado na página para enviar uma mensagem de atualização de senha </p>
                 <Input
                     className="input-outline-secondary"
                     type="text"
-                    text="Código de confirmação"
-                    value={confirmCod}
-                    onchange={(e) => setConfirmCod(e.target.value)}
+                    text="E-mail"
+                    value={confirmEmail}
+                    onchange={(e) => setConfirmEmail(e.target.value)}
                 />
 
                 <Button
                     text='Enviar'
                     type='submit'
                     bg_color='secondary'
-                    fun={() => sendPasswordReset(confirmCod)}
+                    fun={() => sendPasswordReset(confirmEmail)}
                 />
             </form>
 

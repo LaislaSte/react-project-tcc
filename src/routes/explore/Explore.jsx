@@ -12,6 +12,7 @@ import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import Categorys from '../../components/categorys/Categorys';
 import { post } from '../../utils/ArraysAndFunctions';
+import CreateButton from "../../components/createbutton/CreateButton";
 
 const Explore = () => {
 
@@ -29,17 +30,19 @@ const Explore = () => {
             alert("An error occured while fetching user data");
         }
     };
-    useEffect(() => {
-        if (loading) return;
-        if (!user) return navigate("/");
-        fetchUserName();
-    }, [user, loading]);
+
+    // useEffect(() => {
+    //     if (loading) return;
+    //     if (!user) return navigate("/");
+    //     fetchUserName();
+    // }, [user, loading]);
 
     return (
         <>
             <header className="header-content-explore">
                 <Navbar />
                 <Categorys />
+                <CreateButton />
             </header>
 
             <main className="posts-container">
