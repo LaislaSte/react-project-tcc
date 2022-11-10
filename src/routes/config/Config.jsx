@@ -36,43 +36,30 @@ const Config = () => {
 
     const [isItLimited, setItIsLimited] = useState(false);
 
-    // const onChangeCB = (item) => {
-    //     favCategory_user.push(item);
-    //     console.log(favCategory_user)
-    // if (favCategory_user > 1) {
-    //     setCategorys(...favCategory_user + item);
-    //     console.log(favCategory_user)
-    // }
-    //     let arrSelecteds = { ...favCategory_user };
-    //     arrSelecteds.splice(1, 0, item);
-    //     console.log(favCategory_user)
+    const [dataCat, setDataCat] = useState(
+        { categs: [] }
+    );
 
-    // let couter = 0;
-    // let max = 2;
+    const handleCheckboxChange = (e) => {
+        let newArray = [...dataCat.categs, e.target.value];
+        if (dataCat.categs.includes(e.target.value)) {
+            newArray = newArray.filter(day => day !== e.target.value);
+        }
+        setDataCat({
+            categs: newArray
+        });
 
-    // let index = favCategory_user.findIndex(equalto);
-    // const equalto = (i) => {
-    //     return i === couter
-    // }
-    // // let arrSelecteds = { ...favCategory_user };
+        console.log(dataCat.categs);
+    }
 
-    // if (index !== -1) {
-    //     arrSelecteds.splice(item, 1);
-    // } else {
-    //     arrSelecteds.push(id);
-    // }
+    // const [isChecked, setIsChecked] = useState(false);
 
-    // setCategorys(arrSelecteds);
-    // }
-
-    const [isChecked, setIsChecked] = useState(false);
-
-    const handleOnChange = (value) => {
-        setIsChecked(!isChecked);
-        const arrCat = [];
-        arrCat.push(value);
-        setCategorys(arrCat);
-    };
+    // const handleOnChange = (value) => {
+    //     setIsChecked(!isChecked);
+    //     const arrCat = [];
+    //     arrCat.push(value);
+    //     setCategorys(arrCat);
+    // };
 
 
     const handleSubmit = async (e) => {
@@ -177,7 +164,12 @@ const Config = () => {
                                 return (
                                     <div className="form-checked-box" key={index}>
 
-                                        <input type="checkbox" value={item.name} id={item.id} />
+                                        <input
+                                            type="checkbox"
+                                            id={item.id}
+                                            value={item.name}
+                                            onChange={handleCheckboxChange}
+                                        />
 
                                         <label htmlFor={item.id}>{item.name}</label>
 
@@ -185,28 +177,28 @@ const Config = () => {
                                 )
                             })}
 
-                                Select your pizza topping:
-                                <div className="topping">
-                                    <input
-                                        type="checkbox"
-                                        id="topping"
-                                        name="topping"
-                                        value="Paneer"
-                                        checked={isChecked}
-                                        onChange={(e) => handleOnChange(e.target.value)}
-                                    />
-                                    Paneer
-                                </div>
+                            Select your pizza topping:
+                            {/* <div className="topping">
+                                <input
+                                    type="checkbox"
+                                    id="topping"
+                                    name="topping"
+                                    value="Paneer"
+                                    checked={isChecked}
+                                    onChange={(e) => handleOnChange(e.target.value)}
+                                />
+                                Paneer
+                            </div> */}
 
-                                <div className="result">
-                                    Above checkbox is {isChecked ? "checked" : "un-checked"}.
-                                    the value on the input: {favCategory_user}
-                                </div>
-                            
+                            {/* <div className="result">
+                                Above checkbox is {isChecked ? "checked" : "un-checked"}.
+                                the value on the input: {favCategory_user}
+                            </div> */}
+
                         </div>
 
 
-                        <CheckBox/>
+                        <CheckBox />
                     </div>
 
                     <Button

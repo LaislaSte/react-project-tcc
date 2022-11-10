@@ -1,70 +1,85 @@
-import React, { useState } from "react";
-import { toppings } from "../../utils/arraysHeader";
-// import "./styles.css";
+import { checkActionCode } from "firebase/auth";
+import React from "react";
+import { categorys } from "../../utils/arraysHeader";
 import './CheckBox.css';
 
-const getFormattedPrice = (price) => `$${price.toFixed(2)}`;
+class CheckBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      workStart: 8,
+      disable: false,
+      workEnd: "",
+      workDays: []
+    };
+  }
 
-export default function CheckBox() {
-  const [checkedState, setCheckedState] = useState(
-    new Array(toppings.length).fill(false)
-  );
+  disableCB = (index) => {
+    let newArray = [...this.state.workDays];
 
-  const [total, setTotal] = useState(0);
 
-  const [disable, setDisable] = useState(0);
+    if (newArray.length >= 5) {
+      const checkedBoxes = document.querySelectorAll('input[type=checkbox]');
+      const uncheckedBoxes = document.querySelectorAll('input[type=checkbox]:unchecked');
 
-  const handleOnChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item
-    );
-
-    setCheckedState(updatedCheckedState);
-
-    const totalPrice = updatedCheckedState.reduce(
-      (sum, currentState, index) => {
-        if (currentState === true) {
-          return sum + toppings[index].price;
+      checkedBoxes.forEach(i => {
+        if (i === uncheckedBoxes) {
+          return
         }
-        return sum;
-      },
-      0
-    );
 
-    setTotal(totalPrice);
+      })
+
+      if (index === '') {
+        return true
+      }
+    }
+    return;
+  }
+
+  handleCheckboxChange = event => {
+    let newArray = [...this.state.workDays, event.target.value];
+    if (this.state.workDays.includes(event.target.value)) {
+      newArray = newArray.filter(day => day !== event.target.value);
+    }
+    this.setState({
+      workDays: newArray
+    });
   };
 
-  return (
-    <div className="App">
-      <h3>Select Toppings</h3>
-      <ul className="toppings-list">
-        {toppings.map(({ name, price }, index) => {
-          return (
-            <li key={index}>
-              <div className="toppings-list-item">
-                <div className="left-section">
-                  <input
-                    type="checkbox"
-                    id={`custom-checkbox-${index}`}
-                    name={name}
-                    value={name}
-                    checked={checkedState[index]}
-                    onChange={() => handleOnChange(index)}
-                  />
-                  <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                </div>
-                <div className="right-section">{getFormattedPrice(price)}</div>
-              </div>
-            </li>
-          );
-        })}
-        <li>
-          <div className="toppings-list-item">
-            <div className="left-section">Total:</div>
-            <div className="right-section">{getFormattedPrice(total)}</div>
+  render() {
+    console.log(this.state.workDays);
+    return (
+      <div>
+        <form>
+          <div>
+            <h5>Select your workday(s):</h5>
+            <div className="checked-boxes-container">
+              {categorys.map((item, index) => {
+                return (
+                  <div className="form-checked-box" key={index}>
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id={item.id}
+                      value={item.name}
+                      disabled={this.disableCB(index)}
+                      checked={this.disableCB(index)}
+                      onChange={this.handleCheckboxChange}
+                    />
+                    <label className="custom-control-label" htmlFor="monday">
+                      {item.name}
+                    </label>
+
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        </li>
-      </ul>
-    </div>
-  );
+        </form>
+        <button>Save settings</button>
+      </div>
+    );
+  }
 }
+
+export default CheckBox;

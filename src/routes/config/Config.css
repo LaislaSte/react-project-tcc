@@ -60,30 +60,6 @@
     background: none;
 }
 
-.config-container .config-form-container .checked-boxes-container {
-    border: 1px solid var(--SECONDARY_800);
-    border-radius: 1rem;
-    padding: 1rem;
-    font: var(--LIGHT_ITALIC);
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin: .5rem 0 1rem 0;
-}
-
-.config-form-container .checked-boxes-container .form-checked-box {
-    display: flex;
-    gap: 1rem;
-    width: 25%;
-    font-size: 1.8rem;
-}
-
-.config-form-container .checked-boxes-container .form-checked-box input {
-    width: 1.5rem;
-}
-
 .config-container .config-form-container .save-button {
     width: 6rem;
 }
@@ -110,16 +86,6 @@
         max-width: 100%;
     }
 
-    .config-form-container .checked-boxes-container .form-checked-box {
-        /* gap: 1rem; */
-        width: 40%;
-        font-size: 1.5rem;
-    }
-
-    .config-form-container .checked-boxes-container .form-checked-box input {
-        width: 1.5rem;
-    }
-
 }
 
 @media (max-width: 475px) {
@@ -127,25 +93,5 @@
     .config-container .config-form-container .input-img-container {
         justify-content: center;
         gap: 1rem;
-    }
-
-    .config-form-container .checked-boxes-container .form-checked-box {
-        width: 45%;
-        font-size: 1rem;
-    }
-
-    .config-form-container .checked-boxes-container .form-checked-box input {
-        width: 1rem;
-    }
-}
-
-@media (max-width: 340px) {
-
-    .config-form-container .checked-boxes-container .form-checked-box {
-        width: 50%;
-    }
-
-    .config-container .config-form-container .checked-boxes-container {
-        justify-content: center;
     }
 }
