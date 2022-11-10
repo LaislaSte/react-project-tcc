@@ -119,7 +119,10 @@ export const CostumerProvider = ({ children }) => {
 
     const logInWithEmailAndPassword = async (email, password) => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const res = await signInWithEmailAndPassword(auth, email, password);
+            localStorage.setItem('@userLogedWithEmailAndPassword', JSON.stringify(res.user));
+            localStorage.setItem('@userLogedWithEmailAndPasswordId', JSON.stringify(res.providerId));
+            navigate('/explore');
         } catch (err) {
             console.error(err);
             alert(err.message);
@@ -174,10 +177,10 @@ export const CostumerProvider = ({ children }) => {
         setUser(null);
         setAuthenticated(false);
         localStorage.removeItem('user');
-        localStorage.removeItem('@google:user ');
-        localStorage.removeItem('@google:token ');
-        //navegue para página pública inicial
-        navigate('/login');
+        localStorage.removeItem('@google:user');
+        localStorage.removeItem('@google:token');
+        //navegue para página pública inicial/public
+        navigate('/');
     };
 
     // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
