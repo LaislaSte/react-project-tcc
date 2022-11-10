@@ -14,27 +14,38 @@ class CheckBox extends React.Component {
     };
   }
 
-  disableCB = (index) => {
-    let newArray = [...this.state.workDays];
-
-
-    if (newArray.length >= 5) {
-      const checkedBoxes = document.querySelectorAll('input[type=checkbox]');
-      const uncheckedBoxes = document.querySelectorAll('input[type=checkbox]:unchecked');
-
-      checkedBoxes.forEach(i => {
-        if (i === uncheckedBoxes) {
-          return
-        }
-
-      })
-
-      if (index === '') {
-        return true
+  disableCB = () => {
+    $('input[type=checkbox]').on('change', function (e) {
+      if ($('input[type=checkbox]:checked').not(':disabled').length > 3) {
+        $(this).prop('checked', false);
+        alert("allowed only 3");
       }
-    }
-    return;
+    });
+
+    // let newArray = [...this.state.workDays];
+
+
+    // if (newArray.length >= 5) {
+    //   const checkedBoxes = document.querySelectorAll('input[type=checkbox]');
+    //   const uncheckedBoxes = document.querySelectorAll('input[type=checkbox]:unchecked');
+
+    //   checkedBoxes.forEach(i => {
+    //     if (i === uncheckedBoxes) {
+    //       return
+    //     }
+
+    //   })
+
+
+
+    //   if (index === '') {
+    //     return true
+    //   }
+    // }
+    // return;
   }
+
+  disableCB();
 
   handleCheckboxChange = event => {
     let newArray = [...this.state.workDays, event.target.value];
@@ -62,8 +73,8 @@ class CheckBox extends React.Component {
                       className="custom-control-input"
                       id={item.id}
                       value={item.name}
-                      disabled={this.disableCB(index)}
-                      checked={this.disableCB(index)}
+                      disabled={this.disableCB}
+                      checked={this.disableCB}
                       onChange={this.handleCheckboxChange}
                     />
                     <label className="custom-control-label" htmlFor="monday">
