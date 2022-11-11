@@ -26,6 +26,7 @@ const Profile = () => {
     const [userPosts, setUserPosts] = useState([]);
 
     const [user, loading, error] = useAuthState(auth);
+
     const navigate = useNavigate();
 
     const fetchUserInfos = async () => {
@@ -34,7 +35,7 @@ const Profile = () => {
             // const doc = await getDocs(q);
             // const data = doc.docs[0].data();
             const userBios = user?.bios;
-            const userName = user?.email;
+            const userName = user?.displayName;
             const userAvatar = user?.photoURL;
             setName(userName);
             setImgURL(userAvatar);

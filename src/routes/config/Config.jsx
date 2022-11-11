@@ -45,7 +45,6 @@ const Config = () => {
         }
         setCategory(newArray)
     };
-
     const showMessage = (fav) => {
         if (fav) {
             return !validCBcategorys(fav)
@@ -56,14 +55,21 @@ const Config = () => {
         return nameValid(name_user) && biosValid(bios_user) && validCBcategorys(category);
     }
 
+    useEffect(
+        () => {
+            setImgURL(user?.photoURL);
+            setUserName(user?.displayName);
+        },
+        [user]
+    )
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const file = e.target[0]?.files[0];
+        // const file = e.target[0]?.files[0];
 
-        if (!file) return;
+        // if (!file) return;
 
         // let userObj = { displayName: name_user }
         // let imagesObj = { uName: name_user }
@@ -84,30 +90,30 @@ const Config = () => {
 
         // }
 
-        const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
-        // const storageRef = ref(storage, `profile/${file.name}`);
-        const storageRef = ref(storage, `profile/${imageName}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-            'state_changed',
-            snapshot => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setProgress(progress);
-            },
-            error => {
-                console.error(error);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-            }
-        )
+        // const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
+        // // const storageRef = ref(storage, `profile/${file.name}`);
+        // const storageRef = ref(storage, `profile/${imageName}`);
+        // const uploadTask = uploadBytesResumable(storageRef, file);
+        // uploadTask.on(
+        //     'state_changed',
+        //     snapshot => {
+        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //         setProgress(progress);
+        //     },
+        //     error => {
+        //         console.error(error);
+        //     },
+        //     () => {
+        //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+        //     }
+        // )
 
-        const updateUser = {
-            imgURL: imgURL,
-            displayName: name_user,
-            bios: bios_user,
-            categorys: category
-        }
+        // const storageUrl = getDownloadURL(storage, storageRef);
+
+        // setImgURL(storageUrl);
+
+
+        // updateUserProfile(imgURL, name_user, bios_user, category);
 
         updateUserProfile(imgURL, name_user, bios_user, category);
 
@@ -131,7 +137,7 @@ const Config = () => {
                             <InputImg
                                 setImage={setImage}
                                 className='container-img-profile-preview'
-                                imgPreview={image?.preview || avatarDefault}
+                                imgPreview={image?.preview || imgURL || avatarDefault}
                                 imgPreviewClassName='avatar'
                             />
                             <p>Adicionar imagem</p>

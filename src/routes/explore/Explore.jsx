@@ -29,7 +29,7 @@ const Explore = () => {
             const userBios = user?.bios;
             const uid = user?.uid;
             const token = user?.getIdToken();
-            const userName = user?.email;
+            const userName = user?.name;
             const userAvatar = user?.photoURL;
             setName(userName);
             setImgURL(userAvatar);
