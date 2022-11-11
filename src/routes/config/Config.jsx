@@ -1,7 +1,7 @@
 // import React, { useState } from 'react';
 import React, { useState, useContext, useEffect } from 'react';
 import './Config.css';
-import { nameValid, biosValid } from '../../utils/validators';
+import { nameValid, biosValid, validCBcategorys } from '../../utils/validators';
 import { categorys } from '../../utils/arraysHeader';
 import { CostumerContext } from '../../services/UserContext';
 import avatarDefault from '../../assets/img-avatar.png';
@@ -9,7 +9,7 @@ import avatarDefault from '../../assets/img-avatar.png';
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
-// import TxtArea from '../../components/txtarea/TxtArea';
+import TxtArea from '../../components/txtarea/TxtArea';
 import CheckBox from '../../components/checkbox/CheckBox';
 
 // imports storage
@@ -26,7 +26,7 @@ const Config = () => {
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
-    const { user, updateUser } = useContext(CostumerContext);
+    const { user, updateUserProfile } = useContext(CostumerContext);
 
     const [name_user, setUserName] = useState('');
     const [bios_user, setBios] = useState('');
@@ -36,30 +36,26 @@ const Config = () => {
 
     const [isItLimited, setItIsLimited] = useState(false);
 
-    const [dataCat, setDataCat] = useState(
-        { categs: [] }
-    );
+    const [category, setCategory] = useState([]);
 
-    const handleCheckboxChange = (e) => {
-        let newArray = [...dataCat.categs, e.target.value];
-        if (dataCat.categs.includes(e.target.value)) {
-            newArray = newArray.filter(day => day !== e.target.value);
+    const handleCheckboxChange = (event) => {
+        let newArray = [...category, event.target.value];
+        if (category.includes(event.target.value)) {
+            newArray = newArray.filter(day => day !== event.target.value);
         }
-        setDataCat({
-            categs: newArray
-        });
+        setCategory(newArray)
+    };
 
-        console.log(dataCat.categs);
+    const showMessage = (fav) => {
+        if (fav) {
+            return !validCBcategorys(fav)
+        }
     }
 
-    // const [isChecked, setIsChecked] = useState(false);
+    const formValidUserUpdate = () => {
+        return nameValid(name_user) && biosValid(bios_user) && validCBcategorys(category);
+    }
 
-    // const handleOnChange = (value) => {
-    //     setIsChecked(!isChecked);
-    //     const arrCat = [];
-    //     arrCat.push(value);
-    //     setCategorys(arrCat);
-    // };
 
 
     const handleSubmit = async (e) => {
@@ -69,45 +65,51 @@ const Config = () => {
 
         if (!file) return;
 
-        let userObj = { displayName: name_user }
-        let imagesObj = { uName: name_user }
-        try {
-            if (file) {
-                const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
-                const url = await uploadFile(file, `profile/${user?.uid}/${imageName}`);
-                //todo: delete the previous profile image od the user
+        // let userObj = { displayName: name_user }
+        // let imagesObj = { uName: name_user }
+        // try {
+        //     if (file) {
+        //         const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
+        //         const url = await uploadFile(file, `profile/${user?.uid}/${imageName}`);
+        //         //todo: delete the previous profile image od the user
 
-                userObj = { ...userObj, photoURL: url }
-                imagesObj = { ...imagesObj, uURL: url }
+        //         userObj = { ...userObj, photoURL: url }
+        //         imagesObj = { ...imagesObj, uURL: url }
+        //     }
+
+        //     await updateProfile(user, userObj);
+        //     console.log('user updated');
+        // } catch (error) {
+        //     console.log(error);
+
+        // }
+
+        const storageRef = ref(storage, `images/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+            'state_changed',
+            snapshot => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setProgress(progress);
+            },
+            error => {
+                console.error(error);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
             }
+        )
 
-            await updateProfile(user, userObj);
-            console.log('user updated');
-        } catch (error) {
-            console.log(error);
-
-            // updateUser(imgURL, bios_user, name_user);
+        const updateUser = {
+            imgURL: imgURL,
+            displayName: name_user,
+            bios: bios_user,
+            categorys: category
         }
 
-        // const storageRef = ref(storage, `images/${file.name}`);
-        // const uploadTask = uploadBytesResumable(storageRef, file);
-        // uploadTask.on(
-        //     'state_changed',
-        //     snapshot => {
-        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        //         setProgress(progress);
-        //     },
-        //     error => {
-        //         console.error(error);
-        //     },
-        //     () => {
-        //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-        //     }
-        // )
+        updateUserProfile(imgURL, name_user, bios_user, category);
 
     }
-
-
 
     return (
         <div className='Config'>
@@ -130,7 +132,7 @@ const Config = () => {
                                 imgPreview={image?.preview || avatarDefault}
                                 imgPreviewClassName='avatar'
                             />
-                            <p>Tirar foto</p>
+                            <p>Adicionar imagem</p>
                         </div>
 
                         <Input
@@ -146,14 +148,15 @@ const Config = () => {
 
 
                     <div className="txt-area-container">
-                        <textarea
-                            cols="30"
-                            rows="5"
-                            placeholder='Adicione uma descrição...'
-                            className='ta-popup-container'
+                        <TxtArea
+                            text='Adicione uma descrição'
+                            cols='30'
+                            rows='5'
                             value={bios_user}
-                            onChange={(e) => setBios(e.target.value)}
-                        ></textarea>
+                            onchange={(e) => setBios(e.target.value)}
+                            message='Ultrapassa o limite de caracteres'
+                            showMessage={bios_user && !biosValid(bios_user)}
+                        />
                     </div>
 
                     <div className="selects-container">
@@ -163,7 +166,6 @@ const Config = () => {
                             {categorys.map((item, index) => {
                                 return (
                                     <div className="form-checked-box" key={index}>
-
                                         <input
                                             type="checkbox"
                                             id={item.id}
@@ -176,35 +178,17 @@ const Config = () => {
                                     </div>
                                 )
                             })}
-
-                            Select your pizza topping:
-                            {/* <div className="topping">
-                                <input
-                                    type="checkbox"
-                                    id="topping"
-                                    name="topping"
-                                    value="Paneer"
-                                    checked={isChecked}
-                                    onChange={(e) => handleOnChange(e.target.value)}
-                                />
-                                Paneer
-                            </div> */}
-
-                            {/* <div className="result">
-                                Above checkbox is {isChecked ? "checked" : "un-checked"}.
-                                the value on the input: {favCategory_user}
-                            </div> */}
-
                         </div>
 
+                        {showMessage(category) && <p className='input-error-message'> Selecione até 5 categoria </p>}
 
-                        <CheckBox />
                     </div>
 
                     <Button
                         text='Salvar'
                         type='submit'
                         bg_color='secondary save-button'
+                        disable={!formValidUserUpdate()}
                     />
 
                     <div className="config-btns-container">

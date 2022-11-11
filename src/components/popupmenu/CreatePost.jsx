@@ -11,6 +11,8 @@ import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import { Link } from 'react-router-dom';
+import TxtArea from '../txtarea/TxtArea';
+import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
 
 const CreatePost = ({ funPopUp }) => {
     const [title, setTitle] = useState('');
@@ -23,22 +25,27 @@ const CreatePost = ({ funPopUp }) => {
 
     const addPost = useContext(PostsContext);
     // const { addPost, posts } = useContext(PostsContext);
-    // function onChangeCB(id) {
-    //     let c = [...categoryP];
+    const [isChecked, setIsChecked] = useState(false);
+    const [favCategory_user, setFavCategory_user] = useState([]);
 
-    //     const a = c?.find(i => i === id);
+    const handleOnChangeCB = (event) => {
+        setIsChecked(!isChecked);
+        let newArray = [...favCategory_user, event.target.value];
+        if (favCategory_user.includes(event.target.value)) {
+            newArray = newArray.filter(day => day !== event.target.value);
+        }
+        setFavCategory_user(newArray);
+    };
 
-    //     if (a !== undefined) {
-    //         setCategory(c);
-    //         setDisabled(true);
-    //     } else if (a === undefined) {
-    //         c.push(id);
-    //         setCategory(c);
-    //         setDisabled(true);
-    //     }
+    const showMessage = (fav) => {
+        if (fav) {
+            return !validCBpost(fav)
+        }
+    }
 
-
-    // }
+    const formValidCreatePost = () => {
+        return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -101,18 +108,21 @@ const CreatePost = ({ funPopUp }) => {
                             type='text'
                             value={title}
                             onchange={(e) => { setTitle(e.target.value) }}
+                            message='Ultrapassa o limite de caracteres'
+                            showMessage={title && !titleValid(title)}
                         />
                     </div>
 
 
-                    <textarea
-                        cols="30"
-                        rows="5"
-                        placeholder='O que deseja revisar?'
-                        className='ta-popup-container'
+                    <TxtArea
+                        text='Adicione uma descrição'
+                        cols='30'
+                        rows='5'
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    ></textarea>
+                        onchange={(e) => setContent(e.target.value)}
+                        message='Ultrapassa o limite de caracteres'
+                        showMessage={content && !postContentValid(content)}
+                    />
 
                     <p>Adicione uma categoria</p>
 
@@ -121,13 +131,21 @@ const CreatePost = ({ funPopUp }) => {
                             return (
                                 <div className="form-checked-box" key={index}>
 
-                                    <input type="checkbox" value={item} id={item} />
+                                    <input
+                                        type="checkbox"
+                                        value={item}
+                                        id={item}
+                                        onChange={handleOnChangeCB}
+                                    />
 
                                     <label htmlFor={item}>{item}</label>
 
                                 </div>
                             )
                         })}
+
+                        {showMessage(favCategory_user) && <p className='input-error-message'> Selecione apenas 1 categoria </p>}
+
                     </div>
 
                     <div className="input-img-container">
@@ -143,11 +161,13 @@ const CreatePost = ({ funPopUp }) => {
                                 type='button'
                                 bg_color='secondary'
                                 fun={cleanForm}
+                                disable={!formValidCreatePost()}
                             />
                             <Button
                                 text='Postar e revisar'
                                 type='submit'
                                 bg_color='secondary'
+                                disable={!formValidCreatePost()}
                             />
                         </div>
                     </div>

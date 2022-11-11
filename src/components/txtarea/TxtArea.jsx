@@ -24,7 +24,7 @@ const TxtArea = ({
                 ></textarea>
             </div>
             <div>
-                {showMessage && <p className='TxtArea-error-message'> {message} </p>}
+                {showMessage && <p className='input-error-message'> {message} </p>}
             </div >
         </div >
     )
