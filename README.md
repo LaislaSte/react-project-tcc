@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# TODOS: fontEnd
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- add links de redirecionamento do footer
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+- concertar bug da responsividade no navbar q aparece o q nao devia aparecer em determinado ponto do width
 
-### `npm start`
+- criar uma classe no css globar para colocar nos elementos que tenha cursor pointer
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- criar pagina para mostrar os resultados das pesquisa q o user for clicar
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+- diminuir tamanho da fonte e centraliza-la na primeira sessao do public quando estiver width -800px, podendo apagar a foto de fundo ou adicionar um fundo mais escuro nas levar para ficar legível, centralizar o memorizar nunca foi tão fácil
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- adicionar logo na pagina de registro
 
-### `npm run build`
+- defazer arredondamento da div da foto do register
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- limitar a quantidade de assuntos selecionados nas configurações e na criação de post
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+- criar pagina para ver perfis externos
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- criar div para aparecer quando clicar nos 3 pontinhos (excluir, editar, remover das revisçoes) no post
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- adicionar funções aos itens do show-more (3 pontinhos)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- fazer com q os popups sejam div q se abrem dentro do container do post
 
-## Learn More
+- criar popups para ver imagem de modo ampliado (diminuir o tamanho da imgem quando estiver +800px)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- criar opção de denuncia quando o post estiver na pagina de explore ou quando for um user externo
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+- colocar cursor pointer no x dos popups
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+- criar função que pega esse id dos elementos do componente category e o deixa selecionado (com um css diferente)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+- ADICIONAR O DIVS PARA O GOOGLE ADS
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## TODOS: backEnd
 
-### Advanced Configuration
+- função para atualizar informações do usuário como foto de perfil, nome, bio e categorias
+- verificar função para deletar um usuário
+- verificar função para mudança de senha atravez de e-mail
+- verificar função para mudança de e-mail
+- verificar função para confirmação de e-mail
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- função para cadastrar post
+- função para atualizar post
+- função para deletar post
 
-### Deployment
+- organizar diretórios com o uid (e também id do post para registro de imagem de post) para registrar imagens no storage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
 
-### `npm run build` fails to minify
+- add google ads
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- aprender a fazer deploy
+
+## POSSÍVEIS IMPLEMENTAÇÕES
+
+- criar paginas para os links do footer (estruturar lugar para os textos)
+
+- criar paginas para ver quem segue e quem esta seguindo
+
+- criar paginas para ver respondas do post
+
+- criar página de notificações (quem esta seguinto ou quantas revisões tem um post por usuário (como um like))
