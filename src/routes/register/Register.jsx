@@ -17,6 +17,7 @@ import Footer from '../../components/footer/Footer';
 import { FaEnvelope } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { BsFillPersonFill } from 'react-icons/bs';
+import { CostumerContext } from '../../services/UserContext';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -26,9 +27,7 @@ const Register = () => {
     const [user, loading, error] = useAuthState(auth);
     const history = useNavigate();
 
-    // const { addUser, submiting } = useContext(UserAuth);
-    const { registerWithEmailAndPassword } = UserAuth();
-    // const { registerWithEmailAndPassword } = useContext(UserAuth);
+    const { registerWithEmailAndPassword } = useContext(CostumerContext);
 
     const formValidRegister = () => {
         if (emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)) {
