@@ -21,6 +21,8 @@ export const CostumerProvider = ({ children }) => {
 
     //criado estados
     const [user, setUser] = useState(null);
+    const [userData, setUserData] = useState(null);
+
     // const [users, setUsers] = useState(null);
     const [token, setToken] = useState(null);
     const [submiting, setSubmiting] = useState(null);
@@ -60,12 +62,18 @@ export const CostumerProvider = ({ children }) => {
     //     []
     // );
 
+    function getUserData(uid) {
+        db.ref('users/' + uid).once("value", snap => {
+            console.log(snap.val())
+        })
+    }
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             console.log(currentUser);
             setUser(currentUser);
             setToken(user?.getIdToken());
-            console.log('user status changed: ', currentUser);
+            getUserData(user?.uid);
         });
         return () => {
             unsubscribe();
@@ -183,10 +191,10 @@ export const CostumerProvider = ({ children }) => {
         navigate('/');
     };
 
-    // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
     //função para atualizar um usuário na coleção user
     const updateUserProfile = (img_user, name_user, bios_user, user_categorys) => {
 
+        // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
         updateProfile(user, {
             displayName: name_user,
             photoURL: img_user
@@ -200,23 +208,63 @@ export const CostumerProvider = ({ children }) => {
 
         try {
             const q = query(collection(db, "users"), where("uid", "==", user.uid));
-            const docs = getDocs(q);
-            if (docs.docs.length === 0) {
-                updateDoc(collection(db, "users"), {
-                    uid: user.uid,
-                    authProvider: "google teste",
-                    bios: bios_user,
-                    categorys: user_categorys,
-                }).then(() => {
-                    console.log('atualização com query');
-                }).catch((error) => {
-                    console.log(error)
-                })
-            }
-            console.log('user updated');
+            const doc = getDocs(q);
+            console.log(doc);
+            const dataID = doc.docs[0].id;
+            console.log(dataID);
+            // const data = doc.docs[0].data();
+
+            // db.ref('users/' + uid)
+
+            // const uq = query(db, 'users', user.uid);
+            // const uq = query(db, 'users', where("uid", "==", user.uid));
+
+            // const userRef = doc(db, "users/" + user?.uid);
+            const userRef = doc(db, "users", dataID);
+
+            // Set the "capital" field of the city 'DC'
+            updateDoc(userRef, {
+                userBio: bios_user,
+                userCategorys: 'user_categorys'
+            }).then(() => {
+                console.log('atualização com query');
+            }).catch((error) => {
+                console.log('updateDoc error: ', error)
+            });
+
         } catch (error) {
             console.log(error)
         }
+
+        console.log('user updated');
+
+        //             Atualizar elementos em uma matriz
+        // Se o seu documento contém um campo de matriz, você pode usar arrayUnion() e arrayRemove() para adicionar e remover elementos. arrayUnion() adiciona elementos a um array, mas apenas elementos que ainda não estão presentes. arrayRemove() remove todas as instâncias de cada elemento fornecido.
+
+        // import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+
+        // const washingtonRef = doc(db, "cities", "DC");
+
+        // // Atomically add a new region to the "regions" array field.
+        // await updateDoc(washingtonRef, {
+        //     regions: arrayUnion("greater_virginia")
+        // });
+
+        // // Atomically remove a region from the "regions" array field.
+        // await updateDoc(washingtonRef, {
+        //     regions: arrayRemove("east_coast")
+        // });
+
+        // updateDoc(collection(db, "users"), {
+        //     uid: user.uid,
+        //     authProvider: "local teste",
+        //     bios: bios_user,
+        //     categorys: user_categorys,
+        // }).then(() => {
+        //     console.log('atualização com query');
+        // }).catch((error) => {
+        //     console.log(error)
+        // })
 
     }
 

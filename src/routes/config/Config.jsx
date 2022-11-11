@@ -84,7 +84,9 @@ const Config = () => {
 
         // }
 
-        const storageRef = ref(storage, `images/${file.name}`);
+        const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
+        // const storageRef = ref(storage, `profile/${file.name}`);
+        const storageRef = ref(storage, `profile/${imageName}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(
             'state_changed',

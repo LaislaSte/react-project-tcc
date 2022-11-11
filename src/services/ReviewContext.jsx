@@ -15,7 +15,7 @@
 //     const [post, setPosts] = useState(null);
 //     const [verifided, setVerifided] = (false);
 //     const [reviewed, setReviewed] = (0);
-    
+
 //     const [loading, setLoading] = useState(true);
 
 //     //Ao renderizar meu componente, traga junto os meus dados do banco
@@ -44,7 +44,7 @@
 //     }
 
 //     //função para cadastrar um post na coleção posts
-//     const addPost = async () => {
+//     const addPost = async (content, user, category, newData) => {
 //         const post = await addDoc(collectionRef, {
 //             content,
 //             user,
@@ -52,6 +52,38 @@
 //         });
 //         console.log("post cadastrado", post);
 //     }
+
+// Carimbo de data e hora do servidor
+// Você pode definir um campo em seu documento para um carimbo de data/hora do servidor que rastreia quando o servidor recebe a atualização:
+// import { updateDoc, serverTimestamp } from "firebase/firestore";
+
+// const docRef = doc(db, 'objects', 'some-id');
+
+// // Update the timestamp field with the value from the server
+// const updateTimestamp = await updateDoc(docRef, {
+//     timestamp: serverTimestamp()
+// });
+
+
+// Incrementar um valor numérico
+// Você pode aumentar ou diminuir um valor de campo numérico conforme mostrado no exemplo a seguir. Uma operação de incremento aumenta ou diminui o valor atual de um campo pelo valor fornecido.
+
+// Observação: se o campo não existir ou se o valor do campo atual não for um valor numérico, a operação definirá o campo para o valor fornecido.
+
+// import { doc, updateDoc, increment } from "firebase/firestore";
+
+// const washingtonRef = doc(db, "cities", "DC");
+
+// // Atomically increment the population of the city by 50.
+// await updateDoc(washingtonRef, {
+//     population: increment(50)
+// });
+
+// https://firebase.google.com/docs/firestore/solutions/counters
+
+
+
+
 
 //     //função para atualizar um post na coleção posts
 //     const updatePost = async (id) => {
@@ -62,7 +94,7 @@
 //                 await updateDoc(postSelected, {
 //                     verifidedDB: verifided,
 //                     reviewedDB: reviewed,
-//                     likesDB: likes 
+//                     likesDB: likes
 //                 });
 //                 console.log('post atualizado');
 //             } catch (error) {
