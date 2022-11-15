@@ -1,4 +1,36 @@
+# Projeto Memorize Studio:
+
+    Desenvolvimento de projeto de tcc, MemorizeStudio, um site de memorização de conteúdos didáticos básicos.
+
+# Contrubua para o projeto:
+
+> ```
+> tag: descrição
+> ```
+>
+> A **tag** deve ser o tipo de alteração, seguindo a referencia que estará abaixo com checkbox;\
+> E a **descrição** deve ser uma mensagem de commit simples, que abranja todas as alterações dentro do PR;
+
+### Que tipo de alteração esta revisão de código introduz? (Tag)
+
+- [ ] `feat` Nova funcionalidade
+- [ ] `fix` Correção de um bug
+- [ ] `docs` Atualização de documentação
+- [ ] `refact` Alteração no código que não é funcionalidade nova nem correção de bug
+- [ ] `perf` Melhoria de performance
+- [ ] `test` Adição, alteração ou remoção de testes
+- [ ] `build` Alteração no processo de build ou em dependencias externas
+- [ ] `ci` Alteração de pipeline ou fluxo de publicação
+- [ ] `chore` Outras alterações que não modificam arquivos base ou arquivos de teste
+- [ ] `revert` Reversão de commits anteriores
+
+**Exemplo**: `fix/deleteaccount route: concerto de bug no botão delete`
+
 # TODOS: fontEnd
+
+- concertar bugs do input
+
+---
 
 - add links de redirecionamento do footer
 
@@ -58,17 +90,27 @@
 - verificar função para mudança de e-mail
 - verificar função para confirmação de e-mail
 
+---
+
 - função para cadastrar post
 - função para atualizar post
 - função para deletar post
 
+---
+
 - organizar diretórios com o uid (e também id do post para registro de imagem de post) para registrar imagens no storage
+
+---
 
 - função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
 
+---
+
 - add google ads
 
-- aprender a fazer deploy
+---
+
+- fazer deploy
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
 
