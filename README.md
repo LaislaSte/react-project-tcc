@@ -38,8 +38,6 @@
 
 - concertar bug da responsividade no navbar q aparece o q nao devia aparecer em determinado ponto do width
 
-- criar uma classe no css globar para colocar nos elementos que tenha cursor pointer
-
 - criar pagina para mostrar os resultados das pesquisa q o user for clicar
 
 ---
