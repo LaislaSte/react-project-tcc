@@ -1,15 +1,16 @@
 import React from 'react';
 import './Global.css';
 import { fakeUser } from '../../utils/ArraysAndFunctions';
-import { Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Button from '../../components/button/Button';
 
 const DeleteAccount = () => {
 
-    const navigate = Navigate();
+    const navigate = useNavigate();
 
     const deleteAccount = () => {
-        navigate('public');
+        alert('laskdalsk')
+        // navigate('/public');
     }
 
     const notDeleteAccount = () => {
@@ -30,14 +31,14 @@ const DeleteAccount = () => {
                     text='Não deletar'
                     type='submit'
                     bg_color='secondary'
-                    fun={notDeleteAccount()}
+                    fun={notDeleteAccount}
                 />
 
                 <Button
                     text='Deletar'
                     type='submit'
                     bg_color='secondary'
-                    fun={deleteAccount()}
+                    fun={deleteAccount}
                 />
 
             </div>
