@@ -25,6 +25,7 @@ export const CostumerProvider = ({ children }) => {
 
     // const [users, setUsers] = useState(null);
     const [token, setToken] = useState(null);
+    const [id, setId] = useState('');
     const [submiting, setSubmiting] = useState(null);
     const [loading, setLoading] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
@@ -200,117 +201,32 @@ export const CostumerProvider = ({ children }) => {
         console.log(bios_user);
         console.log(categorys);
 
-        // Você pode atualizar as informações básicas do perfil de um usuário — o nome de exibição do usuário e o URL da foto do perfil — com o método updateProfile . Por exemplo:
-        // updateProfile(user, {
-        //     displayName: name_user,
-        //     photoURL: imgURL
-        // }).then(() => {
-        //     // Profile updated!
-        //     console.log('foto de perfil e nome de usuário atualizado');
-        // }).catch((error) => {
-        //     // An error occurred
-        //     console.log("An error occured while fetching user data", error);
-        // });
-
         try {
-            // const q = query(collection(db, "users"), where("uid", "==", user.uid));
-            // const q = query(collection(db, "users"));
-            // const q = collection(db, "users");
-            // console.log(q);
-            // const doc = getDocs(q);
-
-            // const querySnapshot = await getDocs(collection(db, "users"));
-            // querySnapshot.forEach((doc) => {
-            //     // doc.data() is never undefined for query doc snapshots
-            //     console.log(doc.id, " => ", doc.data());
-            // });
-
             const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
 
-                updateDoc(doc, {
-                    userBio: bios_user,
-                    userCategorys: categorys
-                }).then(() => {
-                    console.log('atualização com query');
+                console.log(doc.id);
+                setId(doc.id);
+                console.log(id);
+            });
+
+            const docRef = doc(db, "users", id);
+            const data = {
+                userBio: bios_user,
+                userCategorys: categorys
+            }
+            updateDoc(docRef, data)
+                .then(docRef => {
+                    console.log(docRef, 'atualização com query');
                 }).catch((error) => {
                     console.log('updateDoc error: ', error)
                 });
-            });
-
-
-            // const docRef = doc(db, "users", "uid", "==", user.uid);
-            // const docSnap = await getDoc(docRef);
-
-            // if (docSnap.exists()) {
-            //     console.log("Document data:", docSnap.data());
-            // } else {
-            //     // doc.data() will be undefined in this case
-            //     console.log("No such document!");
-            // }
-
-            // console.log(doc);
-            // const dataID = doc.docs[0].id;
-            // console.log(dataID);
-            // const data = doc.docs[0].data();
-            // console.log(data);
-
-            // db.ref('users/' + uid)
-
-            // const uq = query(db, 'users', user.uid);
-            // const uq = query(db, 'users', where("uid", "==", user.uid));
-            // const userRef = doc(db, "users/" + user?.uid);
-
-            // const userRef = doc(db, "users", dataID);
-
-            // console.log(userRef);
-
-            // updateDoc(userRef, {
-            //     userBio: bios_user,
-            //     userCategorys: categorys
-            // }).then(() => {
-            //     console.log('atualização com query');
-            // }).catch((error) => {
-            //     console.log('updateDoc error: ', error)
-            // });
 
         } catch (error) {
             console.log(error)
         }
-
-        // console.log('user updated');
-
-        //             Atualizar elementos em uma matriz
-        // Se o seu documento contém um campo de matriz, você pode usar arrayUnion() e arrayRemove() para adicionar e remover elementos. arrayUnion() adiciona elementos a um array, mas apenas elementos que ainda não estão presentes. arrayRemove() remove todas as instâncias de cada elemento fornecido.
-
-        // import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-
-        // const washingtonRef = doc(db, "cities", "DC");
-
-        // // Atomically add a new region to the "regions" array field.
-        // await updateDoc(washingtonRef, {
-        //     regions: arrayUnion("greater_virginia")
-        // });
-
-        // // Atomically remove a region from the "regions" array field.
-        // await updateDoc(washingtonRef, {
-        //     regions: arrayRemove("east_coast")
-        // });
-
-        // updateDoc(collection(db, "users"), {
-        //     uid: user.uid,
-        //     authProvider: "local teste",
-        //     bios: bios_user,
-        //     categorys: user_categorys,
-        // }).then(() => {
-        //     console.log('atualização com query');
-        // }).catch((error) => {
-        //     console.log(error)
-        // })
 
     }
 
