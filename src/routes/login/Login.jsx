@@ -19,25 +19,23 @@ import Footer from '../../components/footer/Footer';
 import { FaEnvelope } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { async } from '@firebase/util';
+import Loader from '../../components/loader/Loader';
 
 
 const Login = ({
     //PropriedadeOnSubmit
 }) => {
-    const { logInWithEmailAndPassword, authenticated, loginGoogle } = useContext(CostumerContext);
+    const { logInWithEmailAndPassword, signInWithGoogle, loader } = useContext(CostumerContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
-    // const { logInWithEmailAndPassword } = UserAuth();
-
     useEffect(
         () => {
             if (loading) {
-                //a loading screen/component
-                return;
+                return ;
             }
             if (user) navigate('/explore');
 
@@ -51,6 +49,9 @@ const Login = ({
 
     const handleClick = () => {
         logInWithEmailAndPassword(email, password);
+        if(loader){
+            return <Loader />
+        }
         navigate('/explore');
     }
 
