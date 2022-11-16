@@ -15,6 +15,7 @@
 
 .input-outline input {
     width: 100%;
+    height: 100%;
     background: none;
     padding-right: .8rem;
     padding-left: .7rem;
