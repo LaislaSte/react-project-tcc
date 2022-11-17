@@ -21,6 +21,7 @@ const Explore = () => {
     const [bios, setBios] = useState("");
     const [imgURL, setImgURL] = useState("");
     const navigate = useNavigate();
+
     const fetchUserInfo = async () => {
         try {
             // const q = query(collection(db, "users"), where("uid", "==", user?.uid));

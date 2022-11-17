@@ -89,7 +89,7 @@ export const CostumerProvider = ({ children }) => {
             const user = res.user;
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
-                name,
+                name: name,
                 password,
                 authProvider: "local",
                 email,
@@ -228,6 +228,30 @@ export const CostumerProvider = ({ children }) => {
             console.log(error)
         }
 
+    }
+
+    const getUserId = async () => {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                setId(doc.id);
+                setName(doc.name);
+
+            });
+    }
+
+    const sendPost = async (title, content, cat) => {
+
+        await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            name: name,
+            userID: id,
+            authProvider: "local",
+            title: title,
+            content: content,
+            category: cat
+        });
     }
 
     const updateUserEmail = (user_email) => {

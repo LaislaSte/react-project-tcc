@@ -143,7 +143,8 @@ const CreatePost = ({ funPopUp }) => {
                                 </div>
                             )
                         })}
-
+                        
+                        {/* Tirar a opção de selecionar mais de um. */}
                         {showMessage(favCategory_user) && <p className='input-error-message'> Selecione apenas 1 categoria </p>}
 
                     </div>
