@@ -26,6 +26,7 @@ export const CostumerProvider = ({ children }) => {
     // const [users, setUsers] = useState(null);
     const [token, setToken] = useState(null);
     const [id, setId] = useState('');
+    const [uid, setUid] = useState(null);
     const [submiting, setSubmiting] = useState(null);
     const [loading, setLoading] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
@@ -69,18 +70,20 @@ export const CostumerProvider = ({ children }) => {
     //     })
     // }
 
+
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
             setUser(currentUser);
-            setToken(user?.getIdToken());
-            console.log(currentUser);
+            setUid(currentUser.uid);
+            // setToken(user?.getIdToken());
             // getUserData(user?.uid);
+            getUserId();
         });
         return () => {
             unsubscribe();
-        };
-    }, []);
+        }
+    }, [user]);
 
     const registerWithEmailAndPassword = async (name, email, password) => {
         setLoading(true);
@@ -234,25 +237,22 @@ export const CostumerProvider = ({ children }) => {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 
             const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
+
+            for (var i in querySnapshot.docs) {
+                const doc = querySnapshot.docs[i]
                 setId(doc.id);
-                setName(doc.name);
-
-            });
+                setName(doc.data().name);
+                if (name) {
+                    break
+                }
+            }
+            // querySnapshot.forEach((doc) => {
+            //     setId(doc.id);
+            //     setName(doc.data().name);
+            
+            // });
     }
 
-    const sendPost = async (title, content, cat) => {
-
-        await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            name: name,
-            userID: id,
-            authProvider: "local",
-            title: title,
-            content: content,
-            category: cat
-        });
-    }
 
     const updateUserEmail = (user_email) => {
         updateEmail(user, user_email).then(() => {
@@ -293,7 +293,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail, reathenticateUserCredentials, name }}>
+        <CostumerContext.Provider value={{ name, id, authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail, reathenticateUserCredentials, name }}>
             {children}
         </CostumerContext.Provider>
     )

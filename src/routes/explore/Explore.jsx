@@ -13,14 +13,16 @@ import Navbar from '../../components/navbar/Navbar';
 import Categorys from '../../components/categorys/Categorys';
 import { post } from '../../utils/ArraysAndFunctions';
 import CreateButton from "../../components/createbutton/CreateButton";
+import { CostumerContext } from "../../services/UserContext";
 
 const Explore = () => {
 
     const [user, loading, error] = useAuthState(auth);
-    const [name, setName] = useState("");
     const [bios, setBios] = useState("");
     const [imgURL, setImgURL] = useState("");
     const navigate = useNavigate();
+
+    const { name } = useState(CostumerContext);
 
     const fetchUserInfo = async () => {
         try {
@@ -30,9 +32,7 @@ const Explore = () => {
             const userBios = user?.bios;
             const uid = user?.uid;
             const token = user?.getIdToken();
-            const userName = user?.name;
             const userAvatar = user?.photoURL;
-            setName(userName);
             setImgURL(userAvatar);
             setBios(userBios);
         } catch (err) {
@@ -57,7 +57,7 @@ const Explore = () => {
 
             <main className="posts-container">
                 <h1>Bem Vindo! Usuário Logado: </h1>
-                <p>{name}</p>
+                <p>{user?.displayName}</p>
                 <p>{user?.email}</p>
 
                 <button onClick={logout}

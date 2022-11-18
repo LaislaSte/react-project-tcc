@@ -10,9 +10,17 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import TxtArea from '../txtarea/TxtArea';
 import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
+import { PostProvider } from '../../services/PostContext';
+import { CostumerContext } from '../../services/UserContext';
+import { auth } from '../../services/Banco';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { db } from '../../services/Banco';
+import { addDoc, collection } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+   
 
 const CreatePost = ({ funPopUp }) => {
     const [title, setTitle] = useState('');
@@ -23,10 +31,14 @@ const CreatePost = ({ funPopUp }) => {
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
-    const addPost = useContext(PostsContext);
+    const navigate = useNavigate();
+
     // const { addPost, posts } = useContext(PostsContext);
     const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
+    const [user, loading, error] = useAuthState(auth);
+
+    const { name, id } = useContext(CostumerContext);
 
     const handleOnChangeCB = (event) => {
         setIsChecked(!isChecked);
@@ -47,16 +59,38 @@ const CreatePost = ({ funPopUp }) => {
         return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
+    const sendPost = async (title, content, cat, img_url) => {
+        try {
+            await addDoc(collection(db, "post"), {
+                uid: user.uid,
+                userPhoto: user?.photoURL,
+                imgContent: img_url,
+                name: name,
+                userID: id,
+                authProvider: "local",
+                title: title,
+                content: content,
+                category: cat,
+                likes: 0
+            });
+            alert('Flashcard criado!');
+            navigate('/');
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(categoryP)
-        addPost({ title, content, categoryP });
+        // console.log(favCategory_user);
+        // console.log(content);
+        // console.log(title);
 
         // const file = e.target[0]?.files[0];
 
         // if (!file) return;
 
-        // const postRef = ref(storage, `postsContent/${file.name}`);
+        // const postRef = ref(storage, `postsContent/user.uid/${file.name}`);
 
         // // const pickRef = ref(storage, `profilePick/${file.name}`);
 
@@ -77,6 +111,8 @@ const CreatePost = ({ funPopUp }) => {
         //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
         //     }
         //
+
+        sendPost(title, content, favCategory_user, imgURL);
 
     }
 
@@ -159,9 +195,8 @@ const CreatePost = ({ funPopUp }) => {
                         <div className="btns-popup">
                             <Button
                                 text='Apenas postar'
-                                type='button'
+                                type='submit'
                                 bg_color='secondary'
-                                fun={cleanForm}
                                 disable={!formValidCreatePost()}
                             />
                             <Button
@@ -181,5 +216,9 @@ const CreatePost = ({ funPopUp }) => {
         </div>
     )
 }
+
+<PostProvider>
+    <CreatePost/>      
+</PostProvider>
 
 export default CreatePost

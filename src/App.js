@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useContext, useEffect } from 'react';
+import React, { Component, useContext, useEffect } from 'react';
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import { CostumerProvider, CostumerContext } from './services/UserContext';
 import { PostProvider } from './services/PostContext';
@@ -23,6 +23,7 @@ import Review from './routes/review/Review';
 import Config from './routes/config/Config';
 import { auth } from './services/Banco';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import CreatePost from './components/popupmenu/CreatePost';
 
 function App() {
 
@@ -89,7 +90,6 @@ function App() {
           <Route path="/review" element={<ProtectedRoute> <Review /> </ProtectedRoute>} />
         </Routes>
       </CostumerProvider>
-
     </>
   );
 }
