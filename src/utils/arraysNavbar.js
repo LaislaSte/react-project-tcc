@@ -1,28 +1,30 @@
+// HOOKS AND LIBS
 import React from 'react';
+import { BsPersonCircle } from 'react-icons/bs';
+import { BiLogIn, BiInfoCircle } from 'react-icons/bi';
+import { FaGraduationCap } from 'react-icons/fa';
+
+// ARCHIVES FROM PROJECT
 import avatarDefault from '../assets/icons/avatarDefault.svg';
 
-import { BiHomeAlt } from 'react-icons/bi';
-import { RiSearch2Line } from 'react-icons/ri';
-import { BsPersonCircle } from 'react-icons/bs';
-import { FaGraduationCap } from 'react-icons/fa';
 
 export const SidebarDataPublic = [
     {
         title: 'Login',
         path: '/login',
-        icon: <BiHomeAlt />,
+        icon: <BiLogIn />,
         cName: 'nav-text'
     },
     {
         title: 'Cadastrar',
         path: '/register',
-        icon: <RiSearch2Line />,
+        icon: <BsPersonCircle />,
         cName: 'nav-text'
     },
     {
         title: 'Sobre',
         path: '/about-us',
-        icon: <BsPersonCircle />,
+        icon: <BiInfoCircle />,
         cName: 'nav-text'
     },
 ]

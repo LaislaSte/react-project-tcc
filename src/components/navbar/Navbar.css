@@ -153,9 +153,9 @@
         height: 100vh;
         width: 100%;
         top: 0;
+        right:0 ;
         background: #22457375;
         backdrop-filter: blur(15px);
-        transform: translateX(0);
         transition: var(--transition);
     }
 
@@ -179,6 +179,7 @@
         background: #22457375;
         width: 100%;
         top: 0;
+        left: 0;
         backdrop-filter: blur(15px);
         justify-content: center;
         padding-left: 5%;

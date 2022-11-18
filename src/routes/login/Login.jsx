@@ -16,20 +16,25 @@ import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import Footer from '../../components/footer/Footer';
 
+import { FaEnvelope } from 'react-icons/fa';
+import { RiLockPasswordFill } from 'react-icons/ri';
+import Loader from '../../components/loader/Loader';
+
+
 const Login = () => {
     // states 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     // imports
-    const { logInWithEmailAndPassword, signInWithGoogle } = UserAuth();
+    const { logInWithEmailAndPassword, signInWithGoogle, loader } = UserAuth();
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
 
     useEffect(
         () => {
             if (loading) {
-                //a loading screen/component
                 return;
             }
             if (user) navigate('/explore');
@@ -44,6 +49,9 @@ const Login = () => {
 
     const handleClick = () => {
         logInWithEmailAndPassword(email, password);
+        if (loader) {
+            return <Loader />
+        }
         navigate('/explore');
     }
 
