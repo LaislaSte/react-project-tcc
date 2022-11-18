@@ -1,37 +1,30 @@
-
-import React, { useState, useContext, useEffect } from 'react';
+// HOOKS AND LIBS 
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth'; //tem q instalar**
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaEnvelope } from 'react-icons/fa';
+import { RiLockPasswordFill } from 'react-icons/ri';
 
+// ARCHIVES FROM PROJECT
 import { auth } from '../../services/Banco';
-import { logInWithEmailAndPassword, signInWithGoogle } from '../../services/googleAuthenticatios';
 import './Login.css';
-import { CostumerContext } from '../../services/UserContext';
 import { emailValid, passwordValid } from '../../utils/validators';
+import { UserAuth } from '../../services/UserContext';
 
-import signIn from '../../services/UserAuth';
-import { UserAuth } from '../../services/UserAuth';
-
+/*PAGES AND COMPONENTS */
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import Footer from '../../components/footer/Footer';
 
-import { FaEnvelope } from 'react-icons/fa';
-import { RiLockPasswordFill } from 'react-icons/ri';
-import { async } from '@firebase/util';
-
-
-const Login = ({
-    //PropriedadeOnSubmit
-}) => {
-    const { logInWithEmailAndPassword, authenticated, loginGoogle } = useContext(CostumerContext);
-
+const Login = () => {
+    // states 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    // imports
+    const { logInWithEmailAndPassword, signInWithGoogle } = UserAuth();
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-
-    // const { logInWithEmailAndPassword } = UserAuth();
 
     useEffect(
         () => {
@@ -53,13 +46,6 @@ const Login = ({
         logInWithEmailAndPassword(email, password);
         navigate('/explore');
     }
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     // console.log('dados do form', { email, password });
-    //     //PropriedadeOnSubmit = { email, password }
-    //     login({email, password});
-    // }
 
     return (
         <div className='login'>
