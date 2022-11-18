@@ -1,28 +1,28 @@
+// HOOKS AND LIBS 
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-
-import './Public.css';
-import CurlyHairWoman from '../../assets/woman-with-curly-hair-and-yellow-shirt.jpg';
-import WomanStraighHair from '../../assets/woman-with-yellow-shirt.jpg';
-import WhiteGuyStuduing from '../../assets/white-guy-studing.jpg';
-import brainMen from '../../assets/icons/brain-2029363.svg';
-
-import Button from '../../components/button/Button';
-import Navbar from '../../components/navbar/Navbar';
-import Footer from '../../components/footer/Footer';
 
 import { FaBrain } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
 import { MdPermMedia } from 'react-icons/md'
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 
+// ARCHIVES FROM PROJECT
+import './Public.css';
+import CurlyHairWoman from '../../assets/woman-with-curly-hair-and-yellow-shirt.jpg';
+import WomanStraighHair from '../../assets/woman-with-yellow-shirt.jpg';
+import WhiteGuyStuduing from '../../assets/white-guy-studing.jpg';
+import brainMen from '../../assets/icons/brain-2029363.svg';
+
+/*PAGES AND COMPONENTS */
+import Button from '../../components/button/Button';
+import Navbar from '../../components/navbar/Navbar';
+import Footer from '../../components/footer/Footer';
 
 const Public = () => {
 
-
     return (
-        <div className='container public-container'>
+        <div className=' public-container'>
             <Navbar />
 
             <section className="first-section" id="first-section">
