@@ -1,21 +1,26 @@
+// HOOKS AND LIBS
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../services/Banco";
-import { sendPasswordReset } from "../../services/googleAuthenticatios";
-
-import './Global.css';
-import { passwordValid, passConfValid } from '../../utils/validators';
-
-import Input from '../../components/input/Input';
-import Button from '../../components/button/Button';
-import { fakeUser } from '../../utils/ArraysAndFunctions';
 import { BiArrowBack } from 'react-icons/bi';
 
-export const ChangePassword1 = () => {
+// ARCHIVES FROM PROJECT
+import { auth } from "../../services/Banco";
+import './Global.css';
+import { passwordValid, passConfValid } from '../../utils/validators';
+import { fakeUser } from '../../utils/ArraysAndFunctions';
+import { UserAuth } from "../../services/UserContext";
+
+/*PAGES AND COMPONENTS */
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+
+const ChangePassword = () => {
 
     const [confirmEmail, setConfirmEmail] = useState('');
     const [email, setEmail] = useState("");
+
+    const { sendPasswordReset } = UserAuth()
     const [user, loading, error] = useAuthState(auth);
 
     const navigate = useNavigate();
@@ -32,15 +37,6 @@ export const ChangePassword1 = () => {
             return
         }
 
-        // emailjs.send('service_4jqwlml', 'template_kmkc58i', templateParams, 'wPqwTjjSoaxXx0cEM')
-        //     .then((res) => {
-        //         alert('email sended', res.status, res.text);
-        //         setEmail('');
-        //         setName('');
-        //         setMessage('');
-        //     }, (error) => {
-        //         alert('error: ', error);
-        //     });
     }
 
     return (
@@ -82,66 +78,4 @@ export const ChangePassword1 = () => {
     )
 }
 
-
-// export const ChangePassword2 = () => {
-
-//     const [password, setPassword] = useState('')
-//     const [confirmPassword, setConfirmPassword] = useState('')
-//     const [message, setMessage] = useState('')
-
-//     function sendEmail(e) {
-//         e.preventDefault();
-
-//         if (confirmPassword === '' || password === '') {
-//             alert('preencha corretamente o formulário');
-//             return
-//         }
-
-//         const templateParams = {
-//             message: message,
-//         }
-
-//     }
-
-//     return (
-//         <div className="change-container">
-//             <Link to='/changepassword1'>
-//                 <BiArrowBack className='back-icon' />
-//             </Link>
-//             <div className="img-container">
-//                 <img src={fakeUser.avatar} alt="" />
-//             </div>
-//             <h1 className="title">Altere sua senha</h1>
-
-//             <form className="form" onSubmit={sendEmail}>
-//                 <p>Insira sua nova senha</p>
-//                 <Input
-//                     className="input-outline-secondary"
-//                     type="text"
-//                     text="Senha"
-//                     value={password}
-//                     onchange={(e) => setPassword(e.target.value)}
-//                     message='Insira mais de 3 caracter'
-//                     showMessage={password && !passwordValid(password)}
-//                 />
-
-//                 <p>Confirme sua senha</p>
-//                 <Input
-//                     className="input-outline-secondary"
-//                     type="text"
-//                     text="Confirmação de senha"
-//                     value={confirmPassword}
-//                     onchange={(e) => setConfirmPassword(e.target.value)}
-//                     message='As senhas não são correspondentes'
-//                     showMessage={confirmPassword && !passConfValid(confirmPassword)}
-//                 />
-
-//                 <Button
-//                     text='Alterar'
-//                     type='submit'
-//                     bg_color='secondary'
-//                 />
-//             </form>
-//         </div>
-//     )
-// }
+export default ChangePassword

@@ -10,7 +10,7 @@
     background-color: var(--PRIMARY_600);
     width: 50%;
     height: 70vh;
-    border-radius: 50%;
+    border-radius: 5rem;
     display: flex;
     justify-content: center;
     padding: 1.5rem 0;

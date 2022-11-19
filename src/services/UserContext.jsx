@@ -56,7 +56,7 @@ export const CostumerProvider = ({ children }) => {
             const user = res.user;
             await addDoc(collectionRef, {
                 uid: user.uid,
-                name,
+                name: name,
                 password,
                 authProvider: "local",
                 email,
@@ -152,20 +152,7 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
-
-
     }
-
-    const sendPasswordReset = async (email) => {
-        try {
-            await sendPasswordResetEmail(auth, email);
-            alert("Password reset link sent!");
-            navigate('/login');
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
-    };
 
     const updateUserEmail = (user_email) => {
         updateEmail(user, user_email).then(() => {
@@ -192,7 +179,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, bios, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, bios, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail }}>
             {children}
         </CostumerContext.Provider>
     )

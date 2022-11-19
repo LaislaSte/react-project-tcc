@@ -8,7 +8,7 @@ const emailValid = (email) => {
 }
 
 const passwordValid = (password) => {
-	return password?.toString().length > 6;
+	return password?.toString().length > 5;
 }
 
 const passConfValid = (password, passConf) => {

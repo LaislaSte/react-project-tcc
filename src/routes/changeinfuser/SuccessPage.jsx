@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './Global.css';
 import { fakeUser } from '../../utils/ArraysAndFunctions'
 
-const SuccessePage = () => {
+const SuccessPage = () => {
     return (
         <div className='container'>
             <div className="img-container">
@@ -20,4 +20,4 @@ const SuccessePage = () => {
     )
 }
 
-export default SuccessePage
+export default SuccessPage
