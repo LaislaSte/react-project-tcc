@@ -15,9 +15,6 @@ import { UserAuth } from '../../services/UserContext';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import Footer from '../../components/footer/Footer';
-
-import { FaEnvelope } from 'react-icons/fa';
-import { RiLockPasswordFill } from 'react-icons/ri';
 import Loader from '../../components/loader/Loader';
 
 
@@ -49,7 +46,7 @@ const Login = () => {
 
     const handleClick = () => {
         logInWithEmailAndPassword(email, password);
-        if (loader) {
+        while (loader) {
             return <Loader />
         }
         navigate('/explore');

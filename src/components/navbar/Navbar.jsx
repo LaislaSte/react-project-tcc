@@ -1,10 +1,6 @@
+// HOOKS AND LIBS 
 import React, { useState, useContext } from 'react';
-import './Navbar.css';
-import { CostumerContext } from '../../services/UserContext';
-import { SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
-import Input from '../input/Input'
 import { Link } from 'react-router-dom';
-
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
 import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
@@ -13,56 +9,22 @@ import { BsPersonCircle, BsFillPlusCircleFill } from 'react-icons/bs';
 import { FaGraduationCap } from 'react-icons/fa';
 import { IoMdCreate, IoLogOutOutline } from 'react-icons/io'
 
+// ARCHIVES FROM PROJECT
+import './Navbar.css';
+import { UserAuth } from '../../services/UserContext';
+import { SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
+
+/*PAGES AND COMPONENTS */
+import Input from '../input/Input'
+
 const Navbar = () => {
-
-    const [navbar, setNavbar] = useState(false);
-    const showNavbar = () => setNavbar(!navbar);
-
-    //caso o usuario esteja autenticado as informações exibidas no navbar mudam
-    const { user, logout } = useContext(CostumerContext)
-
+    // states 
     const [term, setTerm] = useState([]);
-
-
-    // const onSearch = (e) => {
-    //     setTerm(e.target.value);
-    //     setResultSearch([]);
-
-    //     if (term.length < 3) {
-    //         return
-    //     }
-
-    //     setResultSearch([
-    //         {
-    //             avatar: '',
-    //             name: 'fasd',
-    //             email: 'klfasj',
-    //             id: 'kjcs'
-    //         },
-    //         {
-    //             avatar: '',
-    //             name: 'fasdsd',
-    //             email: 'klfssssasj',
-    //             id: 'kasjcs'
-    //         },
-    //         {
-    //             avatar: '',
-    //             name: 'fasffdd',
-    //             email: 'klfasfdsj',
-    //             id: 'kjcasas'
-    //         }
-    //     ]);
-
-    // }
-
-    // const onClickResultSearch = (id) => {
-    //     console.log('ao clicar no btn resultado da pesquisa', { id });
-    // }
-
-    const onSearch = (id) => {
-        console.log(id)
-    }
-
+    const [navbar, setNavbar] = useState(false);
+    //imports
+    const { user, logout } = UserAuth();
+    // functions 
+    const showNavbar = () => setNavbar(!navbar);
 
     return (
         <nav className="navbar">
@@ -107,6 +69,7 @@ const Navbar = () => {
                 </li>
 
                 {user
+                    // caso o usuario esteja autenticado as informações exibidas no navbar mudam
                     ? (
                         <>
                             <li className='nav-text'>
@@ -147,33 +110,6 @@ const Navbar = () => {
                         )
                     }))
                 }
-                {/* {user
-                    ? (SidebarData.map((item, index) => {
-                        return (
-                            <li key={index} className={item.cName} onClick={item.functionLogout}>
-                                <Link to={item.path} className='item-link'>
-                                    {item.icon}
-                                    {item.title}
-                                </Link>
-                            </li>
-                        )
-                    }))
-
-                    : (SidebarDataPublic.map((item, index) => {
-                        return (
-                            <li key={index} className={item.cName}>
-                                <Link to={item.path} className='item-link'>
-                                    {item.icon}
-                                    {item.title}
-                                </Link>
-                            </li>
-                        )
-                    }))
-                } */}
-
-                {/* {user === false && (
-                    )} */}
-
             </ul>
 
             {term.length > 2 && (

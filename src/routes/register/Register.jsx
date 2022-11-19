@@ -1,34 +1,48 @@
-import React, { useState, useContext, useEffect } from 'react';
+// HOOKS AND LIBS 
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth'; //tem q instalar**
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaEnvelope } from 'react-icons/fa';
+import { RiLockPasswordFill } from 'react-icons/ri';
+import { BsFillPersonFill } from 'react-icons/bs';
 
+// ARCHIVES FROM PROJECT
 import { auth } from '../../services/Banco';
-import { registerWithEmailAndPassword, signInWithGoogle } from '../../services/googleAuthenticatios';
 import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validators';
-import { UserAuth } from '../../services/UserAuth';
-
+import { UserAuth } from '../../services/UserContext';
 import './Register.css';
 import Explore from '../../assets/image-girl-holding-phone.png';
 
+/*PAGES AND COMPONENTS */
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import Footer from '../../components/footer/Footer';
 
-import { FaEnvelope } from 'react-icons/fa';
-import { RiLockPasswordFill } from 'react-icons/ri';
-import { BsFillPersonFill } from 'react-icons/bs';
-import { CostumerContext } from '../../services/UserContext';
-
 const Register = () => {
+    // states
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+
+    // imports
     const [user, loading, error] = useAuthState(auth);
-    const history = useNavigate();
+    const navigate = useNavigate();
+    const { registerWithEmailAndPassword, verifiedUserEmail, signInWithGoogle } = UserAuth();
 
-    const { registerWithEmailAndPassword } = useContext(CostumerContext);
+    // useeffects 
+    useEffect(
+        () => {
+            if (loading) {
+                //a loading screen/component
+                return;
+            }
+            if (user) navigate('/explore');
+        },
+        [user, loading]
+    )
 
+    // functions 
     const formValidRegister = () => {
         if (emailValid(email) && passwordValid(password) && nameValid(name) && passConfValid(passwordConfirm)) {
             return true;
@@ -37,25 +51,18 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`usuario cadastrado`);
-        registerWithEmailAndPassword(name, email, password);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setPasswordConfirm('');
+        try {
+            const res = verifiedUserEmail();
+            res ? registerWithEmailAndPassword(name, email, password) : alert('Insira um e-mail válido');
+            console.log(`usuario cadastrado`);
+            setName('');
+            setEmail('');
+            setPassword('');
+            setPasswordConfirm('');
+        } catch (error) {
+            alert(error)
+        }
     }
-
-    useEffect(
-        () => {
-            if (loading) {
-                //a loading screen/component
-                return;
-            }
-            if (user) history('/explore');
-
-        },
-        [user, loading]
-    )
 
     return (
         <>

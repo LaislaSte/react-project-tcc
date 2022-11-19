@@ -1,93 +1,60 @@
-import React, { createContext, useState, useEffect } from 'react';
+// HOOKS AND LIBS
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// auth:
 import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
-
-import { db, auth, provider } from './Banco';
+// firestore: 
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where } from "firebase/firestore";
+
+// ARCHIVES FROM PROJECT
+import { db, auth, provider } from './Banco';
 
 //instanciado um objeto com o Hook do react createContext
 export const CostumerContext = createContext();
 //referenciando a coleção do banco de dados a ser usada
 const collectionRef = collection(db, 'users');
 
-// const provider = new GoogleAuthProvider();
-// const auth = getAuth(app);
-
-
 export const CostumerProvider = ({ children }) => {
+    //states
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
+    const [id, setId] = useState('');
+    const [bios, setBios] = useState('');
+    const [authenticated, setAuthenticated] = useState(false);
+    const [loader, setLoader] = useState(false);
+
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
 
-    //criado estados
-    const [user, setUser] = useState(null);
-    const [userData, setUserData] = useState(null);
-
-    // const [users, setUsers] = useState(null);
-    const [token, setToken] = useState(null);
-    const [id, setId] = useState('');
-    const [submiting, setSubmiting] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [authenticated, setAuthenticated] = useState(false);
-
-
-    const [image, setImage] = useState(null);
-    const [bios, setBios] = useState('');
-    const [name, setName] = useState('');
-
-
-    //Ao renderizar meu componente, verifica se há algum usuário logado, pegando os item do localstorage e os validando
-    // useEffect(
-    //     () => {
-    //         //pego devolta o user do localStorage
-    //         const recoveredToken = localStorage.getItem('@google:token');
-    //         const recoveredGoggleUser = localStorage.getItem('@google:user');
-    //         const recoveredUser = localStorage.getItem('user:');
-
-    //         //(com a fun if dessa maneira consigo validar o que esta no seu parametro), se é valido seto o usuario novamente
-    //         if (recoveredGoggleUser && recoveredToken) {
-    //             setUser(JSON.parse(recoveredGoggleUser));
-    //             setToken(JSON.parse(recoveredToken));
-    //             setAuthenticated(true);
-    //             //navegue para a home
-    //             navigate('/');
-    //         }
-    //         if (recoveredUser) {
-    //             setUser(JSON.parse(recoveredUser));
-    //             setAuthenticated(true);
-    //             navigate('/');
-    //         }
-    //         //quando o validar os itens, set o carregamento da info (loading) para false
-    //         setLoading(false);
-    //     },
-    //     []
-    // );
-
-    // function getUserData(uid) {
-    //     db.ref('users/' + uid).once("value", snap => {
-    //         console.log(snap.val())
-    //     })
-    // }
-
+    //BUSCAR ATUAL USUÁRIO AUTENTICADO QUANDO RENDERIZADO A PÁGINA
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
             setUser(currentUser);
             setToken(user?.getIdToken());
-            console.log(currentUser);
-            // getUserData(user?.uid);
+            fetchId();
         });
-        return () => {
-            unsubscribe();
-        };
+        // return () => {
+        unsubscribe();
+        // };
     }, []);
 
+    // functions 
+    const fetchId = async () => {
+        const q = query(collectionRef, where("uid", "==", user?.uid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            setId(doc.id);
+            console.log(id);
+        });
+    }
+
+    // auth functions 
     const registerWithEmailAndPassword = async (name, email, password) => {
-        setLoading(true);
+        setLoader(true);
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const user = res.user;
-            await addDoc(collection(db, "users"), {
+            await addDoc(collectionRef, {
                 uid: user.uid,
                 name,
                 password,
@@ -98,24 +65,11 @@ export const CostumerProvider = ({ children }) => {
             console.error(err);
             alert(err.message);
         }
-
-        setLoading(false);
-    };
-
-    const fetchUserName = async () => {
-        try {
-            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            const doc = await getDocs(q);
-            const data = doc.docs[0].data();
-            console.log(data);
-            setName(data.name);
-        } catch (err) {
-            console.error(err);
-            alert("An error occured while fetching user data");
-        }
+        setLoader(false);
     };
 
     const revomeUser = () => {
+        setLoader(true)
         deleteUser(user).then(() => {
             // User deleted.
             console.log('usuário deletado');
@@ -123,16 +77,13 @@ export const CostumerProvider = ({ children }) => {
             // An error ocurred
             console.log(error);
         });
+        setLoader(false)
     }
 
     //FUNÇÕES DE LOGIN E LOGOUT
-
     const logInWithEmailAndPassword = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
-            localStorage.setItem('@userLogedWithEmailAndPassword', JSON.stringify(res.user));
-            localStorage.setItem('@userLogedWithEmailAndPasswordId', JSON.stringify(res.providerId));
-
             navigate('/explore');
         } catch (err) {
             console.error(err);
@@ -147,10 +98,10 @@ export const CostumerProvider = ({ children }) => {
                 const token = credential.accessToken;
                 const userGoogle = result.user;
 
-                const q = query(collection(db, "users"), where("uid", "==", userGoogle.uid));
+                const q = query(collectionRef, where("uid", "==", userGoogle.uid));
                 const docs = getDocs(q);
                 if (docs.docs.length === 0) {
-                    addDoc(collection(db, "users"), {
+                    addDoc(collectionRef, {
                         uid: user.uid,
                         name: user.displayName,
                         authProvider: "google",
@@ -172,6 +123,39 @@ export const CostumerProvider = ({ children }) => {
             });
     }
 
+    const logout = () => {
+        signOut(auth);
+        setUser(null);
+        setAuthenticated(false);
+        navigate('/');
+    };
+
+    //FUNÇÕES DE ATUALIZAÇÃO
+    const updateUserProfile = (imgURL, name_user, bios_user, categorys) => {
+
+        updateDoc(doc(db, "users", id), {
+            userBio: bios_user,
+            userCategorys: categorys
+        })
+            .then(docRef => {
+                console.log(docRef, 'atualização com query');
+                setBios(bios_user);
+            }).catch((error) => {
+                console.log('updateDoc error: ', error)
+            });
+
+        try {
+            updateProfile(user, {
+                displayName: name_user,
+                photoURL: imgURL
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
     const sendPasswordReset = async (email) => {
         try {
             await sendPasswordResetEmail(auth, email);
@@ -182,53 +166,6 @@ export const CostumerProvider = ({ children }) => {
             alert(err.message);
         }
     };
-
-    const logout = () => {
-        signOut(auth);
-        setUser(null);
-        setAuthenticated(false);
-        localStorage.removeItem('user');
-        localStorage.removeItem('@google:user');
-        localStorage.removeItem('@google:token');
-        //navegue para página pública inicial/public
-        navigate('/');
-    };
-
-    //função para atualizar um usuário na coleção user
-    const updateUserProfile = async (imgURL, name_user, bios_user, categorys) => {
-        console.log(imgURL);
-        console.log(name_user);
-        console.log(bios_user);
-        console.log(categorys);
-
-        try {
-            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-
-                console.log(doc.id);
-                setId(doc.id);
-                console.log(id);
-            });
-
-            const docRef = doc(db, "users", id);
-            const data = {
-                userBio: bios_user,
-                userCategorys: categorys
-            }
-            updateDoc(docRef, data)
-                .then(docRef => {
-                    console.log(docRef, 'atualização com query');
-                }).catch((error) => {
-                    console.log('updateDoc error: ', error)
-                });
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
 
     const updateUserEmail = (user_email) => {
         updateEmail(user, user_email).then(() => {
@@ -245,33 +182,22 @@ export const CostumerProvider = ({ children }) => {
             .then((result) => {
                 // Email verification sent!
                 console.log('e-mail de verificação enviado', result);
-                return 'success';
+                return true;
             }).catch((error) => {
                 console.log(error);
-                return 'failed';
+                return false;
             })
-    }
-
-
-    const reathenticateUserCredentials = () => {
-        // TODO(you): prompt the user to re-provide their sign-in credentials
-        // const credential = promptForCredentials();
-
-        // reauthenticateWithCredential(user, credential).then(() => {
-        //     // User re-authenticated.
-        //     console.log('feita reautenticação');
-        // }).catch((error) => {
-        //     // An error ocurred
-        //     console.log(error);
-        // });
     }
 
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail, reathenticateUserCredentials, name }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, bios, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, sendPasswordReset, verifiedUserEmail }}>
             {children}
         </CostumerContext.Provider>
     )
 }
 
+export const UserAuth = () => {
+    return useContext(CostumerContext);
+};

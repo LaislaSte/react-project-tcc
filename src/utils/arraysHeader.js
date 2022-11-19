@@ -7,39 +7,6 @@ export const userCategorys = [
   'Química',
   'Biologia'
 ]
-
-export const toppings = [
-  {
-    name: "Capsicum",
-    price: 1.2
-  },
-  {
-    name: "Paneer",
-    price: 2.0
-  },
-  {
-    name: "Red Paprika",
-    price: 2.5
-  },
-  {
-    name: "Onions",
-    price: 3.0
-  },
-  {
-    name: "Extra Cheese",
-    price: 3.5
-  },
-  {
-    name: "Baby Corns",
-    price: 3.0
-  },
-  {
-    name: "Mushroom",
-    price: 2.0
-  }
-];
-
-
 export const categorys = [
   {
     name: 'Geografia',
@@ -97,19 +64,4 @@ export const categorys = [
     name: 'Ciências',
     id: '14'
   },
-]
-
-export const moreReviewI = [
-  'Excluir revisão'
-]
-export const morePostI = [
-  'Editar Postagem',
-  'Excluir Postagem',
-  'Adicionar às revisões',
-  'Remover das revisões'
-]
-
-export const morePostE = [
-  'Denunciar Postagem',
-  'Remover das revisões'
 ]

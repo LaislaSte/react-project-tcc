@@ -1,51 +1,35 @@
+// HOOKS AND LIBS 
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { query, collection, getDocs, where } from "firebase/firestore";
-import { db } from '../../services/Banco';
+import { Link } from 'react-router-dom';
+import { BsGearFill, BsFillArrowDownCircleFill } from 'react-icons/bs';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+// ARCHIVES FROM PROJECT
 import './Profile.css';
 import { morePostI } from '../../utils/arraysHeader';
-import { fakeReviews } from '../../utils/ArraysAndFunctions';
-import { post, fakeUser } from '../../utils/ArraysAndFunctions';
+import { post } from '../../utils/ArraysAndFunctions';
 import avatarDefault from '../../assets/img-avatar.png';
+import { auth } from '../../services/Banco';
+import { UserAuth } from '../../services/UserContext'
 
+/*PAGES AND COMPONENTS */
 import LikeButton from '../../components/likebutton/LikeButton';
 import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import CreateButton from '../../components/createbutton/CreateButton';
 
-import { BsGearFill, BsFillArrowDownCircleFill } from 'react-icons/bs';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../services/Banco';
-
 const Profile = () => {
-
+    // states 
     const [name, setName] = useState("");
     const [imgURL, setImgURL] = useState("");
-    const [bios, setBios] = useState("");
-
+    const [bio, setBio] = useState("");
     const [userPosts, setUserPosts] = useState([]);
 
+    // imports
     const [user, loading, error] = useAuthState(auth);
+    const { bios } = UserAuth();
 
-    const navigate = useNavigate();
-
-    const fetchUserInfos = async () => {
-        try {
-            // const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-            // const doc = await getDocs(q);
-            // const data = doc.docs[0].data();
-            const userBios = user?.bios;
-            const userName = user?.displayName;
-            const userAvatar = user?.photoURL;
-            setName(userName);
-            setImgURL(userAvatar);
-            setBios(userBios);
-        } catch (err) {
-            console.error(err);
-            alert("An error occured while fetching user data");
-        }
-    };
-
+    // useeffect 
     useEffect(
         () => {
             fetchUserInfos();
@@ -53,11 +37,19 @@ const Profile = () => {
         [user, loading]
     )
 
-    // useEffect(() => {
-    //     if (loading) return;
-    //     if (!user) return navigate("/");
-    //     fetchUserName();
-    // }, [user, loading]);
+    // functions 
+    const fetchUserInfos = async () => {
+        try {
+            const userName = user?.displayName;
+            const userAvatar = user?.photoURL;
+            setName(userName);
+            setImgURL(userAvatar);
+            setBio(bios);
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
+        }
+    };
 
     return (
         <div className='Profile'>
@@ -72,9 +64,9 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="bios">
+                <div className="bio">
                     <h2>{name}</h2>
-                    {bios}
+                    {bio}
                 </div>
 
                 <div className="header-button-profile">
@@ -99,7 +91,7 @@ const Profile = () => {
                                 category={item.category}
                                 title={item.title}
                                 click_type={<LikeButton postId={item.id} />}
-                                moreContent={morePostI}
+                            // moreContent={morePostI}
                             />
                         )
                     })}

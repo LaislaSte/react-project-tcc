@@ -1,5 +1,4 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import React from 'react';
 import { storage } from './Banco';
 
 const uploadFile = (file, filePath) => {
@@ -10,6 +9,7 @@ const uploadFile = (file, filePath) => {
             await uploadBytes(storageRef, file);
             const url = await getDownloadURL(storageRef);
             resolve(url);
+            return url;
         } catch (error) {
             reject(error);
         }

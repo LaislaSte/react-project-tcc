@@ -1,43 +1,45 @@
-// import React, { useState } from 'react';
-import React, { useState, useContext, useEffect } from 'react';
+// HOOKS AND LIBS 
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { AiOutlineClose } from 'react-icons/ai';
+
+// ARCHIVES FROM PROJECT
 import './Config.css';
 import { nameValid, biosValid, validCBcategorys } from '../../utils/validators';
 import { categorys } from '../../utils/arraysHeader';
-import { CostumerContext } from '../../services/UserContext';
+import { UserAuth } from '../../services/UserContext';
 import avatarDefault from '../../assets/img-avatar.png';
+import uploadFile from '../../services/uploadFile';
 
+/*PAGES AND COMPONENTS */
 import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import TxtArea from '../../components/txtarea/TxtArea';
-import CheckBox from '../../components/checkbox/CheckBox';
 
-// imports storage
-import { getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
-import { storage } from '../../services/Banco';
-import { Link } from 'react-router-dom';
-import { AiOutlineClose } from 'react-icons/ai';
-import { updateProfile } from 'firebase/auth';
-import uploadFile from '../../services/uploadFile';
-import { async } from '@firebase/util';
 
 const Config = () => {
+    // states 
     const [image, setImage] = useState(null);
     const [imgURL, setImgURL] = useState('');
-    const [progress, setProgress] = useState(0);
-
-    const { user, updateUserProfile } = useContext(CostumerContext);
-
     const [name_user, setUserName] = useState('');
     const [bios_user, setBios] = useState('');
-    const [favCategory_user, setCategorys] = useState([]);
-    const [img_user, setImgUser] = useState(null);
-    const [userLoged_id, setIdUser] = useState('');
-
-    const [isItLimited, setItIsLimited] = useState(false);
-
     const [category, setCategory] = useState([]);
+    const [img_user, setImgUser] = useState(null);
 
+    // imports 
+    const { user, updateUserProfile } = UserAuth();
+
+    // useeffect 
+    useEffect(
+        () => {
+            setImgURL(user?.photoURL);
+            setUserName(user?.displayName);
+        },
+        []
+    )
+
+    // functions 
     const handleCheckboxChange = (event) => {
         let newArray = [...category, event.target.value];
         if (category.includes(event.target.value)) {
@@ -45,6 +47,7 @@ const Config = () => {
         }
         setCategory(newArray)
     };
+
     const showMessage = (fav) => {
         if (fav) {
             return !validCBcategorys(fav)
@@ -55,67 +58,28 @@ const Config = () => {
         return nameValid(name_user) && biosValid(bios_user) && validCBcategorys(category);
     }
 
-    useEffect(
-        () => {
-            setImgURL(user?.photoURL);
-            setUserName(user?.displayName);
-        },
-        [user]
-    )
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const file = e.target[0]?.files[0];
+        if (!file) return;
 
-        // const file = e.target[0]?.files[0];
+        try {
+            if (file) {
+                const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
+                const url = uploadFile(file, `profile/${imageName}`)
+                setImgURL(url);
 
-        // if (!file) return;
+                // todo: delete the previous profile image od the user
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
-        // let userObj = { displayName: name_user }
-        // let imagesObj = { uName: name_user }
-        // try {
-        //     if (file) {
-        //         const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
-        //         const url = await uploadFile(file, `profile/${user?.uid}/${imageName}`);
-        //         //todo: delete the previous profile image od the user
-
-        //         userObj = { ...userObj, photoURL: url }
-        //         imagesObj = { ...imagesObj, uURL: url }
-        //     }
-
-        //     await updateProfile(user, userObj);
-        //     console.log('user updated');
-        // } catch (error) {
-        //     console.log(error);
-
-        // }
-
-        // const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
-        // // const storageRef = ref(storage, `profile/${file.name}`);
-        // const storageRef = ref(storage, `profile/${imageName}`);
-        // const uploadTask = uploadBytesResumable(storageRef, file);
-        // uploadTask.on(
-        //     'state_changed',
-        //     snapshot => {
-        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        //         setProgress(progress);
-        //     },
-        //     error => {
-        //         console.error(error);
-        //     },
-        //     () => {
-        //         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-        //     }
-        // )
-
-        // const storageUrl = getDownloadURL(storage, storageRef);
-
-        // setImgURL(storageUrl);
-
-
-        // updateUserProfile(imgURL, name_user, bios_user, category);
-
-        updateUserProfile(imgURL, name_user, bios_user, category);
+        try {
+            updateUserProfile(imgURL, name_user, bios_user, category);
+        } catch (error) {
+            console.log(error);
+        }
 
     }
 
@@ -124,16 +88,13 @@ const Config = () => {
 
             <div className="config-container">
 
-                <div className="close-icon-container">
-                    <Link to='/profile'> <AiOutlineClose className='config-link' /> </Link>
-                </div>
+                {/* <div className="close-icon-container"> */}
+                <Link to='/profile'> <AiOutlineClose className='close-icon-container config-link' /> </Link>
+                {/* </div> */}
 
                 <form onSubmit={handleSubmit} className="config-form-container">
-
                     <div className="user-img-container">
-
                         <div className="config-user-avatar-container">
-
                             <InputImg
                                 setImage={setImage}
                                 className='container-img-profile-preview'
@@ -154,7 +115,6 @@ const Config = () => {
                         />
                     </div>
 
-
                     <div className="txt-area-container">
                         <TxtArea
                             text='Adicione uma descrição'
@@ -169,7 +129,6 @@ const Config = () => {
 
                     <div className="selects-container">
                         <p>Escolha suas preferências de estudo (até 5) </p>
-
                         <div className='checked-boxes-container' >
                             {categorys.map((item, index) => {
                                 return (
@@ -189,7 +148,6 @@ const Config = () => {
                         </div>
 
                         {showMessage(category) && <p className='input-error-message'> Selecione até 5 categoria </p>}
-
                     </div>
 
                     <Button
@@ -200,23 +158,18 @@ const Config = () => {
                     />
 
                     <div className="config-btns-container">
-                        <Link to='/changepassword1'>
+                        <Link to='/chsangepassword1'>
                             <Button text='Editar Senha' type='button' bg_color='primary' />
                         </Link>
-
                         <Link to='/changeemail1'>
                             <Button text='Editar E-mail' type='button' bg_color='primary' />
                         </Link>
-
                         <Link to='/deleteaccount'>
                             <Button text='Excluir Contar' type='button' bg_color='primary' />
                         </Link>
-
                     </div>
 
-
                 </form >
-
             </div>
         </div >
     )

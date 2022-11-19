@@ -56,31 +56,6 @@ export const Post = ({
 
                     </div>
 
-                    <div className="header-show-more">
-                        <BiDotsVertical onClick={onChange} />
-
-                        <div className={showMore ? 'show-more-content ' : 'show-more-content show-more-content-active'}>
-                            <ul>
-                                {userPostedIt
-                                    ? morePostI.map((item, index) => {
-                                        return (
-                                            <li key={index} >  <p> {item} </p>  </li>
-                                        )
-                                    })
-                                    : morePostE.map((item, index) => {
-                                        return (
-                                            <li key={index} >  <p> {item} </p>  </li>
-                                        )
-                                    })
-                                }
-
-                                {/* <li onClick={handleClick(this)}>Excluir Postagem</li>
-                                <li>Editar Postagem</li>
-                                <li>Adicionar às revisões</li>
-                                <li>Remover das revisões</li> */}
-                            </ul>
-                        </div>
-                    </div>
                 </div>
 
                 <div className="content-post">

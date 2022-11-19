@@ -1,24 +1,27 @@
+// HOOKS AND LIBS 
 import React from 'react';
+
+// ARCHIVES FROM PROJECT
 import './Review.css';
 import { post, findPostsOfUser, fakeUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
 
-
+/*PAGES AND COMPONENTS */
 import Navbar from '../../components/navbar/Navbar';
 import ReviewButton from '../../components/reviewbutton/ReviewButton';
 import { Post } from '../../components/post/Post';
 import Categorys from '../../components/categorys/Categorys';
 import CreateButton from '../../components/createbutton/CreateButton';
 
-function verifiedLoginAndReview(id_post, arrPost) {
-    //há um post atribuido a revisao? se sim return true 
-    const a = onChangeHeart(id_post);
-
-    //o post é do user logado? se sim return true 
-    const b = findPostsOfUser(arrPost);
-
-}
-
 const Review = () => {
+
+    // functions 
+    function verifiedLoginAndReview(id_post, arrPost) {
+        //há um post atribuido a revisao? se sim return true 
+        const a = onChangeHeart(id_post);
+
+        //o post é do user logado? se sim return true 
+        const b = findPostsOfUser(arrPost);
+    }
 
     return (
         <>
@@ -26,7 +29,6 @@ const Review = () => {
                 <Navbar />
                 <Categorys />
                 <CreateButton />
-
             </header>
 
             <main className="posts-container">
@@ -47,10 +49,6 @@ const Review = () => {
                     )
                 })}
             </main>
-
-            <footer>
-
-            </footer>
 
         </>
     )
