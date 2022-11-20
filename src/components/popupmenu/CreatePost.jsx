@@ -10,11 +10,15 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TxtArea from '../txtarea/TxtArea';
 import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
+import { UserAuth } from '../../services/UserContext';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../services/Banco';
 
 const CreatePost = ({ funPopUp }) => {
+    // states 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [categoryP, setCategory] = useState([]);
@@ -23,8 +27,9 @@ const CreatePost = ({ funPopUp }) => {
     const [imgURL, setImgURL] = useState('');
     const [progress, setProgress] = useState(0);
 
-    const addPost = useContext(PostsContext);
-    // const { addPost, posts } = useContext(PostsContext);
+    // imports 
+    const { name, id, user } = UserAuth;
+    const navigate = useNavigate();
     const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
 
@@ -50,7 +55,7 @@ const CreatePost = ({ funPopUp }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(categoryP)
-        addPost({ title, content, categoryP });
+        // addPost({ title, content, categoryP });
 
         // const file = e.target[0]?.files[0];
 
@@ -80,6 +85,27 @@ const CreatePost = ({ funPopUp }) => {
 
     }
 
+    const sendPost = async (title, content, cat, img_url) => {
+        try {
+            await addDoc(collection(db, "post"), {
+                uid: user?.uid,
+                userPhoto: user?.photoURL,
+                imgContent: img_url,
+                name: name,
+                userID: id,
+                authProvider: "local",
+                title: title,
+                content: content,
+                category: cat,
+                likes: 0
+            });
+            alert('Flashcard criado!');
+            navigate('/explore');
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const cleanForm = () => {
         setContent('');
         setTitle('');
@@ -94,10 +120,9 @@ const CreatePost = ({ funPopUp }) => {
             <div className="create-post-container">
                 <div className="close-icon-container">
                     <AiOutlineClose className='close-icon' onClick={funPopUp} />
-                    {/* <BiArrowBack className='back-icon' /> */}
                 </div>
 
-                <form onSubmit={handleSubmit} className="form-create-post">
+                <form onSubmit={sendPost} className="form-create-post">
 
                     <div className="user-img-container">
                         <img src={fakeUser.avatar} alt="" />
@@ -143,7 +168,7 @@ const CreatePost = ({ funPopUp }) => {
                                 </div>
                             )
                         })}
-                        
+
                         {/* Tirar a opção de selecionar mais de um. */}
                         {showMessage(favCategory_user) && <p className='input-error-message'> Selecione apenas 1 categoria </p>}
 
@@ -159,7 +184,7 @@ const CreatePost = ({ funPopUp }) => {
                         <div className="btns-popup">
                             <Button
                                 text='Apenas postar'
-                                type='button'
+                                type='submit'
                                 bg_color='secondary'
                                 fun={cleanForm}
                                 disable={!formValidCreatePost()}

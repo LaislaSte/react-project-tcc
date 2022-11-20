@@ -26,19 +26,52 @@ export const CostumerProvider = ({ children }) => {
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
 
-    //BUSCAR ATUAL USUÁRIO AUTENTICADO QUANDO RENDERIZADO A PÁGINA
+    // //BUSCAR ATUAL USUÁRIO AUTENTICADO QUANDO RENDERIZADO A PÁGINA
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    //         setUser(currentUser);
+    //         setToken(user?.getIdToken());
+    //         fetchId();
+    //     });
+    //     // return () => {
+    //     unsubscribe();
+    //     // };
+    // }, []);
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setToken(user?.getIdToken());
-            fetchId();
+            setUid(currentUser.uid);
+            // setToken(user?.getIdToken());
+            // getUserData(user?.uid);
+            getUserId();
         });
-        // return () => {
-        unsubscribe();
-        // };
-    }, []);
+        return () => {
+            unsubscribe();
+        }
+    }, [user]);
 
     // functions 
+    const getUserId = async () => {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+
+        const querySnapshot = await getDocs(q);
+
+        for (var i in querySnapshot.docs) {
+            const doc = querySnapshot.docs[i]
+            setId(doc.id);
+            setName(doc.data().name);
+            if (name) {
+                break
+            }
+        }
+        // querySnapshot.forEach((doc) => {
+        //     setId(doc.id);
+        //     setName(doc.data().name);
+
+        // });
+    }
+    
     const fetchId = async () => {
         const q = query(collectionRef, where("uid", "==", user?.uid));
         const querySnapshot = await getDocs(q);
