@@ -16,11 +16,11 @@ export const PostProvider = ({ children }) => {
     //criado estados
     // const [posts, setPosts] = useState(null);
     const [post, setPost] = useState(null);
-    const [likes, setLikes] = (null);
+    // const [likes, setLikes] = (null);
 
     const [loading, setLoading] = useState(true);
 
-    const { user, token } = useContext(CostumerContext);
+    const { user, name, id } = useContext(CostumerContext);
 
     //Ao renderizar meu componente, traga junto os meus dados do banco
     // useEffect(() => {
@@ -47,25 +47,27 @@ export const PostProvider = ({ children }) => {
     //         .catch(error => { console.log(error.message) })
     // }
 
+    // 
+    
+
     //função para cadastrar um post na coleção posts
+    // const addPost = async ({ title, content, category }) => {
+    //     try {
+    //         const post = await addDoc(collectionRef, {
+    //             title: title,
+    //             description: content,
+    //             user: user,
+    //             userToken: token,
+    //             categorys: category,
+    //             likes: 0
+    //         });
+    //         console.log("post cadastrado", post.id, post);
+    //         // updateCurrentUser(auth, user)
 
-    const addPost = async ({ title, content, category }) => {
-        try {
-            const post = await addDoc(collectionRef, {
-                title: title,
-                description: content,
-                user: user,
-                userToken: token,
-                categorys: category,
-                likes: 0
-            });
-            console.log("post cadastrado", post.id, post);
-            // updateCurrentUser(auth, user)
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     //função para atualizar um post na coleção posts para quando ele receber um like (A FAZER)
     const updatePost = async (id, update_title, update_description, update_category, update_img) => {
@@ -106,7 +108,7 @@ export const PostProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD
     return (
-        <PostsContext.Provider value={{ post, addPost, updatePost, removePost, loading }}>
+        <PostsContext.Provider value={{ post, updatePost, removePost, loading }}>
             {children}
         </PostsContext.Provider>
     )

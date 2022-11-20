@@ -19,39 +19,33 @@ export const CostumerProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [id, setId] = useState('');
-    const [bios, setBios] = useState('');
+    const [uid, setUid] = useState(null);
+    const [submiting, setSubmiting] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [image, setImage] = useState(null);
+    const [bios, setBios] = useState('');
+    const [name, setName] = useState('');
 
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
 
-    // //BUSCAR ATUAL USUÁRIO AUTENTICADO QUANDO RENDERIZADO A PÁGINA
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    //         setUser(currentUser);
-    //         setToken(user?.getIdToken());
-    //         fetchId();
-    //     });
-    //     // return () => {
-    //     unsubscribe();
-    //     // };
-    // }, []);
 
+    // useEffect 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
+            setToken(user?.getIdToken());
             setUid(currentUser.uid);
-            // setToken(user?.getIdToken());
+            console.log(currentUser);
             // getUserData(user?.uid);
-            getUserId();
         });
         return () => {
             unsubscribe();
-        }
-    }, [user]);
+        };
+    }, []);
 
-    // functions 
     const getUserId = async () => {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 
@@ -71,17 +65,7 @@ export const CostumerProvider = ({ children }) => {
 
         // });
     }
-    
-    const fetchId = async () => {
-        const q = query(collectionRef, where("uid", "==", user?.uid));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            setId(doc.id);
-            console.log(id);
-        });
-    }
 
-    // auth functions 
     const registerWithEmailAndPassword = async (name, email, password) => {
         setLoader(true);
         try {
@@ -144,8 +128,6 @@ export const CostumerProvider = ({ children }) => {
 
                 console.log(userGoogle);
                 setUser(userGoogle);
-                localStorage.setItem('@google:user', JSON.stringify(user));
-                localStorage.setItem('@google:token', token);
                 navigate('/explore');
             }).catch((error) => {
                 const errorCode = error.code;
@@ -185,7 +167,22 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
+
     }
+
+
+    const sendPost = async (title, content, cat) => {
+        await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            name: name,
+            userID: id,
+            authProvider: "local",
+            title: title,
+            content: content,
+            category: cat
+        });
+    }
+
 
     const updateUserEmail = (user_email) => {
         updateEmail(user, user_email).then(() => {
@@ -212,7 +209,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, bios, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost }}>
             {children}
         </CostumerContext.Provider>
     )

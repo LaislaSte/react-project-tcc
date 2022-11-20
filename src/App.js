@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 // ARCHIVES FROM PROJECT
+import './App.css';
 import { auth } from './services/Banco';
 import { CostumerProvider } from './services/UserContext';
 import ProtectedRoute from './ProtectedRoute';
@@ -57,7 +58,6 @@ function App() {
           <Route path="/review" element={<ProtectedRoute> <Review /> </ProtectedRoute>} />
         </Routes>
       </CostumerProvider>
-
     </>
   );
 }

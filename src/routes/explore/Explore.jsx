@@ -4,7 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 
 // ARCHIVES FROM PROJECT
-import { auth, db } from "../../services/Banco";
+import { auth } from "../../services/Banco";
 import { post } from '../../utils/ArraysAndFunctions';
 import './Explore.css';
 
@@ -16,16 +16,12 @@ import Categorys from '../../components/categorys/Categorys';
 import CreateButton from "../../components/createbutton/CreateButton";
 
 const Explore = () => {
-    // states 
-    const [name, setName] = useState("");
-    const [bios, setBios] = useState("");
-    const [imgURL, setImgURL] = useState("");
 
     // imports 
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
-    // useeffect 
+
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
@@ -40,6 +36,8 @@ const Explore = () => {
             </header>
 
             <main className="posts-container">
+                <h1>Bem Vindo! Usuário Logado: </h1>
+                <p>{user?.displayName}</p>
 
                 {post.map((item, index) => {
                     return (

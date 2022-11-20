@@ -10,12 +10,20 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import TxtArea from '../txtarea/TxtArea';
 import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
+import { PostProvider } from '../../services/PostContext';
+import { CostumerContext } from '../../services/UserContext';
+import { auth } from '../../services/Banco';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { db } from '../../services/Banco';
+import { addDoc, collection } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../../services/UserContext';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../services/Banco';
+
 
 const CreatePost = ({ funPopUp }) => {
     // states 
@@ -28,10 +36,12 @@ const CreatePost = ({ funPopUp }) => {
     const [progress, setProgress] = useState(0);
 
     // imports 
-    const { name, id, user } = UserAuth;
     const navigate = useNavigate();
     const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
+    const [user, loading, error] = useAuthState(auth);
+    const { name, id } = UserAuth;
+
 
     const handleOnChangeCB = (event) => {
         setIsChecked(!isChecked);
@@ -52,16 +62,18 @@ const CreatePost = ({ funPopUp }) => {
         return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(categoryP)
-        // addPost({ title, content, categoryP });
+        // console.log(favCategory_user);
+        // // console.log(content);
+        // console.log(title);
 
         // const file = e.target[0]?.files[0];
 
         // if (!file) return;
 
-        // const postRef = ref(storage, `postsContent/${file.name}`);
+        // const postRef = ref(storage, `postsContent/user.uid/${file.name}`);
 
         // // const pickRef = ref(storage, `profilePick/${file.name}`);
 
@@ -186,7 +198,6 @@ const CreatePost = ({ funPopUp }) => {
                                 text='Apenas postar'
                                 type='submit'
                                 bg_color='secondary'
-                                fun={cleanForm}
                                 disable={!formValidCreatePost()}
                             />
                             <Button
@@ -206,5 +217,9 @@ const CreatePost = ({ funPopUp }) => {
         </div>
     )
 }
+
+<PostProvider>
+    <CreatePost />
+</PostProvider>
 
 export default CreatePost
