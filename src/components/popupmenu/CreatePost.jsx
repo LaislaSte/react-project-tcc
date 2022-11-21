@@ -1,48 +1,42 @@
-import React, { useState, useContext } from 'react';
+// HOOKS AND LIBS 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { addDoc, collection } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { AiOutlineClose } from 'react-icons/ai';
+
+// ARCHIVES FROM PROJECT
 import './CreatePost.css';
 import { fakeUser } from '../../utils/ArraysAndFunctions';
 import imageDefault from '../../assets/icons/uploadDefault.svg'
-import { PostsContext } from '../../services/PostContext';
+import avatarDefault from '../../assets/icons/avatarDefault.svg'
+import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
+import { UserAuth } from '../../services/UserContext';
+import { db, auth, storage } from '../../services/Banco';
 
-import { AiOutlineClose } from 'react-icons/ai';
-// import { BiArrowBack } from 'react-icons/bi';
-
+/*PAGES AND COMPONENTS */
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
-import { Link, useNavigate, Navigate } from 'react-router-dom';
 import TxtArea from '../txtarea/TxtArea';
-import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
-import { PostProvider } from '../../services/PostContext';
-import { CostumerContext } from '../../services/UserContext';
-import { auth } from '../../services/Banco';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { db } from '../../services/Banco';
-import { addDoc, collection } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import { UserAuth } from '../../services/UserContext';
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../../services/Banco';
-
+import uploadFile from '../../services/uploadFile';
+import { ref } from 'firebase/storage';
 
 const CreatePost = ({ funPopUp }) => {
     // states 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [categoryP, setCategory] = useState([]);
-    const [disabled, setDisabled] = useState(false);
     const [image, setImage] = useState(null);
     const [imgURL, setImgURL] = useState('');
-    const [progress, setProgress] = useState(0);
+    const [isChecked, setIsChecked] = useState(false);
+    const [favCategory_user, setFavCategory_user] = useState([]);
 
     // imports 
     const navigate = useNavigate();
-    const [isChecked, setIsChecked] = useState(false);
-    const [favCategory_user, setFavCategory_user] = useState([]);
     const [user, loading, error] = useAuthState(auth);
     const { name, id } = UserAuth;
 
-
+    // functions 
     const handleOnChangeCB = (event) => {
         setIsChecked(!isChecked);
         let newArray = [...favCategory_user, event.target.value];
@@ -65,9 +59,6 @@ const CreatePost = ({ funPopUp }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(favCategory_user);
-        // // console.log(content);
-        // console.log(title);
 
         // const file = e.target[0]?.files[0];
 
@@ -97,21 +88,28 @@ const CreatePost = ({ funPopUp }) => {
 
     }
 
-    const sendPost = async (title, content, cat, img_url) => {
+    const sendPost = async (e) => {
+        const file = e.target[0]?.files[0];
+        if (!file) return;
+
+        const url = uploadFile(file, `postsContent/${user?.uid}/${file?.name?.split('.')?.pop()}`)
+        setImgURL(url);
+
         try {
             await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL,
-                imgContent: img_url,
+                imgContent: imgURL,
                 name: name,
                 userID: id,
                 authProvider: "local",
                 title: title,
                 content: content,
-                category: cat,
+                category: favCategory_user,
                 likes: 0
             });
             alert('Flashcard criado!');
+            cleanForm();
             navigate('/explore');
         } catch (err) {
             console.log(err)
@@ -137,7 +135,7 @@ const CreatePost = ({ funPopUp }) => {
                 <form onSubmit={sendPost} className="form-create-post">
 
                     <div className="user-img-container">
-                        <img src={fakeUser.avatar} alt="" />
+                        <img src={user?.photoURL || avatarDefault} alt="" />
 
                         <Input
                             text='Título'
@@ -217,9 +215,5 @@ const CreatePost = ({ funPopUp }) => {
         </div>
     )
 }
-
-<PostProvider>
-    <CreatePost />
-</PostProvider>
 
 export default CreatePost
