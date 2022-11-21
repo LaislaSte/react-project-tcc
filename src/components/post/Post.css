@@ -50,8 +50,10 @@
     cursor: pointer;
 }
 
-.header-show-more {
+.header-icons svg {
     cursor: pointer;
+    font-size: 1.5rem;
+    margin-right: 1rem;
 }
 
 /* --------end of header---------- */
@@ -114,12 +116,10 @@
     position: fixed;
     top: 2rem;
     right: 2rem;
-    width: 2rem;
-    height: 2rem;
     padding: .8rem;
     color: var(--TEXT_LIGHT);
-    font-size: 3rem;
     cursor: pointer;
+    font-size: 3rem;
 }
 
 /* --------end of content---------- */

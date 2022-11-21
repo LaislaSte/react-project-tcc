@@ -63,26 +63,23 @@ export const Post = ({
 
                 </div>
 
-            </div>
+                <div className="content-post">
+                    <p> {content} </p>
+                    <div className="img-content-container">
+                        {img_content && (
+                            <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                        )}
+                    </div>
+                    <div className={modal ? "modal open" : 'modal'}>
+                        <img src={img_content} alt="" />
+                        <MdClose onClick={onCickImg} />
+                    </div>
 
-
-            <div className="content-post">
-                <p> {content} </p>
-                <div className="img-content-container">
-                    {img_content && (
-                        <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
-                    )}
                 </div>
-                <div className={modal ? "modal open" : 'modal'}>
-                    <img src={img_content} alt="" />
-                    <MdClose onClick={onCickImg} />
+
+                <div className="footer-post">
+                    {click_type}
                 </div>
-
-            </div>
-
-            <div className="footer-post">
-
-                {click_type}
 
             </div>
 
