@@ -11,7 +11,7 @@ import { auth } from '../../services/Banco';
 import { emailValid, passConfValid, passwordValid, nameValid } from '../../utils/validators';
 import { UserAuth } from '../../services/UserContext';
 import './Register.css';
-import Explore from '../../assets/image-girl-holding-phone.png';
+import logo from '../../assets/icons/logo.svg';
 
 /*PAGES AND COMPONENTS */
 import Button from '../../components/button/Button';
@@ -69,7 +69,7 @@ const Register = () => {
             <div className='register'>
 
                 <div className="brand-img-register">
-                    <img src={Explore} alt="" />
+                    <img src={logo} alt="" />
                 </div>
 
                 <div className="register-container">

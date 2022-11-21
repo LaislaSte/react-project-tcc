@@ -7,7 +7,6 @@
 }
 
 .brand-img-register {
-    background-color: var(--PRIMARY_600);
     width: 50%;
     height: 70vh;
     border-radius: 5rem;
@@ -92,7 +91,7 @@
 
 @media screen and (max-width: 420px) {
     .register-form-container button {
-        width: 30%;
+        width: 70%;
         padding: auto 1rem;
     }
 
