@@ -28,25 +28,15 @@
 
 # TODOS: fontEnd
 
-- concertar bugs do input
-
----
-
 - add links de redirecionamento do footer
 
 ---
-
-- concertar bug da responsividade no navbar q aparece o q nao devia aparecer em determinado ponto do width
 
 - criar pagina para mostrar os resultados das pesquisa q o user for clicar
 
 ---
 
-- diminuir tamanho da fonte e centraliza-la na primeira sessao do public quando estiver width -800px, podendo apagar a foto de fundo ou adicionar um fundo mais escuro nas levar para ficar legível, centralizar o memorizar nunca foi tão fácil
-
-- adicionar logo na pagina de registro
-
-- defazer arredondamento da div da foto do register
+- concertar resposividade das fontes na primeira sessao do public
 
 ---
 
@@ -93,6 +83,7 @@
 - função para cadastrar post
 - função para atualizar post
 - função para deletar post
+- importar posts do usuario logado do firestore e adicionalos a um estado no perfil para ser renderizados
 
 ---
 
