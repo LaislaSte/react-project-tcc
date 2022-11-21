@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Post.css';
-import { morePostE, morePostI } from '../../utils/arraysHeader';
+import { BiPencil, BiTrash } from 'react-icons/bi';
+import { MdClose } from 'react-icons/md';
 
-import { BiDotsVertical } from 'react-icons/bi';
-import { useState } from 'react';
+import './Post.css';
+import { UserAuth } from '../../services/UserContext';
 
 export const Post = ({
     content,
@@ -15,25 +15,23 @@ export const Post = ({
     title,
     img_content,
     click_type,
-    userPostedIt
+    internalUser
 }) => {
 
     const [showMore, setShowMore] = useState(false);
     const onChange = () => setShowMore(!showMore);
+    const [modal, setModal] = useState(false);
+    const onCickImg = () => setModal(!modal);
+
+    const { deletePost, updatePost } = UserAuth();
 
     const navigate = useNavigate();
 
-    const handleClick = (index) => {
-        // if (index == 'Editar Postagem') {
-        //     console.log(index)
-        // }
-        // if (index == 'Excluir Postagem') {
-        //     console.log(index)
-        // }
-        // if (index == 'Adicionar às revisões') {
-        //     console.log(index)
-        // }
-        console.log('clicado')
+    const clickDeletePost = () => {
+        deletePost();
+    }
+    const clickUpdtePost = () => {
+        updatePost();
     }
 
     return (
@@ -56,27 +54,35 @@ export const Post = ({
 
                     </div>
 
-                </div>
-
-                <div className="content-post">
-                    <p>
-                        {content}
-                    </p>
-                    <div className="img-content-container">
-                        {img_content && (
-                            <img src={img_content} alt="imagem do conteúdo do post" className='img-content' />
-                        )}
-                    </div>
+                    {internalUser && (
+                        <div className="header-icons">
+                            <BiTrash onClick={clickDeletePost} />
+                            <BiPencil onClick={clickUpdtePost} />
+                        </div>
+                    )}
 
                 </div>
 
-                <div className="footer-post">
+            </div>
 
-                    {click_type}
 
+            <div className="content-post">
+                <p> {content} </p>
+                <div className="img-content-container">
+                    {img_content && (
+                        <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                    )}
+                </div>
+                <div className={modal ? "modal open" : 'modal'}>
+                    <img src={img_content} alt="" />
+                    <MdClose onClick={onCickImg} />
                 </div>
 
+            </div>
 
+            <div className="footer-post">
+
+                {click_type}
 
             </div>
 

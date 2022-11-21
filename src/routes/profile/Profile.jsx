@@ -6,7 +6,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 // ARCHIVES FROM PROJECT
 import './Profile.css';
-import { morePostI } from '../../utils/arraysHeader';
 import { post } from '../../utils/ArraysAndFunctions';
 import avatarDefault from '../../assets/img-avatar.png';
 import { auth } from '../../services/Banco';
@@ -23,6 +22,7 @@ const Profile = () => {
     const [name, setName] = useState("");
     const [imgURL, setImgURL] = useState("");
     const [bio, setBio] = useState("");
+    // todos: importar posts do usuario logado do firestore e adicionalos nesse estado
     const [userPosts, setUserPosts] = useState([]);
 
     // imports
@@ -91,7 +91,7 @@ const Profile = () => {
                                 category={item.category}
                                 title={item.title}
                                 click_type={<LikeButton postId={item.id} />}
-                            // moreContent={morePostI}
+                                internalUser={true}
                             />
                         )
                     })}
