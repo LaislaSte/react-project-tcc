@@ -36,10 +36,10 @@ export const CostumerProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            setToken(user?.getIdToken());
-            setUid(currentUser.uid);
-            console.log(currentUser);
-            // getUserData(user?.uid);
+            console.log(user?.uid);
+            // setToken(user?.getIdToken());
+            // setUid(currentUser.uid);
+            getUserId();
         });
         return () => {
             unsubscribe();
@@ -48,17 +48,22 @@ export const CostumerProvider = ({ children }) => {
 
     const getUserId = async () => {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-
         const querySnapshot = await getDocs(q);
 
-        for (var i in querySnapshot.docs) {
-            const doc = querySnapshot.docs[i]
-            setId(doc.id);
-            setName(doc.data().name);
-            if (name) {
-                break
+        try {
+            for (var i in querySnapshot.docs) {
+                const doc = querySnapshot.docs[i]
+                setId(doc.id);
+                setName(doc.data().name);
+                console.log(id, name);
+                if (name) {
+                    break
+                }
             }
+        } catch (error) {
+            console.log(error);
         }
+
         // querySnapshot.forEach((doc) => {
         //     setId(doc.id);
         //     setName(doc.data().name);
@@ -66,6 +71,7 @@ export const CostumerProvider = ({ children }) => {
         // });
     }
 
+    //FUNÇÃO PARA CADASTRO COM O AUTHENTICATED E FIRESTORE
     const registerWithEmailAndPassword = async (name, email, password) => {
         setLoader(true);
         try {
@@ -85,15 +91,22 @@ export const CostumerProvider = ({ children }) => {
         setLoader(false);
     };
 
+    //FUNÇÃO PARA EXCLUIR USER COM O AUTHENTICATED E FIRESTORE
     const revomeUser = () => {
         setLoader(true)
         deleteUser(user).then(() => {
-            // User deleted.
-            console.log('usuário deletado');
+            console.log('usuário deletado: AUTH');
         }).catch((error) => {
-            // An error ocurred
-            console.log(error);
+            console.log(error, ': AUTH');
         });
+
+        try {
+            deleteDoc(doc(db, 'users', id));
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
+
         setLoader(false)
     }
 
@@ -150,11 +163,14 @@ export const CostumerProvider = ({ children }) => {
 
         updateDoc(doc(db, "users", id), {
             userBio: bios_user,
-            userCategorys: categorys
+            userCategorys: categorys,
+            name: name_user,
+            imgURL: imgURL
         })
             .then(docRef => {
                 console.log(docRef, 'atualização com query');
                 setBios(bios_user);
+                setName(name_user);
             }).catch((error) => {
                 console.log('updateDoc error: ', error)
             });
@@ -169,20 +185,6 @@ export const CostumerProvider = ({ children }) => {
         }
 
     }
-
-
-    const sendPost = async (title, content, cat) => {
-        await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            name: name,
-            userID: id,
-            authProvider: "local",
-            title: title,
-            content: content,
-            category: cat
-        });
-    }
-
 
     const updateUserEmail = (user_email) => {
         updateEmail(user, user_email).then(() => {
@@ -206,10 +208,31 @@ export const CostumerProvider = ({ children }) => {
             })
     }
 
+    // FUNÇÕES PARA OS POSTS
+    const sendPost = async (title, content, cat, img_content) => {
+        await addDoc(collection(db, "users"), {
+            uid: user?.uid,
+            userAvatar: user?.photoURL,
+            name: name,
+            userID: id,
+            authProvider: "local",
+            title: title,
+            content: content,
+            contentImg: img_content,
+            category: cat
+        });
+    }
+
+    const deletePost = () => {
+        console.log('post deletado');
+    }
+    const updatePost = () => {
+        console.log('post atualizado')
+    }
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost }}>
+        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost, updatePost, deletePost }}>
             {children}
         </CostumerContext.Provider>
     )
