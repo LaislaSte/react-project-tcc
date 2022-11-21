@@ -10,7 +10,7 @@ const InputImg = ({
     //vai receber a url setada em image
     imgPreview,
     //para mudar o estilo do preview
-    imgPreviewClassName=''
+    imgPreviewClassName = ''
 }) => {
 
     //quando clicar na div, seria como clicar no input. O input vai, atravez do atributo ref, preencheer a referencia dele msm dentro deste hook do react abaixo 
@@ -41,7 +41,6 @@ const InputImg = ({
         fileReader.readAsDataURL(file);
         //este metodo é assincrono, entao, apenas quando ele terminar de ler o arquivo a imagem será setada como um objt que irá conter o a url e o arquivo (onloadend - ao fim do caregamento)
         fileReader.onload = () => {
-            console.log(fileReader.result)
             setImage({
                 preview: fileReader.result,
                 file
@@ -51,7 +50,7 @@ const InputImg = ({
 
     return (
         <div className={`input-img-container`} onClick={showSelector}>
-            
+
             {
                 //esta condição dira que se a url da img existir (se a props for passada e a primeira expressão for true, então, retorne uma div com o elemento img setando seu src com a url da imagem)
                 imgPreview && (
