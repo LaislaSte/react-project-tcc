@@ -56,7 +56,7 @@ const Public = () => {
                 </div>
 
                 <div className="first-s-img">
-                    <img src={brainMen} alt="" srcset="" />
+                    <img src={brainMen} alt="" />
                 </div>
 
                 <Link to='#public-header' className='first-s-header3'>
