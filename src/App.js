@@ -22,6 +22,7 @@ import Profile from './routes/profile/Profile';
 import Review from './routes/review/Review';
 import Config from './routes/config/Config';
 import UserDetail from './routes/profile/UserDetail';
+import NotFound from './routes/changeinfuser/NotFound';
 
 function App() {
 
@@ -48,6 +49,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:id" element={<UserDetail />} />
+          <Route path="*" element={<NotFound />} />
+
 
           {/* private routes: */}
           <Route path="/changepassword" element={<ProtectedRoute> <ChangePassword /> </ProtectedRoute>} />

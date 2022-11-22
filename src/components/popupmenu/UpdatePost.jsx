@@ -139,7 +139,7 @@ const UpdatePost = ({
                 <form onSubmit={updatePost} className="form-create-post">
 
                     <div className="user-img-container">
-                        <img src={user?.photoURL || avatarDefault} alt="" />
+                        <img src={user?.photoURL || avatarDefault} alt="" className='update-img-container'/>
 
                         <Input
                             text='Título'
@@ -193,7 +193,7 @@ const UpdatePost = ({
                             setImage={setImage}
                             className='container-img-upload-preview'
                             imgPreview={image?.preview || imageDefault}
-                            imgPreviewClassName='upload-preview'
+                            imgPreviewClassName='upload-preview update-img-container'
                         />
                         <div className="btns-popup">
                             <Button

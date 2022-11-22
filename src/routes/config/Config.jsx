@@ -45,6 +45,10 @@ const Config = () => {
         if (category.includes(event.target.value)) {
             newArray = newArray.filter(day => day !== event.target.value);
         }
+        if(newArray.length > 5){
+            showMessage(true);
+            //da para criar uma função para por no form valid
+        }
         setCategory(newArray)
     };
 

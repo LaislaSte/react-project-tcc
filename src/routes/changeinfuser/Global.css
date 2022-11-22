@@ -9,6 +9,11 @@
     text-align: center;
 }
 
+.container .not-found-title {
+    font-size: 5rem;
+    color: var(--ALERT);
+}
+
 .change-container {
     min-height: 100vh;
     display: flex;

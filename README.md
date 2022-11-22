@@ -53,7 +53,6 @@
 ---
 
 - **importante** função para atualizar informações do usuário como foto de perfil, nome, bio e categorias
-- **importante** verificar função para deletar um usuário
 - verificar função para mudança de senha atravez de e-mail
 - verificar função para mudança de e-mail
 - **importante** verificar função para confirmação de e-mail
