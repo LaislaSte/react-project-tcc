@@ -90,7 +90,8 @@ const Profile = () => {
                                 avatar={item.user_vatar}
                                 category={item.category}
                                 title={item.title}
-                                click_type={<LikeButton postId={item.id} />}
+                                postId={item.id}
+                                click_type_like={<LikeButton postId={item.id} />}
                                 internalUser={true}
                             />
                         )

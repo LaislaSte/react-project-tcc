@@ -21,23 +21,24 @@ import Explore from './routes/explore/Explore';
 import Profile from './routes/profile/Profile';
 import Review from './routes/review/Review';
 import Config from './routes/config/Config';
+import UserDetail from './routes/profile/UserDetail';
 
 function App() {
 
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
-  useEffect(
-    () => {
-      if (loading) {
-        //a loading screen/component
-        return;
-      }
-      if (user) navigate('/explore');
+  // useEffect(
+  //   () => {
+  //     if (loading) {
+  //       //a loading screen/component
+  //       return;
+  //     }
+  //     if (user) navigate('/explore');
 
-    },
-    [user, loading]
-  );
+  //   },
+  //   [user, loading]
+  // );
 
   return (
     <>
@@ -46,6 +47,7 @@ function App() {
           <Route path="/" element={<Public />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user/:id" element={<UserDetail />} />
 
           {/* private routes: */}
           <Route path="/changepassword" element={<ProtectedRoute> <ChangePassword /> </ProtectedRoute>} />

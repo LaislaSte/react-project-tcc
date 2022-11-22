@@ -1,6 +1,7 @@
 /*buttons contents*/
 .btn {
-    width: max-content;
+    min-width: 6rem;
+    width: auto;
     display: inline-block;
     color: var(--TEXT_LIGHT);
     font: var(--REGULAR);
@@ -26,7 +27,7 @@
     border: solid 1.5px var(--SECONDARY_900);
 }
 
-.google{
+.google {
     background-color: var(--TEXT_LIGHT);
     border: solid 1.5px var(--SECONDARY_800);
     color: var(--TEXT);

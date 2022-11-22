@@ -21,7 +21,7 @@ const Explore = () => {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
-
+    // useeffect 
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
@@ -50,7 +50,7 @@ const Explore = () => {
                             img_content={item.post_archive}
                             category={item.category}
                             title={item.title}
-                            click_type={< LikeButton postId={item.id} />}
+                            click_type_like={< LikeButton postId={item.id} />}
                         />
                     )
                 })}

@@ -1,7 +1,7 @@
 // HOOKS AND LIBS 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
 
@@ -22,19 +22,60 @@ import TxtArea from '../txtarea/TxtArea';
 import uploadFile from '../../services/uploadFile';
 import { ref } from 'firebase/storage';
 
-const CreatePost = ({ funPopUp }) => {
+const UpdatePost = ({
+    funPopUp,
+    postId,
+}) => {
     // states 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
     const [imgURL, setImgURL] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
 
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { name, id } = UserAuth;
+    const { name } = UserAuth;
+
+    // useeffect 
+    useEffect(
+        () => {
+            const fetchPost = async () => {
+                const q = query(collection(db, "post"), where("uid", "==", user?.uid));
+                const querySnapshot = await getDocs(q);
+
+                try {
+                    // for (var i in querySnapshot.docs) {
+                    //     const doc = querySnapshot.docs[i]
+                    //     setId(doc.id);
+                    //     if (name) {
+                    //         break
+                    //     }
+                    // }
+                    querySnapshot.forEach((doc) => {
+                        // setId(doc.id);
+                        if (doc.id === postId) {
+                            setTitle(doc.data().title);
+                            setContent(doc.data().content);
+                            setImgURL(doc.data().imgURL);
+                            setFavCategory_user(doc.data().category);
+                        }
+
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+
+            return () => {
+                fetchPost();
+            };
+
+        },
+        []
+    )
 
     // functions 
     const handleOnChangeCB = (event) => {
@@ -52,12 +93,12 @@ const CreatePost = ({ funPopUp }) => {
         }
     }
 
-    const formValidCreatePost = () => {
+    const formValidUpdatePost = () => {
         return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
 
-    const sendPost = async (e) => {
+    const updatePost = async (e) => {
         const file = e.target[0]?.files[0];
         if (!file) return;
 
@@ -65,16 +106,11 @@ const CreatePost = ({ funPopUp }) => {
         setImgURL(url);
 
         try {
-            await addDoc(collection(db, "post"), {
-                uid: user?.uid,
-                userPhoto: user?.photoURL,
+            await updateDoc(doc(db, "post", postId), {
                 imgContent: imgURL,
-                name: name,
-                // userID: id,
                 title: title,
                 content: content,
-                category: favCategory_user,
-                likes: 0
+                category: favCategory_user
             });
             alert('Flashcard criado!');
             cleanForm();
@@ -100,7 +136,7 @@ const CreatePost = ({ funPopUp }) => {
                     <AiOutlineClose className='close-icon' onClick={funPopUp} />
                 </div>
 
-                <form onSubmit={sendPost} className="form-create-post">
+                <form onSubmit={updatePost} className="form-create-post">
 
                     <div className="user-img-container">
                         <img src={user?.photoURL || avatarDefault} alt="" />
@@ -161,16 +197,10 @@ const CreatePost = ({ funPopUp }) => {
                         />
                         <div className="btns-popup">
                             <Button
-                                text='Apenas postar'
+                                text='Salvar'
                                 type='submit'
                                 bg_color='secondary'
-                                disable={!formValidCreatePost()}
-                            />
-                            <Button
-                                text='Postar e revisar'
-                                type='submit'
-                                bg_color='secondary'
-                                disable={!formValidCreatePost()}
+                                disable={!formValidUpdatePost()}
                             />
                         </div>
                     </div>
@@ -184,4 +214,4 @@ const CreatePost = ({ funPopUp }) => {
     )
 }
 
-export default CreatePost
+export default UpdatePost

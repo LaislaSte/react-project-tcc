@@ -50,10 +50,18 @@
     cursor: pointer;
 }
 
+.header-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .8rem;
+    max-width: 4rem;
+    width: auto;
+}
+
 .header-icons svg {
     cursor: pointer;
     font-size: 1.5rem;
-    margin-right: 1rem;
 }
 
 /* --------end of header---------- */
@@ -62,6 +70,10 @@
     margin-bottom: .5rem;
     text-align: justify;
     padding: 1rem;
+}
+
+.content-post h2 {
+    margin-bottom: 1rem;
 }
 
 .img-content-container {
@@ -75,63 +87,14 @@
     object-fit: cover;
 }
 
-/* modal  */
-.modal {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000000d9;
-    transition: opacity .4s ease, visibility .4s ease, transform .5s ease-in-out;
-    visibility: hidden;
-    opacity: 0;
-    transform: calc(0);
-    overflow: hidden;
-    z-index: 999;
-}
-
-.modal.open {
-    visibility: visible;
-    opacity: 1;
-    transform: scale(1);
-}
-
-.modal img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 100%;
-    display: block;
-    line-height: 0;
-    box-sizing: border-box;
-    padding: 2rem 0 2rem;
-    padding: 0 auto;
-}
-
-.modal svg {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
-    padding: .8rem;
-    color: var(--TEXT_LIGHT);
-    cursor: pointer;
-    font-size: 3rem;
-}
-
 /* --------end of content---------- */
 
 .footer-post {
     display: flex;
     justify-content: flex-end;
-    padding: .5rem 1.5rem 0 1.5rem;
-}
-
-.footer-post p {
-    font: var(--LIGHT_ITALIC);
+    align-items: center;
+    padding: .5rem 1.5rem 0 0;
+    gap: 1rem;
 }
 
 /* --------end of footer---------- */

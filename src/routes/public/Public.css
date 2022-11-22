@@ -81,6 +81,14 @@
 
 /* ========== DESKTOP ============= */
 @media (max-width: 876px) {
+    .first-s-header-container {
+        width: 90%;
+    }
+
+    .first-s-header p {
+        min-width: 200px;
+        width: auto;
+    }
 
     .first-s-header p {
         font-size: 2rem;
@@ -90,16 +98,19 @@
         font-size: 3rem;
     }
 
-    .first-s-paragraph p {
-        font-size: 1rem;
-    }
-
     .first-s-paragraph {
         width: 100%;
     }
 
+    .first-s-paragraph p {
+        font-size: 1rem;
+    }
+
     .first-s-header2 {
         left: 5vw;
+        flex-direction: column;
+        align-items: center;
+        gap: .5rem;
     }
 
     .first-s-header2 h1 {
@@ -108,10 +119,6 @@
 
     .first-s-img {
         display: none;
-    }
-
-    .first-s-header-container {
-        width: 90%;
     }
 
     .first-s-header3 {
@@ -119,80 +126,29 @@
         left: 0;
         display: flex;
         justify-content: center;
-    }
-
-}
-
-@media (max-width: 500px) and (min-height: 600px) {
-    .first-s-header2 {
-        width: 100%;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        top: -5vh;
-    }
-
-    .first-s-header p {
-        font-size: 1.5rem;
-    }
-
-    .first-s-header h1 {
-        font-size: 2rem;
-    }
-
-    .first-s-paragraph {
-        font-size: .5rem;
-        height: 50vh;
-    }
-
-    .first-s-header2 h1 {
-        font-size: 1.2rem;
-    }
-
-    .first-s-img {
-        display: none;
-    }
-
-    .first-s-header3 h1 {
-        font-size: 1.2rem;
-        top: 5vh;
-    }
-
-    .first-s-header3 .footer-icon {
-        display: none;
+        text-align: center;
     }
 
 }
 
 @media (max-width: 500px) {
 
-    .first-s-header3 .footer-icon {
-        display: none;
-    }
-
-    .first-s-header3 h1 {
+    .first-s-header3 h1,
+    .first-s-header h1,
+    .first-s-header p,
+    .first-s-header2 h1 {
         font-size: 1.5rem;
     }
 
+    .first-s-header3 svg {
+        display: none;
+    }
 }
 
-@media (max-height: 600px) {
-    .first-s-header p {
-        font-size: 2rem;
+@media (max-width: 445px) or (max-height: 560px) {
+    .first-s-header3 h1 {
+        display: none;
     }
-
-    .first-s-header h1 {
-        font-size: 3rem;
-    }
-
-    .first-s-paragraph p {
-        font-size: 1rem;
-    }
-
-    .first-s-header2 {
-        left: 5vw;
-    }
-
 }
 
 /* ========== MOBILE ============= */

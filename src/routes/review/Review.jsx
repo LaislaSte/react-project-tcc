@@ -11,6 +11,7 @@ import ReviewButton from '../../components/reviewbutton/ReviewButton';
 import { Post } from '../../components/post/Post';
 import Categorys from '../../components/categorys/Categorys';
 import CreateButton from '../../components/createbutton/CreateButton';
+import LikeButton from '../../components/likebutton/LikeButton';
 
 const Review = () => {
 
@@ -43,7 +44,8 @@ const Review = () => {
                             img_content={item.post_archive}
                             category={item.category}
                             title={item.title}
-                            click_type={< ReviewButton />}
+                            click_type_review={< ReviewButton />}
+                            click_type_like={< LikeButton postId={item.id} />}
                             userLoged={verifiedLoginAndReview(item.id, fakeUser.arrIdsPost)}
                         />
                     )

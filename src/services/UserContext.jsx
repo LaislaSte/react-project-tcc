@@ -223,8 +223,8 @@ export const CostumerProvider = ({ children }) => {
         });
     }
 
-    const deletePost = () => {
-        console.log('post deletado');
+    const deletePost = (postId) => {
+        console.log('post deletado', postId);
     }
     const updatePost = () => {
         console.log('post atualizado')

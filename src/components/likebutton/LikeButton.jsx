@@ -15,6 +15,10 @@ const LikeButton = ({ postId }) => {
         console.log('user e conteudo registrado em revisoes, setado o contador e primeira data de revisao');
         showPopUp()
     }
+    const removeReview = () => {
+        console.log('user e conteudo removido das revisoes');
+        showPopUp()
+    }
 
     return (
         <>
@@ -22,25 +26,34 @@ const LikeButton = ({ postId }) => {
                 {
                     onChangeHeart(postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
                 }
-                {/* <FaHeart
-                    // className='post-like-container-icon post-like-container-true'
-                    className={onChangeHeart(postId) ? 'post-like-container-icon post-like-container-true' : 'post-like-container-icon post-like-container-false'}
-                    onClick={showPopUp}
-                /> */}
             </div>
 
-            <div className={popUp ? 'popup-menu popup-menu-active' : 'popup-menu'}>
+            <div className={popUp ? 'modal open' : 'modal'}>
+                <AiOutlineClose onClick={showPopUp} />
                 <div className="popup-container">
-                    <div className='icon-container close-popup'>
-                        <AiOutlineClose onClick={showPopUp} />
-                    </div>
-                    <div className="popup-content">
-                        <h1>Deseja registrar este post nas suas revisões?</h1>
-                        <div className="btns-popup btns-popup-review">
-                            <Button type='button' bg_color='secondary' fun={registerReview} text='sim' />
-                            <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
-                        </div>
-                    </div>
+
+                    {onChangeHeart(postId)
+                        ? (
+                            <>
+                                <h1>Deseja remover este post das suas revisões?</h1>
+                                <div className="btns-popup">
+                                    <Button type='button' bg_color='secondary' fun={removeReview} text='sim' />
+                                    <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
+                                </div>
+                            </>
+                        )
+
+                        : (
+                            <>
+                                <h1>Deseja registrar este post nas suas revisões?</h1>
+                                <div className="btns-popup">
+                                    <Button type='button' bg_color='secondary' fun={registerReview} text='sim' />
+                                    <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
+                                </div>
+                            </>
+                        )
+                    }
+
                 </div>
             </div>
         </>

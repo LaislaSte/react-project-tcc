@@ -1,6 +1,6 @@
 // HOOKS AND LIBS 
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, browserHistory, useNavigate } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
 import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
@@ -19,12 +19,25 @@ import Input from '../input/Input'
 
 const Navbar = () => {
     // states 
-    const [term, setTerm] = useState([]);
     const [navbar, setNavbar] = useState(false);
+    const [query, setQuery] = useState("");
+
     //imports
     const { user, logout } = UserAuth();
+    const navigate = useNavigate();
+
     // functions 
     const showNavbar = () => setNavbar(!navbar);
+    // console.log()
+
+    const goToUserPage = () => {
+        // const id = "01";
+        const result = resultSearch.filter(item => item.name.includes(query));
+        const id = result[0].id
+        navigate(`/user/${id}`);
+        setQuery('');
+        // browserHistory.push(`/${id}`)
+    }
 
     return (
         <nav className="navbar">
@@ -40,8 +53,8 @@ const Navbar = () => {
                     text='Pesquisar'
                     type='text'
                     icon={<BsSearch />}
-                    value={term}
-                    onchange={(e) => { setTerm(e.target.value) }}
+                    value={query}
+                    onchange={(e) => { setQuery(e.target.value) }}
 
                 />
             </div>
@@ -63,8 +76,8 @@ const Navbar = () => {
                         type='text'
                         icon={<BsSearch />}
                         className='input-outline-secondary'
-                        value={term}
-                        onchange={(e) => { setTerm(e.target.value) }}
+                        value={query}
+                        onchange={(e) => { setQuery(e.target.value) }}
                     />
                 </li>
 
@@ -112,18 +125,18 @@ const Navbar = () => {
                 }
             </ul>
 
-            {term.length > 2 && (
+            {query.length > 2 && (
                 <div className="result-search-container">
 
                     <ul className='container-result'>
-                        {resultSearch.map((result, index) => {
+                        {resultSearch.filter(item => item.name.toLowerCase().includes(query)).map((result, index) => {
                             return (
                                 <li key={index} className="result-profile-container">
 
                                     <div className="result-profile">
                                         <div className="result-profile-content">
 
-                                            <img className='result-avatar-container' src={result.avatar} alt="" />
+                                            <img onClick={goToUserPage} className='result-avatar-container' src={result.avatar} alt="" />
                                             <p> {result.name} </p>
 
                                             <div className="result-categ-content">

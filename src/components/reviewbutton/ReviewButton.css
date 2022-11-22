@@ -1,3 +1,10 @@
+.review-btn {
+    height: 1.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 .review-btn:hover {
     color: var(--TEXT_LIGHT);
     background: none;
