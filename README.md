@@ -28,78 +28,61 @@
 
 # TODOS: fontEnd
 
-- add links de redirecionamento do footer
+- **importante** add links de redirecionamento do footer
 
----
+- **importante** concertar bugs nos links de redirecionamento em register e login
 
-- criar pagina para mostrar os resultados das pesquisa q o user for clicar
+- **importante** concertar bugs do checkboxes
 
----
+- limitar a quantidade de categorias selecionadas nas configurações e na criação de post
 
-- concertar resposividade das fontes na primeira sessao do public
+- concertar bugs do updatePost onde as img preview estão no tamanho errado e colocar close icon
 
----
+- colocar close icon no deletePost do post
 
-- limitar a quantidade de assuntos selecionados nas configurações e na criação de post
+- criar dados para aparecer nos perfis externos
 
----
+- criar função que pega o id dos elementos do componente category e o deixa selecionado (com um css diferente)
 
-- criar pagina para ver perfis externos
-
----
-
-- criar div para aparecer quando clicar nos 3 pontinhos (excluir, editar, remover das revisçoes) no post
-
-- adicionar funções aos itens do show-more (3 pontinhos)
-
-- fazer com q os popups sejam div q se abrem dentro do container do post
-
-- criar popups para ver imagem de modo ampliado (diminuir o tamanho da imgem quando estiver +800px)
-
-- criar opção de denuncia quando o post estiver na pagina de explore ou quando for um user externo
-
----
-
-- colocar cursor pointer no x dos popups
-
----
-
-- criar função que pega esse id dos elementos do componente category e o deixa selecionado (com um css diferente)
-
----
-
-- ADICIONAR O DIVS PARA O GOOGLE ADS
+- **importante** ADICIONAR O DIVS PARA O GOOGLE ADS
 
 ## TODOS: backEnd
 
-- função para atualizar informações do usuário como foto de perfil, nome, bio e categorias
-- verificar função para deletar um usuário
+- **importante** verificar função para buscar usuário logado (ainda está retornando undefined)
+
+---
+
+- **importante** função para atualizar informações do usuário como foto de perfil, nome, bio e categorias
+- **importante** verificar função para deletar um usuário
 - verificar função para mudança de senha atravez de e-mail
 - verificar função para mudança de e-mail
-- verificar função para confirmação de e-mail
+- **importante** verificar função para confirmação de e-mail
+- importar usuários existentes para rederiza-los no filtro de busca
 
 ---
 
-- função para cadastrar post
+- **importante** função para cadastrar post
 - função para atualizar post
-- função para deletar post
+- **importante** função para deletar post
 - importar posts do usuario logado do firestore e adicionalos a um estado no perfil para ser renderizados
+- **importante** importar posts existentes para renderiza-los no explore
+- importar posts de usuario atraves do seu uid (query com uid forenecido)
 
 ---
 
-- organizar diretórios com o uid (e também id do post para registro de imagem de post) para registrar imagens no storage
+- **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
 
 ---
 
-- função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
+- **verificar** organizar diretórios com o uid (e também id do post para registro de imagem de post) para registrar imagens no storage
 
 ---
 
-- add google ads
+- **verificar** add google ads
 
 ---
 
-- fazer deploy
+- **verificar** fazer deploy
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
 
