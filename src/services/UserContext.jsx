@@ -16,17 +16,20 @@ const collectionRef = collection(db, 'users');
 
 export const CostumerProvider = ({ children }) => {
     //states
+    // dados do usuários:
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
     const [id, setId] = useState('');
     const [uid, setUid] = useState(null);
-    const [submiting, setSubmiting] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [authenticated, setAuthenticated] = useState(false);
-    const [loader, setLoader] = useState(false);
-    const [image, setImage] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
     const [bios, setBios] = useState('');
     const [name, setName] = useState('');
+    const [categorys, setCategorys] = useState('');
+
+    // para outras funcionalidades
+    const [submiting, setSubmiting] = useState(null);
+    const [loading, setLoading] = useState(false);
+    // const [authenticated, setAuthenticated] = useState(false);
+    const [loader, setLoader] = useState(false);
 
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
@@ -36,9 +39,9 @@ export const CostumerProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            console.log(user?.uid);
-            // setToken(user?.getIdToken());
-            // setUid(currentUser.uid);
+            setUid(currentUser.uid);
+            setName(currentUser.displayName);
+            setImgUrl(currentUser.photoURL);
             getUserId();
         });
         return () => {
@@ -47,7 +50,7 @@ export const CostumerProvider = ({ children }) => {
     }, []);
 
     const getUserId = async () => {
-        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const q = query(collection(db, "users"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
 
         try {
@@ -55,7 +58,8 @@ export const CostumerProvider = ({ children }) => {
                 const doc = querySnapshot.docs[i]
                 setId(doc.id);
                 setName(doc.data().name);
-                console.log(id, name);
+                setBios(doc.data().userBio);
+                setCategorys(doc.data().userCategorys);
                 if (name) {
                     break
                 }
@@ -63,13 +67,8 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error);
         }
-
-        // querySnapshot.forEach((doc) => {
-        //     setId(doc.id);
-        //     setName(doc.data().name);
-
-        // });
     }
+
 
     //FUNÇÃO PARA CADASTRO COM O AUTHENTICATED E FIRESTORE
     const registerWithEmailAndPassword = async (name, email, password) => {
@@ -154,12 +153,21 @@ export const CostumerProvider = ({ children }) => {
     const logout = () => {
         signOut(auth);
         setUser(null);
-        setAuthenticated(false);
+        // setAuthenticated(false);
         navigate('/');
     };
 
     //FUNÇÕES DE ATUALIZAÇÃO
     const updateUserProfile = (imgURL, name_user, bios_user, categorys) => {
+
+        try {
+            updateProfile(user, {
+                displayName: name_user,
+                photoURL: imgURL
+            })
+        } catch (error) {
+            console.log(error)
+        }
 
         updateDoc(doc(db, "users", id), {
             userBio: bios_user,
@@ -171,18 +179,11 @@ export const CostumerProvider = ({ children }) => {
                 console.log(docRef, 'atualização com query');
                 setBios(bios_user);
                 setName(name_user);
+                setImgUrl(imgURL);
+                setCategorys(categorys);
             }).catch((error) => {
                 console.log('updateDoc error: ', error)
             });
-
-        try {
-            updateProfile(user, {
-                displayName: name_user,
-                photoURL: imgURL
-            })
-        } catch (error) {
-            console.log(error)
-        }
 
     }
 
@@ -232,7 +233,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ authenticated, user, token, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost, updatePost, deletePost }}>
+        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost, updatePost, deletePost }}>
             {children}
         </CostumerContext.Provider>
     )
