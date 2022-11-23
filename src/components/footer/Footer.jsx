@@ -7,7 +7,7 @@ const Footer = () => {
 
         <footer className='footer-container'>
             <div className="footer-header-logo">
-                <Link className='link'> <h1>MemorizeStudio</h1> </Link>
+                <Link to='/' className='link'> <h1>MemorizeStudio</h1> </Link>
                 <p>Memorizar nunca foi tão fácil</p>
             </div>
 
