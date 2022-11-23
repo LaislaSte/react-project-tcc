@@ -40,42 +40,42 @@ const UpdatePost = ({
     const { name } = UserAuth;
 
     // useeffect 
-    useEffect(
-        () => {
-            const fetchPost = async () => {
-                const q = query(collection(db, "post"), where("uid", "==", user?.uid));
-                const querySnapshot = await getDocs(q);
+    // useEffect(
+    //     () => {
+    //         const fetchPost = async () => {
+    //             const q = query(collection(db, "post"), where("uid", "==", user?.uid));
+    //             const querySnapshot = await getDocs(q);
 
-                try {
-                    // for (var i in querySnapshot.docs) {
-                    //     const doc = querySnapshot.docs[i]
-                    //     setId(doc.id);
-                    //     if (name) {
-                    //         break
-                    //     }
-                    // }
-                    querySnapshot.forEach((doc) => {
-                        // setId(doc.id);
-                        if (doc.id === postId) {
-                            setTitle(doc.data().title);
-                            setContent(doc.data().content);
-                            setImgURL(doc.data().imgURL);
-                            setFavCategory_user(doc.data().category);
-                        }
+    //             try {
+    //                 // for (var i in querySnapshot.docs) {
+    //                 //     const doc = querySnapshot.docs[i]
+    //                 //     setId(doc.id);
+    //                 //     if (name) {
+    //                 //         break
+    //                 //     }
+    //                 // }
+    //                 querySnapshot.forEach((doc) => {
+    //                     // setId(doc.id);
+    //                     if (doc.id === postId) {
+    //                         setTitle(doc.data().title);
+    //                         setContent(doc.data().content);
+    //                         setImgURL(doc.data().imgURL);
+    //                         setFavCategory_user(doc.data().category);
+    //                     }
 
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
-            };
+    //                 });
+    //             } catch (error) {
+    //                 console.log(error);
+    //             }
+    //         };
 
-            return () => {
-                fetchPost();
-            };
+    //         return () => {
+    //             fetchPost();
+    //         };
 
-        },
-        []
-    )
+    //     },
+    //     []
+    // )
 
     // functions 
     const handleOnChangeCB = (event) => {
@@ -189,12 +189,15 @@ const UpdatePost = ({
                     </div>
 
                     <div className="input-img-container">
-                        <InputImg
-                            setImage={setImage}
-                            className='container-img-upload-preview'
-                            imgPreview={image?.preview || imageDefault}
-                            imgPreviewClassName='upload-preview'
-                        />
+                        <div>
+                            <p>Inserir Imagem</p>
+                            <InputImg
+                                setImage={setImage}
+                                className='container-img-upload-preview'
+                                imgPreview={image?.preview || imageDefault}
+                                imgPreviewClassName='upload-preview'
+                            />
+                        </div>
                         <div className="btns-popup">
                             <Button
                                 text='Salvar'
