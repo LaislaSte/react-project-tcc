@@ -101,9 +101,3 @@
     }
 
 }
-
-@media (max-width: 821px) {
-    .register-container .footer .label .colorfull-text {
-        font-size: 1rem;
-    }
-}

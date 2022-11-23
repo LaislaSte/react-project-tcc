@@ -153,12 +153,15 @@ const CreatePost = ({ funPopUp }) => {
                     </div>
 
                     <div className="input-img-container">
-                        <InputImg
-                            setImage={setImage}
-                            className='container-img-upload-preview'
-                            imgPreview={image?.preview || imageDefault}
-                            imgPreviewClassName='upload-preview'
-                        />
+                        <div>
+                            <p>Inserir Imagem</p>
+                            <InputImg
+                                setImage={setImage}
+                                className='container-img-upload-preview'
+                                imgPreview={image?.preview || imageDefault}
+                                imgPreviewClassName='upload-preview'
+                            />
+                        </div>
                         <div className="btns-popup">
                             <Button
                                 text='Apenas postar'

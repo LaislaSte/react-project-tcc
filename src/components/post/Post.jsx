@@ -11,6 +11,7 @@ import TxtArea from '../txtarea/TxtArea';
 import { fakeUser } from '../../utils/ArraysAndFunctions';
 import InputImg from '../inputImg/InputImg';
 import UpdatePost from '../popupmenu/UpdatePost';
+import { AiOutlineClose } from 'react-icons/ai';
 
 export const Post = ({
     postId,
@@ -65,7 +66,7 @@ export const Post = ({
                         <div className="header-icons">
                             <BiTrash onClick={onClickSM1} />
                             <div className={showMore1 ? 'modal open' : 'modal'}>
-                                <MdClose onClick={onClickSM1} />
+                                <AiOutlineClose onClick={onClickSM1} />
                                 <div className="popup-container">
                                     <h1>Certeza que deseja excluir?</h1>
                                     <div className="btns-popup">
@@ -76,13 +77,15 @@ export const Post = ({
                             </div>
 
                             <BiPencil onClick={onClickSM} />
-                            <div className={showMore ? 'modal open' : 'modal'}>
-                                <MdClose onClick={onClickSM} />
-                                <UpdatePost
-                                    funPopUp={onClickSM}
-                                    postId={postId}
-                                />
-                            </div>
+                            {showMore
+                                ? (
+                                    <UpdatePost
+                                        funPopUp={onClickSM}
+                                        postId={postId}
+                                    />
+                                )
+                                : null
+                            }
 
                         </div>
                     )}
