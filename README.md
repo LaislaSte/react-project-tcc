@@ -26,19 +26,33 @@
 
 **Exemplo**: `fix/deleteaccount route: concerto de bug no botão delete`
 
-# TODOS: fontEnd
+## TODOS: fontEnd
 
-- **importante** add links de redirecionamento do footer
+- **importante** concertar bugs nos links de redirecionamento em register e login [ok]
 
-- **importante** concertar bugs nos links de redirecionamento em register e login
+- **importante** concertar bugs do checkboxes [ok]
 
-- **importante** concertar bugs do checkboxes
+- concertar bugs do updatePost onde as img preview estão no tamanho errado e colocar close icon [ok]
+
+- colocar close icon no deletePost do post [ok]
+
+- **importante** criar usuários falsos
+
+- **importante** criar posts falsos para o usuario logado
+
+- **importante** adicionar função de redirecionamento para perfil no componente do post
+
+- **importante** renderizar do profile do usuario logado os posts falsos criados
+
+- **importante** renderizar os respectivos posts nos perfis dos respectivos usuários
+
+- ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.
+
+- criar componente para página não encontrada
+
+- filtrar categorias existentes no banco para ficar pré selecionadas no config
 
 - limitar a quantidade de categorias selecionadas nas configurações e na criação de post
-
-- concertar bugs do updatePost onde as img preview estão no tamanho errado e colocar close icon
-
-- colocar close icon no deletePost do post
 
 - criar dados para aparecer nos perfis externos
 
@@ -46,14 +60,17 @@
 
 - **importante** ADICIONAR O DIVS PARA O GOOGLE ADS
 
+---
+
 ## TODOS: backEnd
 
-- **importante** verificar função para buscar usuário logado (ainda está retornando undefined)
+- **importante** verificar função para buscar usuário logado (ainda está retornando undefined) [ok]
 
 ---
 
-- **importante** função para atualizar informações do usuário como foto de perfil, nome, bio e categorias
-- **importante** verificar função para deletar um usuário
+- **importante** função para atualizar informações do usuário como foto de perfil, nome, bio e categorias [ok]
+- **importante** verificar função para deletar um usuário [ok]
+
 - verificar função para mudança de senha atravez de e-mail
 - verificar função para mudança de e-mail
 - **importante** verificar função para confirmação de e-mail
@@ -62,15 +79,17 @@
 ---
 
 - **importante** função para cadastrar post
-- função para atualizar post
 - **importante** função para deletar post
-- importar posts do usuario logado do firestore e adicionalos a um estado no perfil para ser renderizados
 - **importante** importar posts existentes para renderiza-los no explore
+
+- função para atualizar post
+- importar posts do usuario logado do firestore e adicionalos a um estado no perfil para ser renderizados
 - importar posts de usuario atraves do seu uid (query com uid forenecido)
 
 ---
 
 - **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
+- **importante** função para atualizar revisão com nova data de revisão
 
 ---
 
