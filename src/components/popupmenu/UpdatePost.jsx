@@ -37,7 +37,7 @@ const UpdatePost = ({
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { name } = UserAuth;
+    const { updatePost } = UserAuth();
 
     // useeffect 
     // useEffect(
@@ -98,34 +98,44 @@ const UpdatePost = ({
     }
 
 
-    const updatePost = async (e) => {
+    //função que chama o atualizar post do context
+    const onClickUpdatePost = async (e) => {
+        e.preventDefault();
         const file = e.target[0]?.files[0];
         if (!file) return;
 
-        const url = uploadFile(file, `postsContent/${user?.uid}/${file?.name?.split('.')?.pop()}`)
-        setImgURL(url);
+        try {
+            if (file) {
+                const imageName = uid + '.' + file?.name?.split('.')?.pop();
+                const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
+
+                const uploadTask = uploadBytesResumable(postRef, file);
+                uploadTask.on(
+                    'state_changed',
+                    snapshot => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        // setProgress(progress);
+                    },
+                    error => {
+                        console.error(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                    }
+                )
+
+                // todo: delete the previous profile image od the user
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
         try {
-            await updateDoc(doc(db, "post", postId), {
-                imgContent: imgURL,
-                title: title,
-                content: content,
-                category: favCategory_user
-            });
-            alert('Flashcard criado!');
-            cleanForm();
-            navigate('/explore');
-        } catch (err) {
-            console.log(err)
+            //passar por parametro os states:
+            // updatePost(imgURL, name_user, bios_user, category);
+        } catch (error) {
+            console.log(error);
         }
-    }
-
-    const cleanForm = () => {
-        setContent('');
-        setTitle('');
-        setImage(null);
-        setImgURL('')
-        // showPopUp()
     }
 
     return (
@@ -136,7 +146,7 @@ const UpdatePost = ({
                     <AiOutlineClose className='close-icon' onClick={funPopUp} />
                 </div>
 
-                <form onSubmit={updatePost} className="form-create-post">
+                <form onSubmit={onClickUpdatePost} className="form-create-post">
 
                     <div className="user-img-container">
                         <img src={user?.photoURL || avatarDefault} alt="" />

@@ -1,17 +1,19 @@
+// HOOKS AND LIBS 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineClose } from 'react-icons/ai';
 import { BiPencil, BiTrash } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
 
+// ARCHIVES FROM PROJECT
 import './Post.css';
 import { UserAuth } from '../../services/UserContext';
-import Button from '../button/Button';
-import Input from '../input/Input';
-import TxtArea from '../txtarea/TxtArea';
+import avatarDefault from '../../assets/icons/avatarDefault.svg'
 import { fakeUser } from '../../utils/ArraysAndFunctions';
-import InputImg from '../inputImg/InputImg';
+
+/*PAGES AND COMPONENTS */
+import Button from '../button/Button';
 import UpdatePost from '../popupmenu/UpdatePost';
-import { AiOutlineClose } from 'react-icons/ai';
 
 export const Post = ({
     postId,
@@ -27,25 +29,28 @@ export const Post = ({
     internalUser
 }) => {
 
+    // states e functions para os popups 
     const [modal, setModal] = useState(false);
     const onCickImg = () => setModal(!modal);
-
     const [showMore, setShowMore] = useState(false);
     const onClickSM = () => setShowMore(!showMore);
-
     const [showMore1, setShowMore1] = useState(false);
     const onClickSM1 = () => setShowMore1(!showMore1);
 
-    const { deletePost, updatePost } = UserAuth();
-
+    // imports 
+    const { deletePost } = UserAuth();
     const navigate = useNavigate();
 
+    // functions 
+    //função que chama o deletar post do context
     const clickDeletePost = () => {
         deletePost(postId);
         onClickSM1();
     }
-    const clickUpdtePost = () => {
-        updatePost();
+
+    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
+    const goToUserPage = () => {
+        navigate(`/user/${user_id}`);
     }
 
     return (
@@ -54,11 +59,11 @@ export const Post = ({
 
                 <div className="header-post">
 
-                    <div className="header-content-user" >
+                    <div className="header-content-user" onClick={goToUserPage}>
                         <div className="header-user-avatar">
-                            <img src={avatar} alt="avatar do usuário do post" className='header-user-avatar-img' />
+                            <img src={avatar || avatarDefault} alt="avatar do usuário do post" className='header-user-avatar-img' />
                         </div>
-                        <p> {user_name} </p>
+                        <p> {user_name ? user_name : 'Sem Nome'} </p>
                     </div>
 
 
@@ -100,14 +105,16 @@ export const Post = ({
                     <p> {content} </p>
                     <div className="img-content-container">
                         {img_content && (
-                            <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                            <>
+                                <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                                <div className={modal ? "modal open" : 'modal'}>
+                                    <img src={img_content} alt="" />
+                                    <MdClose onClick={onCickImg} />
+                                </div>
+                            </>
                         )}
                     </div>
 
-                    <div className={modal ? "modal open" : 'modal'}>
-                        <img src={img_content} alt="" />
-                        <MdClose onClick={onCickImg} />
-                    </div>
 
                 </div>
 

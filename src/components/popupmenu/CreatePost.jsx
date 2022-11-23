@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addDoc, collection } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
 
@@ -19,8 +20,6 @@ import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import TxtArea from '../txtarea/TxtArea';
-import uploadFile from '../../services/uploadFile';
-import { ref } from 'firebase/storage';
 
 const CreatePost = ({ funPopUp }) => {
     // states 
@@ -34,7 +33,7 @@ const CreatePost = ({ funPopUp }) => {
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { name, id } = UserAuth;
+    const { name, uid } = UserAuth();
 
     // functions 
     const handleOnChangeCB = (event) => {
@@ -58,11 +57,35 @@ const CreatePost = ({ funPopUp }) => {
 
 
     const sendPost = async (e) => {
+        e.preventDefault();
         const file = e.target[0]?.files[0];
         if (!file) return;
 
-        const url = uploadFile(file, `postsContent/${user?.uid}/${file?.name?.split('.')?.pop()}`)
-        setImgURL(url);
+        try {
+            if (file) {
+                const imageName = uid + '.' + file?.name?.split('.')?.pop();
+                const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
+
+                const uploadTask = uploadBytesResumable(postRef, file);
+                uploadTask.on(
+                    'state_changed',
+                    snapshot => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        // setProgress(progress);
+                    },
+                    error => {
+                        console.error(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                    }
+                )
+
+                // todo: delete the previous profile image od the user
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
         try {
             await addDoc(collection(db, "post"), {
@@ -70,7 +93,6 @@ const CreatePost = ({ funPopUp }) => {
                 userPhoto: user?.photoURL,
                 imgContent: imgURL,
                 name: name,
-                // userID: id,
                 title: title,
                 content: content,
                 category: favCategory_user,
@@ -88,7 +110,7 @@ const CreatePost = ({ funPopUp }) => {
         setContent('');
         setTitle('');
         setImage(null);
-        setImgURL('')
+        setImgURL('');
         // showPopUp()
     }
 
