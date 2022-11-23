@@ -16,6 +16,8 @@ import InputImg from '../../components/inputImg/InputImg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import TxtArea from '../../components/txtarea/TxtArea';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '../../services/Banco';
 
 
 const Config = () => {
@@ -28,13 +30,14 @@ const Config = () => {
     const [img_user, setImgUser] = useState(null);
 
     // imports 
-    const { user, updateUserProfile } = UserAuth();
+    const { name, imgUrl, bios, uid, updateUserProfile } = UserAuth();
 
     // useeffect 
     useEffect(
         () => {
-            setImgURL(user?.photoURL);
-            setUserName(user?.displayName);
+            setImgURL(imgUrl);
+            setUserName(name);
+            setBios(bios);
         },
         []
     )
@@ -65,9 +68,23 @@ const Config = () => {
 
         try {
             if (file) {
-                const imageName = user.uid + '.' + file?.name?.split('.')?.pop();
-                const url = uploadFile(file, `profile/${imageName}`)
-                setImgURL(url);
+                const imageName = uid + '.' + file?.name?.split('.')?.pop();
+                const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
+
+                const uploadTask = uploadBytesResumable(postRef, file);
+                uploadTask.on(
+                    'state_changed',
+                    snapshot => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        // setProgress(progress);
+                    },
+                    error => {
+                        console.error(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                    }
+                )
 
                 // todo: delete the previous profile image od the user
             }
@@ -130,6 +147,7 @@ const Config = () => {
                     <div className="selects-container">
                         <p>Escolha suas preferências de estudo (até 5) </p>
                         <div className='checked-boxes-container' >
+                            {/* {categorys.filter(i => i.includes())} */}
                             {categorys.map((item, index) => {
                                 return (
                                     <div className="form-checked-box" key={index}>
