@@ -47,7 +47,6 @@
 - **importante** ADICIONAR O DIVS PARA O GOOGLE ADS
 - **importante** adicionar função de add ou remover resisão no like button
 
-- filtrar categorias existentes no banco para ficar pré selecionadas no config
 - criar função que pega o id dos elementos do componente category e o deixa selecionado (com um css diferente)
 
 ---
@@ -62,28 +61,34 @@
 - **importante** importar posts existentes para renderiza-los no explore [ok]
 - **importante** importar usuários existentes para rederiza-los no filtro de busca (função semelhante ao getPosts); [ok]
 - **importante** função para cadastrar post [ok]
+- **importante** filtragem de post por uid; [ok]
+- **verificar** verificar cadastro de url do storage (nao está cadastrando a url) [ok]
 
 ---
 
-- **importante** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente
-- **importante** filtragem de post por uid; [ok]
-- **importante** filtragem de post por categoria;
+laisla:
 
-- **verificar** verificar cadastro de url do storage (nao está cadastrando a url)
+- **verificar** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente
+- **importante** filtragem de post por categoria;
+- **verificar** organizar nomes dos diretórios no storage (pasta profile com uid e nome do file e pasta postContent com uid e nome do file)
+- **verificar** filtrar categorias existentes (perfil do user) para ficar pré selecionadas no config e no componente categorys de pesquisa
+
+---
+
 - **importante** função para atualizar post
 - **importante** função para deletar post
+- **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário;
+- **verificar** função para filtrar posts likeados pelo usuário (se existe uma review com as inf. desse post);
 
 - **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
 - **importante** função para atualizar revisão com nova data de revisão
 
-- **verificar** organizar nomes dos diretórios no storage (pasta profile com uid e nome do file e pasta postContent com uid e nome do file)
+---
+
 - **verificar** como atualizar os diretórios
 - **verificar** add google ads
 - **verificar** fazer deploy
 
----
-
-- função para atualizar post
 - verificar função para mudança de senha atravez de e-mail
 - verificar função para mudança de e-mail
 - verificar função para confirmação de e-mail
