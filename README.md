@@ -66,7 +66,8 @@
 ---
 
 - **importante** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente
-- **importante** filtragem de post;
+- **importante** filtragem de post por uid; [ok]
+- **importante** filtragem de post por categoria;
 
 - **verificar** verificar cadastro de url do storage (nao está cadastrando a url)
 - **importante** função para atualizar post
