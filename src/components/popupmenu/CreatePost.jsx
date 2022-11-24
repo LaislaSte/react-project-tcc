@@ -60,15 +60,12 @@ const CreatePost = ({ funPopUp }) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
         if (!file) return;
+        // const url = '';
 
         try {
             if (file) {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
                 const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
-
-                const url = await getDownloadURL(postRef);
-                console.log(url);
-                setImgURL()
 
                 const uploadTask = uploadBytesResumable(postRef, file);
                 uploadTask.on(
@@ -84,6 +81,9 @@ const CreatePost = ({ funPopUp }) => {
                         getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
                     }
                 )
+
+                const url = await getDownloadURL(postRef);
+                setImgURL(url)
 
                 // todo: delete the previous profile image of the user
             }
@@ -105,6 +105,7 @@ const CreatePost = ({ funPopUp }) => {
             });
             alert('Flashcard criado!');
             cleanForm();
+            funPopUp();
             navigate('/explore');
         } catch (err) {
             console.log(err)
