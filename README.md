@@ -60,12 +60,15 @@
 - **importante** função para atualizar informações do usuário como foto de perfil, nome, bio e categorias [ok]
 - **importante** verificar função para deletar um usuário [ok]
 - **importante** importar posts existentes para renderiza-los no explore [ok]
+- **importante** importar usuários existentes para rederiza-los no filtro de busca (função semelhante ao getPosts); [ok]
+- **importante** função para cadastrar post [ok]
 
 ---
 
-- **importante** importar usuários existentes para rederiza-los no filtro de busca (função semelhante ao getPosts);
+- **importante** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente
+- **importante** filtragem de post;
 
-- **importante** função para cadastrar post
+- **verificar** verificar cadastro de url do storage (nao está cadastrando a url)
 - **importante** função para atualizar post
 - **importante** função para deletar post
 
