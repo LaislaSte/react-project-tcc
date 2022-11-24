@@ -1,7 +1,7 @@
 // HOOKS AND LIBS 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
 
@@ -20,7 +20,6 @@ import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import TxtArea from '../txtarea/TxtArea';
 import uploadFile from '../../services/uploadFile';
-import { ref } from 'firebase/storage';
 
 const UpdatePost = ({
     funPopUp,
@@ -37,7 +36,7 @@ const UpdatePost = ({
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { updatePost } = UserAuth();
+    const { updatePost, uid } = UserAuth();
 
     // useeffect 
     // useEffect(

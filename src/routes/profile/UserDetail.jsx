@@ -23,6 +23,7 @@ const UserDetail = () => {
     const [name, setName] = useState("");
     const [imgURL, setImgURL] = useState("");
     const [bio, setBio] = useState("");
+    // const [euser, setEuser] = useState(null);
     // todos: importar posts do usuario logado do firestore e adicionalos nesse estado
     const [userPosts, setUserPosts] = useState([]);
 
@@ -30,91 +31,71 @@ const UserDetail = () => {
 
     // imports
     const [user, loading, error] = useAuthState(auth);
-    const { bios } = UserAuth();
+    const { getExternalUser, euser } = UserAuth();
+
+    // function 
+    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
+    useEffect(() => {
+        const callUser = () => {
+            try {
+                // setEuser(getExternalUser(id));
+                // const res = await getExternalUser(id);
+                getExternalUser(id);
+                console.log(euser?.espost);
+                // setName(euser.name);
+                // setImgURL(euser.avatar);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        callUser()
+
+    }, [])
+
 
     return (
         <div className='Profile'>
             <Navbar />
             <CreateButton />
 
-            {resultSearch.filter(item => item.id.includes(id)).map(i => {
-                return (
-                    <>
-                        <header className='section-profile' key={i.id}>
+            <header className='section-profile'>
 
-                            <div className="profile-container">
-                                <div className="img-background">
-                                    <img src={i.avatar ? i.avatar : avatarDefault} alt="" />
-                                </div>
-                            </div>
+                <div className="profile-container">
+                    <div className="img-background">
+                        <img src={euser?.avatar ? euser?.avatar : avatarDefault} alt="" />
+                    </div>
+                </div>
 
-                            <div className="bio">
-                                <h2>{i.name}</h2>
-                                {i.bios}
-                            </div>
+                <div className="bio">
+                    <h2>{euser?.name ? euser?.name : 'Sem Nome'}</h2>
+                    {euser?.bio ? euser?.bio : 'Nada por aqui'}
+                </div>
 
-                        </header>
-
-                        <main className="section-posts">
-                            {i.posts && (
-                                <>
-                                    <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
-                                    <div className="posts-container">
-                                        {i.posts.map((item, index) => {
-                                            return (
-                                                <Post
-                                                    key={index}
-                                                    content={item.content}
-                                                    user_name={item.name}
-                                                    img_content={item.imgContent}
-                                                    user_id={item.uid}
-                                                    avatar={item.userPhoto}
-                                                    category={item.category}
-                                                    title={item.title}
-                                                    postId={item.postId}
-                                                    click_type_like={<LikeButton postId={item.postId} />}
-                                                    internalUser={false}
-                                                />
-                                            )
-                                        })}
-                                    </div>
-                                </>
-                            )}
-                        </main>
-
-                    </>
-                )
-            })}
-
+            </header>
 
             <main className="section-posts">
-                {resultSearch.filter(item => item.id.includes(id)).map((item, index) => {
-                    item.posts && (
-                        <>
+                <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
 
-                            <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
-                            <div className="posts-container">
-                                {item.posts.map((i, index) => {
-                                    return (
-                                        <Post
-                                            key={index}
-                                            content={i.content}
-                                            user_name={i.name}
-                                            img_content={i.imgContent}
-                                            user_id={i.uid}
-                                            avatar={i.userPhoto}
-                                            category={i.category}
-                                            title={i.title}
-                                            postId={i.postId}
-                                            click_type_like={<LikeButton postId={i.postId} />}
-                                            internalUser={false}
-                                        />
-                                    )
-                                })}
-                            </div>
-
-                        </>
-                    )
+                {euser?.espost?.map((item, index) => {
+                    <>
+                        <div className="posts-container">
+                            <Post
+                                key={index}
+                                postId={item.eid}
+                                user_id={item.euid}
+                                // user_name={name}
+                                // avatar={imgURL}
+                                user_name={euser.name}
+                                avatar={euser.avatar}
+                                title={item.etitle}
+                                category={item.ecategory}
+                                content={item.econtent}
+                                img_content={item.econtentImg}
+                                click_type_like={<LikeButton postId={item.eid} />}
+                                internalUser={false}
+                            />
+                        </div>
+                    </>
 
 
                 })}

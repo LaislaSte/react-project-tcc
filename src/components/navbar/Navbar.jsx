@@ -1,6 +1,7 @@
 // HOOKS AND LIBS 
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, browserHistory, useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch, BsBoxArrowInUpRight } from 'react-icons/bs';
 import { BiHomeAlt, BiLogOut } from 'react-icons/bi';
@@ -13,6 +14,8 @@ import { IoMdCreate, IoLogOutOutline } from 'react-icons/io'
 import './Navbar.css';
 import { UserAuth } from '../../services/UserContext';
 import { SidebarDataPublic, resultSearch } from '../../utils/arraysNavbar';
+import avatarDefault from '../../assets/icons/avatarDefault.svg'
+import { auth } from '../../services/Banco';
 
 /*PAGES AND COMPONENTS */
 import Input from '../input/Input'
@@ -23,17 +26,24 @@ const Navbar = () => {
     const [query, setQuery] = useState("");
 
     //imports
-    const { user, logout } = UserAuth();
+    const { logout, getUsers, users } = UserAuth();
     const navigate = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
+
+    // useeffect 
+    useEffect(() => {
+        if (loading) return;
+        if (!user) return navigate("/");
+        getUsers();
+    }, [user, loading]);
 
     // functions 
     const showNavbar = () => setNavbar(!navbar);
-    // console.log()
+    // console.log()s
 
     const goToUserPage = () => {
-        // const id = "01";
-        const result = resultSearch.filter(item => item.name.includes(query));
-        const id = result[0].id
+        const result = users.filter(item => item.ename.toLowerCase().includes(query));
+        const id = result[0].euid
         navigate(`/user/${id}`);
         setQuery('');
         // browserHistory.push(`/${id}`)
@@ -129,15 +139,15 @@ const Navbar = () => {
                 <div className="result-search-container">
 
                     <ul className='container-result'>
-                        {resultSearch.filter(item => item.name.toLowerCase().includes(query)).map((result, index) => {
+                        {users.filter(item => item.ename.toLowerCase().includes(query)).map((result, index) => {
                             return (
                                 <li key={index} className="result-profile-container">
 
                                     <div className="result-profile">
-                                        <div className="result-profile-content">
+                                        <div className="result-profile-content" onClick={goToUserPage}>
 
-                                            <img onClick={goToUserPage} className='result-avatar-container' src={result.avatar} alt="" />
-                                            <p> {result.name} </p>
+                                            <img className='result-avatar-container' src={result?.eavatar || avatarDefault} alt="" />
+                                            <p> {result?.ename} </p>
 
                                             <div className="result-categ-content">
 

@@ -71,7 +71,17 @@ const sashaPosts = [
 ]
 
 const lumityPosts = [
-
+    {
+        postId: '01',
+        uid: '02',
+        name: 'lumity',
+        userPhoto: lumityAvatar,
+        imgContent: 'https://gastronomixsprod.blob.core.windows.net/production/Blog%20omslagen/22.%20Schol.jpg',
+        title: 'post da lumity 01',
+        content: 'Free stock photos & videos you can use everywhere. Browse millions of high-quality royalty free stock images & copyright free pictures. No attribution required.',
+        category: 'Matemática',
+        likes: 10
+    },
 ];
 const cosimaPosts = [
 
@@ -84,6 +94,13 @@ const evelynPosts = [
 ];
 
 export const resultSearch = [
+    {
+        'id': 'l24BZqJcLxQ6JtOkoWFBIwwDTEH2',
+        'name': 'Laisla Stephanie',
+        'avatar': sashaAvatar,
+        'bios': 'i hate men and love woman',
+        'posts': sashaPosts
+    },
     {
         'id': '01',
         'name': 'sasha bazanea',

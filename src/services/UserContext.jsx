@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // auth:
 import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
 // firestore: 
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp } from "firebase/firestore";
 
 // ARCHIVES FROM PROJECT
 import { db, auth, provider } from './Banco';
@@ -16,6 +16,9 @@ const collectionRef = collection(db, 'users');
 
 export const CostumerProvider = ({ children }) => {
     //states
+    // usuario externo/especifico 
+    const [euser, setEuser] = useState(null);
+
     // dados do usuários:
     const [user, setUser] = useState(null);
     const [id, setId] = useState('');
@@ -25,6 +28,11 @@ export const CostumerProvider = ({ children }) => {
     const [name, setName] = useState('');
     const [categorys, setCategorys] = useState('');
 
+    // para os posts 
+    const [users, setUsers] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [eposts, setEposts] = useState([]);
+
     // para outras funcionalidades
     const [submiting, setSubmiting] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -33,6 +41,7 @@ export const CostumerProvider = ({ children }) => {
 
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
+
 
 
     // useEffect 
@@ -49,6 +58,11 @@ export const CostumerProvider = ({ children }) => {
         };
     }, []);
 
+    /* ================================
+        FUNÇÕES PARA OS USERS 
+    =================================== */
+
+    //pega as informações do user logado
     const getUserId = async () => {
         const q = query(collection(db, "users"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
@@ -67,6 +81,94 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    // que pegue todos os users da tabela para rederiza-los no filtro de busca  
+    const getUsers = async () => {
+        const q = query(collection(db, "users"));
+        const querySnapshot = await getDocs(q);
+        const d = []
+
+        try {
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                const userObj = {
+                    euid: doc.data().uid,
+                    ename: doc.data().name,
+                    eavatar: doc.data().imgURL,
+                    ebios: doc.data().bios
+                }
+                // console.log(userObj);
+                d.push(userObj);
+            });
+
+            setUsers(d);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    //pega as informações de perfil de um user especifico para renderizar informações de perfil (nome, foto e bio) 
+    // que pegue posts de um usuario especifico passando seu uid 
+    const getExternalUser = async (euid) => {
+        getExternalPosts(euid);
+        const q = query(collection(db, "users"), where("uid", "==", euid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            setEuser({ name: doc.data().name, bio: doc.data().bios, avatar: doc.data().imgURL, espost: eposts });
+        });
+    }
+
+    const getExternalPosts = async (euid) => {
+        const secondq = query(collection(db, "post"), where("uid", "==", euid));
+        const secondquerySnapshot = await getDocs(secondq);
+        const d = [];
+        try {
+            secondquerySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                const posts = {
+                    eid: doc.id,
+                    euid: doc.data().uid,
+                    etitle: doc.data().title,
+                    econtent: doc.data().content,
+                    econtentImg: doc.data().contentImg,
+                    ecategory: doc.data().category
+                }
+                d.push(posts);
+            });
+
+            setEposts(d);
+
+            // const users = [
+            //     {
+            //         name: 'laknsdlka',
+            //         bio: 'allsblabsl',
+            //         avatar: 'fonte meu cu'
+            //     },
+            //     [
+            //         {
+            //             euid: 'doc.data().uid',
+            //             etitle: 'doc.data().title',
+            //             econtent: 'doc.data().content',
+            //             econtentImg: 'doc.data().contentImg',
+            //             ecategory: 'doc.data().category'
+            //         },
+            //         {
+            //             euid: 'doc.data().uid2',
+            //             etitle: 'doc.data().title2',
+            //             econtent: 'doc.data().content2',
+            //             econtentImg: 'doc.data().contentImg2',
+            //             ecategory: 'doc.data().category2'
+            //         },
+            //     ]
+            // ]
+
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
 
@@ -109,7 +211,7 @@ export const CostumerProvider = ({ children }) => {
         setLoader(false)
     }
 
-    //FUNÇÕES DE LOGIN E LOGOUT
+    //FUNÇÕES DE LOGIN, LOGIN COM GOOGLE E LOGOUT
     const logInWithEmailAndPassword = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
@@ -197,6 +299,7 @@ export const CostumerProvider = ({ children }) => {
         });
     }
 
+    //FUNÇÃO DE VERIFICAÇÃO DE E-MAIL
     const verifiedUserEmail = () => {
         sendEmailVerification(user)
             .then((result) => {
@@ -209,31 +312,105 @@ export const CostumerProvider = ({ children }) => {
             })
     }
 
-    // FUNÇÕES PARA OS POSTS
+
+    /* ================================
+        FUNÇÕES PARA OS POSTS 
+    =================================== */
+
+    // FUNÇÃO DE CADASTRO DE POST 
     const sendPost = async (title, content, cat, img_content) => {
-        await addDoc(collection(db, "users"), {
-            uid: user?.uid,
-            userAvatar: user?.photoURL,
-            name: name,
-            userID: id,
-            authProvider: "local",
-            title: title,
-            content: content,
-            contentImg: img_content,
-            category: cat
-        });
+        try {
+            const newDoc = await addDoc(collection(db, "post"), {
+                uid: user?.uid,
+                name: name,
+                userAvatar: user?.photoURL,
+                title: title,
+                content: content,
+                contentImg: img_content,
+                category: cat,
+                date: serverTimestamp()
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
+    // que pegue todos os posts da tabela para renderizar no explore 
+    const getPosts = async () => {
+        const q = query(collection(db, "post"));
+        const querySnapshot = await getDocs(q);
+        const d = []
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            const post = {
+                id: doc.id,
+                user_name: doc.data().name,
+                user_id: doc.data().uid,
+                avatar: doc.data().userPhoto,
+                title: doc.data().title,
+                category: doc.data().category,
+                content: doc.data().content,
+                img_content: doc.data().imgContent,
+            }
+            d.push(post);
+        });
+
+        if (d) {
+            setPosts(d);
+        }
+    }
+
+    //FUNÇÃO DE DELETAR POST
     const deletePost = (postId) => {
         console.log('post deletado', postId);
     }
+
+    //FUNÇÃO DE ATUALIZAR POST
     const updatePost = () => {
         console.log('post atualizado')
     }
 
+
+    /* ================================
+        FUNÇÕES PARA AS REVISÕES 
+    =================================== */
+
+    //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
+
+    //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
+
+    // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
+    const getReviews = async () => {
+        const q = query(collection(db, "review"));
+        const querySnapshot = await getDocs(q);
+        const d = []
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            const review = {
+                id: doc.id,
+                // user_name: doc.data().name,
+                // user_id: doc.data().uid,
+                // avatar: doc.data().userPhoto,
+                // title: doc.data().title,
+                // category: doc.data().category,
+                // content: doc.data().content,
+                // img_content: doc.data().imgContent,
+            }
+            d.push(review);
+        });
+
+        if (d) {
+            setPosts(d);
+        }
+    }
+
+
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, sendPost, updatePost, deletePost }}>
+        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, euser, posts, users, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, getExternalUser, getUsers, getPosts, sendPost, updatePost, deletePost }}>
             {children}
         </CostumerContext.Provider>
     )

@@ -58,13 +58,17 @@ const CreatePost = ({ funPopUp }) => {
 
     const sendPost = async (e) => {
         e.preventDefault();
-        const file = e.target[0]?.files[0];
+        const file = e.target[5]?.files[0];
         if (!file) return;
 
         try {
             if (file) {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
                 const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
+
+                const url = await getDownloadURL(postRef);
+                console.log(url);
+                setImgURL()
 
                 const uploadTask = uploadBytesResumable(postRef, file);
                 uploadTask.on(
@@ -81,7 +85,7 @@ const CreatePost = ({ funPopUp }) => {
                     }
                 )
 
-                // todo: delete the previous profile image od the user
+                // todo: delete the previous profile image of the user
             }
         } catch (error) {
             console.log(error);
@@ -91,6 +95,7 @@ const CreatePost = ({ funPopUp }) => {
             await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL,
+                //está cadastrando url vazia:
                 imgContent: imgURL,
                 name: name,
                 title: title,
@@ -109,8 +114,8 @@ const CreatePost = ({ funPopUp }) => {
     const cleanForm = () => {
         setContent('');
         setTitle('');
-        setImage(null);
-        setImgURL('');
+        // setImage(null);
+        // setImgURL('');
         // showPopUp()
     }
 

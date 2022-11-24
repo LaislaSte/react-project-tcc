@@ -19,37 +19,56 @@ import CreateButton from '../../components/createbutton/CreateButton';
 
 const Profile = () => {
     // states 
-    const [name, setName] = useState("");
-    const [imgURL, setImgURL] = useState("");
-    const [bio, setBio] = useState("");
+    // const [name, setName] = useState("");
+    // const [imgURL, setImgURL] = useState("");
+    // const [bio, setBio] = useState("");
     // todos: importar posts do usuario logado do firestore e adicionalos nesse estado
     const [userPosts, setUserPosts] = useState([]);
 
     // imports
     const [user, loading, error] = useAuthState(auth);
-    const { bios } = UserAuth();
+    const { bios, imgUrl, name, uid, getExternalUser, euser } = UserAuth();
 
-    // useeffect 
-    useEffect(
-        () => {
-            fetchUserInfos();
-        },
-        [user, loading]
-    )
-
-    // functions 
-    const fetchUserInfos = async () => {
-        try {
-            const userName = user?.displayName;
-            const userAvatar = user?.photoURL;
-            setName(userName);
-            setImgURL(userAvatar);
-            setBio(bios);
-        } catch (err) {
-            console.error(err);
-            alert("An error occured while fetching user data");
+    // function 
+    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
+    useEffect(() => {
+        const callUser = () => {
+            try {
+                // setEuser(getExternalUser(id));
+                // const res = await getExternalUser(id);
+                getExternalUser(uid);
+            } catch (error) {
+                console.log(error);
+            }
         }
-    };
+        callUser()
+
+    }, [])
+
+    // // useeffect 
+    // useEffect(
+    //     () => {
+    //         fetchUserInfos();
+    //     },
+    //     [user]
+    // )
+
+    // // functions 
+    // const fetchUserInfos = async () => {
+    //     try {
+    //         // setName(user?.displayName);
+    //         // setImgURL(user?.photoURL);
+    //         setBio(bios);
+    //         console.log(bios)
+    //         console.log(user?.photoURL)
+    //         console.log(name)
+    //         console.log(user)
+
+    //     } catch (err) {
+    //         console.error(err);
+    //         alert("An error occured while fetching user data");
+    //     }
+    // };
 
     return (
         <div className='Profile'>
@@ -60,13 +79,13 @@ const Profile = () => {
 
                 <div className="profile-container">
                     <div className="img-background">
-                        <img src={imgURL ? imgURL : avatarDefault} alt="" />
+                        <img src={imgUrl ? imgUrl : avatarDefault} alt="" />
                     </div>
                 </div>
 
                 <div className="bio">
                     <h2>{name}</h2>
-                    {bio}
+                    {bios}
                 </div>
 
                 <div className="header-button-profile">
@@ -79,20 +98,20 @@ const Profile = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
                 <div className="posts-container">
-                    {post.map((item, index) => {
+                    {euser.espost.map((item, index) => {
                         return (
                             <Post
                                 key={index}
-                                content={item.description}
-                                user_name={item.user_name}
-                                img_content={item.post_archive}
-                                user_id={item.user_id}
-                                avatar={item.user_vatar}
-                                category={item.category}
-                                title={item.title}
-                                postId={item.id}
-                                click_type_like={<LikeButton postId={item.id} />}
+                                postId={item.eid}
                                 internalUser={true}
+                                user_id={user.uid}
+                                user_name={name}
+                                avatar={imgUrl}
+                                title={item.etitle}
+                                category={item.ecategory}
+                                content={item.econtent}
+                                img_content={item.econtentImg}
+                                click_type_like={<LikeButton postId={item.eid} />}
                             />
                         )
                     })}
