@@ -98,7 +98,7 @@ const Profile = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
                 <div className="posts-container">
-                    {euser.espost.map((item, index) => {
+                    {euser?.espost?.map((item, index) => {
                         return (
                             <Post
                                 key={index}
