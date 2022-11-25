@@ -248,6 +248,38 @@ a:hover {
 
 
 /*===============
+  GOOGLE ADS STYLE
+=================*/
+.aa,
+.aaa {
+  margin: 2rem 1rem;
+  border: 1px solid var(--BACKGROUND_DARK);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aaa {
+  position: absolute;
+  top: 10vh;
+  left: 2vw;
+  background-color: blueviolet;
+}
+
+@media (max-width: 840px) {
+  .aaa {
+    display: none;
+  }
+}
+
+@media (max-width: 670px) {
+  .aa {
+    margin-top: 1rem;
+  }
+
+}
+
+/*===============
   CHECKBOXES STYLE
 =================*/
 .checked-boxes-container {

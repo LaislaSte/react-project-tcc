@@ -75,6 +75,12 @@ const Profile = () => {
             <Navbar />
             <CreateButton />
 
+            <div className="aaa">
+                <h1>
+                    google ads
+                </h1>
+            </div>
+
             <header className='section-profile'>
 
                 <div className="profile-container">

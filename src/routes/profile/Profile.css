@@ -66,6 +66,8 @@
     padding: 1rem 2rem;
 }
 
+/* end of header of profile  */
+
 
 .section-posts {
     margin-top: 10%;
@@ -79,6 +81,7 @@
     gap: 3rem;
 }
 
+/* end of posts contents  */
 
 
 @media screen and (max-width: 800px) {
