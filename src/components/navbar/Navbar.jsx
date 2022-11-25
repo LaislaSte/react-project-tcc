@@ -26,7 +26,7 @@ const Navbar = () => {
     const [query, setQuery] = useState("");
 
     //imports
-    const { logout, getUsers, users } = UserAuth();
+    const { logout, getUsers, users, getExternalUser, getPosts } = UserAuth();
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
 
@@ -43,10 +43,22 @@ const Navbar = () => {
 
     const goToUserPage = () => {
         const result = users.filter(item => item.ename.toLowerCase().includes(query));
-        const id = result[0].euid
+        const id = result[0].euid;
+        getExternalUser(id);
         navigate(`/user/${id}`);
         setQuery('');
         // browserHistory.push(`/${id}`)
+    }
+
+    //testar funções:
+    const goToProfilePage = () => {
+        getExternalUser(user.uid);
+    }
+    const goToExplorePage = () => {
+        getPosts();
+    }
+    const goToReviewPage = () => {
+        // getReviews();
     }
 
     return (
@@ -96,13 +108,13 @@ const Navbar = () => {
                     ? (
                         <>
                             <li className='nav-text'>
-                                <Link to='/explore' className='item-link'>
+                                <Link to='/explore' className='item-link' onClick={goToProfilePage}>
                                     <RiSearch2Line />
                                     Explorar
                                 </Link>
                             </li>
                             <li className='nav-text'>
-                                <Link to='/review' className='item-link'>
+                                <Link to='/review' className='item-link' onClick={goToExplorePage}>
                                     <BiHomeAlt />
                                     Revisão
                                 </Link>

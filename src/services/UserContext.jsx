@@ -33,6 +33,9 @@ export const CostumerProvider = ({ children }) => {
     const [posts, setPosts] = useState([]);
     const [eposts, setEposts] = useState([]);
 
+    //para as reviews
+    const [ereviews, setEreviews] = useState([]);
+
     // para outras funcionalidades
     const [submiting, setSubmiting] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -119,6 +122,8 @@ export const CostumerProvider = ({ children }) => {
         querySnapshot.forEach((doc) => {
             setEuser({ name: doc.data().name, bio: doc.data().bios, avatar: doc.data().imgURL, espost: eposts });
         });
+
+        console.log('dados do post da juma imgContent/ userContext: ', euser?.espost?.map(i => i.econtentImg));
     }
 
     const getExternalPosts = async (euid) => {
@@ -133,37 +138,14 @@ export const CostumerProvider = ({ children }) => {
                     euid: doc.data().uid,
                     etitle: doc.data().title,
                     econtent: doc.data().content,
-                    econtentImg: doc.data().contentImg,
+                    econtentImg: doc.data().imgContent,
                     ecategory: doc.data().category
                 }
                 d.push(posts);
             });
 
             setEposts(d);
-
-            // const users = [
-            //     {
-            //         name: 'laknsdlka',
-            //         bio: 'allsblabsl',
-            //         avatar: 'fonte meu cu'
-            //     },
-            //     [
-            //         {
-            //             euid: 'doc.data().uid',
-            //             etitle: 'doc.data().title',
-            //             econtent: 'doc.data().content',
-            //             econtentImg: 'doc.data().contentImg',
-            //             ecategory: 'doc.data().category'
-            //         },
-            //         {
-            //             euid: 'doc.data().uid2',
-            //             etitle: 'doc.data().title2',
-            //             econtent: 'doc.data().content2',
-            //             econtentImg: 'doc.data().contentImg2',
-            //             ecategory: 'doc.data().category2'
-            //         },
-            //     ]
-            // ]
+            // console.log('logando estados posts/ fun getExternalPosts: ', eposts);
 
         } catch (error) {
             console.log(error);
@@ -378,12 +360,15 @@ export const CostumerProvider = ({ children }) => {
     =================================== */
 
     //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
+    const registerReview = async (title, content, cat, img_content) => {
+
+    }
 
     //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
     const getReviews = async () => {
-        const q = query(collection(db, "review"));
+        const q = query(collection(db, "review"), where('uid', '==', uid));
         const querySnapshot = await getDocs(q);
         const d = []
 
@@ -410,7 +395,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, euser, posts, users, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, getExternalUser, getUsers, getPosts, sendPost, updatePost, deletePost }}>
+        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, euser, posts, users, ereviews, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, getExternalUser, getUsers, getPosts, sendPost, updatePost, deletePost, registerReview, getReviews }}>
             {children}
         </CostumerContext.Provider>
     )

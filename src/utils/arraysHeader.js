@@ -7,7 +7,7 @@ export const userCategorys = [
   'Química',
   'Biologia'
 ]
-export const categorys = [
+export const arrCategorys = [
   {
     name: 'Geografia',
     id: '1'

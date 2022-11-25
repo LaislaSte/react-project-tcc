@@ -1,7 +1,7 @@
 // HOOKS AND LIBS 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -29,6 +29,7 @@ const CreatePost = ({ funPopUp }) => {
     const [imgURL, setImgURL] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
+    const [createdPost, setCreatedPost] = useState(null);
 
     // imports 
     const navigate = useNavigate();
@@ -36,6 +37,8 @@ const CreatePost = ({ funPopUp }) => {
     const { name, uid } = UserAuth();
 
     // functions 
+
+    //adiciona os itens seleionados pelo usuario com checkbox em um estado
     const handleOnChangeCB = (event) => {
         setIsChecked(!isChecked);
         let newArray = [...favCategory_user, event.target.value];
@@ -45,17 +48,29 @@ const CreatePost = ({ funPopUp }) => {
         setFavCategory_user(newArray);
     };
 
+    //para limpar os campos quando cadastrar e fechar o popup
+    const cleanForm = () => {
+        setContent('');
+        setTitle('');
+        setFavCategory_user([]);
+        setImage(null);
+        setImgURL('');
+        showPopUp()
+    }
+
+    //habilita mensagem de erro ao selecionar mais de uma categoria
     const showMessage = (fav) => {
         if (fav) {
             return !validCBpost(fav)
         }
     }
 
+    //verifica se todos os campos foram preenchidos corretamente para habilitar o botão
     const formValidCreatePost = () => {
         return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
-
+    //cadastra um post e uma revisão
     const sendPost = async (e) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
@@ -95,7 +110,6 @@ const CreatePost = ({ funPopUp }) => {
             await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL,
-                //está cadastrando url vazia:
                 imgContent: imgURL,
                 name: name,
                 title: title,
@@ -104,20 +118,30 @@ const CreatePost = ({ funPopUp }) => {
                 likes: 0
             });
             alert('Flashcard criado!');
+            // cleanForm();
+            // navigate('/explore');
+        } catch (err) {
+            console.log(err)
+        }
+
+        try {
+            await addDoc(collection(db, "review"), {
+                uid: user?.uid,
+                userPhoto: user?.photoURL,
+                imgContent: imgURL,
+                name: name,
+                title: title,
+                content: content,
+                category: favCategory_user,
+                data: serverTimestamp(),
+                reviewData: '22/30/22'
+            });
+            alert('Flashcard e Review criado!');
             cleanForm();
-            funPopUp();
             navigate('/explore');
         } catch (err) {
             console.log(err)
         }
-    }
-
-    const cleanForm = () => {
-        setContent('');
-        setTitle('');
-        // setImage(null);
-        // setImgURL('');
-        // showPopUp()
     }
 
     return (
@@ -193,12 +217,6 @@ const CreatePost = ({ funPopUp }) => {
                         <div className="btns-popup">
                             <Button
                                 text='Apenas postar'
-                                type='submit'
-                                bg_color='secondary'
-                                disable={!formValidCreatePost()}
-                            />
-                            <Button
-                                text='Postar e revisar'
                                 type='submit'
                                 bg_color='secondary'
                                 disable={!formValidCreatePost()}

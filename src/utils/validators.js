@@ -32,7 +32,7 @@ const validCBpost = (arr) => {
 }
 
 const validCBcategorys = (arr) => {
-	return arr?.length < 5;
+	return arr?.length < 6;
 }
 
 export {

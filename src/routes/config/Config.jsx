@@ -1,12 +1,12 @@
 // HOOKS AND LIBS 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 
 // ARCHIVES FROM PROJECT
 import './Config.css';
 import { nameValid, biosValid, validCBcategorys } from '../../utils/validators';
-import { categorys } from '../../utils/arraysHeader';
+import { arrCategorys } from '../../utils/arraysHeader';
 import { UserAuth } from '../../services/UserContext';
 import avatarDefault from '../../assets/img-avatar.png';
 import uploadFile from '../../services/uploadFile';
@@ -29,8 +29,10 @@ const Config = () => {
     const [category, setCategory] = useState([]);
     const [img_user, setImgUser] = useState(null);
 
+
     // imports 
-    const { name, imgUrl, bios, uid, updateUserProfile } = UserAuth();
+    const { name, imgUrl, bios, categorys, uid, updateUserProfile } = UserAuth();
+    const navigate = useNavigate();
 
     // useeffect 
     useEffect(
@@ -48,7 +50,7 @@ const Config = () => {
         if (category.includes(event.target.value)) {
             newArray = newArray.filter(day => day !== event.target.value);
         }
-        if(newArray.length > 5){
+        if (newArray.length > 5) {
             showMessage(true);
             //da para criar uma função para por no form valid
         }
@@ -67,33 +69,35 @@ const Config = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const file = e.target[0]?.files[0];
-        if (!file) return;
+        if (!imgURL) {
+            const file = e.target[0]?.files[0];
+            if (!file) return;
 
-        try {
-            if (file) {
-                const imageName = uid + '.' + file?.name?.split('.')?.pop();
-                const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
+            try {
+                if (file) {
+                    const imageName = uid + '.' + file?.name?.split('.')?.pop();
+                    const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
 
-                const uploadTask = uploadBytesResumable(postRef, file);
-                uploadTask.on(
-                    'state_changed',
-                    snapshot => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        // setProgress(progress);
-                    },
-                    error => {
-                        console.error(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-                    }
-                )
+                    const uploadTask = uploadBytesResumable(postRef, file);
+                    uploadTask.on(
+                        'state_changed',
+                        snapshot => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            // setProgress(progress);
+                        },
+                        error => {
+                            console.error(error);
+                        },
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                        }
+                    )
 
-                // todo: delete the previous profile image od the user
+                    // todo: delete the previous profile image od the user
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
         }
 
         try {
@@ -102,6 +106,7 @@ const Config = () => {
             console.log(error);
         }
 
+        navigate("/profile");
     }
 
     return (
@@ -113,7 +118,7 @@ const Config = () => {
                 <Link to='/profile'> <AiOutlineClose className='close-icon-container config-link' /> </Link>
                 {/* </div> */}
 
-                <form onSubmit={handleSubmit} className="config-form-container">
+                <form onSubmit={handleSubmit} className="config-form-container" name='form1'>
                     <div className="user-img-container">
                         <div className="config-user-avatar-container">
                             <InputImg
@@ -152,21 +157,38 @@ const Config = () => {
                         <p>Escolha suas preferências de estudo (até 5) </p>
                         <div className='checked-boxes-container' >
                             {/* {categorys.filter(i => i.includes())} */}
-                            {categorys.map((item, index) => {
-                                return (
-                                    <div className="form-checked-box" key={index}>
-                                        <input
-                                            type="checkbox"
-                                            id={item.id}
-                                            value={item.name}
-                                            onChange={handleCheckboxChange}
-                                        />
 
-                                        <label htmlFor={item.id}>{item.name}</label>
+                            {
+                                arrCategorys.forEach(element => {
+                                    //o array post será o que vem do banco, ou seja, todos os posts
+                                    let index = categorys.findIndex(obj => obj === element);
+                                    if (index !== -1) {
+                                        return (
+                                            <p> array Selected: {element[index]} </p>
+                                        )
+                                    } else {
+                                        return (
+                                            <p> array unSelected: {element[index]} </p>
+                                        )
+                                    }
+                                })
+                            }
 
-                                    </div>
-                                )
-                            })}
+                            {/* {arrCategorys.map((item, index) => {
+                            return (
+                            <div className="form-checked-box" key={index}>
+                                <input
+                                    type="checkbox"
+                                    id={item.id}
+                                    value={item.name}
+                                    onChange={handleCheckboxChange}
+                                />
+
+                                <label htmlFor={item.id}>{item.name}</label>
+
+                            </div>
+                            )
+                            })} */}
                         </div>
 
                         {showMessage(category) && <p className='input-error-message'> Selecione até 5 categoria </p>}

@@ -38,10 +38,8 @@ const UserDetail = () => {
     useEffect(() => {
         const callUser = () => {
             try {
-                // setEuser(getExternalUser(id));
-                // const res = await getExternalUser(id);
                 getExternalUser(id);
-                console.log(euser?.espost);
+                console.log(euser?.espost.map(i => i.econtent));
                 // setName(euser.name);
                 // setImgURL(euser.avatar);
             } catch (error) {
@@ -57,6 +55,12 @@ const UserDetail = () => {
         <div className='Profile'>
             <Navbar />
             <CreateButton />
+
+            <div className="aaa">
+                <h1>
+                    google ads
+                </h1>
+            </div>
 
             <header className='section-profile'>
 
@@ -76,7 +80,35 @@ const UserDetail = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
 
-                {euser?.espost?.map((item, index) => {
+                {euser.espost[0] && (
+                    <>
+                        {euser?.espost.map((item, index) => {
+                            return (
+                                <>
+                                    <div className="posts-container">
+                                        <Post
+                                            key={index}
+                                            postId={item.eid}
+                                            user_id={item.euid}
+                                            // user_name={name}
+                                            // avatar={imgURL}
+                                            user_name={euser.name}
+                                            avatar={euser.avatar}
+                                            title={item.etitle}
+                                            category={item.ecategory}
+                                            content={item.econtent}
+                                            img_content={item.econtentImg}
+                                            click_type_like={<LikeButton postId={item.eid} />}
+                                            internalUser={false}
+                                        />
+                                    </div>
+                                </>
+                            )
+                        })
+                        }
+                    </>
+                )}
+                {/* {euser?.espost?.map((item, index) => {
                     <>
                         <div className="posts-container">
                             <Post
@@ -98,7 +130,7 @@ const UserDetail = () => {
                     </>
 
 
-                })}
+                })} */}
 
             </main>
 

@@ -1,5 +1,5 @@
 // HOOKS AND LIBS 
-import React from 'react';
+import React, { useState } from 'react';
 
 // ARCHIVES FROM PROJECT
 import './Review.css';
@@ -14,6 +14,8 @@ import CreateButton from '../../components/createbutton/CreateButton';
 import LikeButton from '../../components/likebutton/LikeButton';
 
 const Review = () => {
+    //states
+    const [query, setQuery] = useState('');
 
     // functions 
     function verifiedLoginAndReview(id_post, arrPost) {
@@ -28,25 +30,63 @@ const Review = () => {
         <>
             <header className="header-main-filter">
                 <Navbar />
-                <Categorys />
+                {/* <Categorys /> */}
+                <div className="search-filter">
+
+                    <select onChange={(e) => { setQuery(e.target.value); }} className="custom-select input-outline-primary" aria-label="Filter Countries By Region">
+                        <option value="All">Tudo</option>
+                        <option value="Matemática">Matemática</option>
+                        <option value="Sociologia">Sociologia</option>
+                        <option value="História">História</option>
+                        <option value="Biologia">Biologia</option>
+                    </select>
+                    <span className="focus"></span>
+                </div>
                 <CreateButton />
             </header>
 
+            <div className="aa">
+                <h1>
+                    google ads
+                </h1>
+            </div>
+
             <main className="posts-container">
-                {post.map((item, index) => {
+                {query.length > 2 && (
+                    <div className="result-search-container-posts">
+
+                        {post.filter(item => item.category.includes(query)).map(doc => {
+                            return (
+                                <Post
+                                    key={doc.id}
+                                    user_id={doc.user_id}
+                                    user_name={doc.user_name}
+                                    avatar={doc.avatar}
+                                    title={doc.title}
+                                    category={doc.category}
+                                    content={doc.content}
+                                    img_content={doc.img_content}
+                                    click_type_like={< LikeButton postId={doc.id} />}
+                                    click_type_review={< ReviewButton postId={doc.id} />}
+                                />
+                            )
+                        })}
+
+                    </div>
+                )}
+
+                {post.map(doc => {
                     return (
                         <Post
-                            key={index}
-                            content={item.description}
-                            user_name={item.user_name}
-                            user_id={item.user_id}
-                            avatar={item.user_vatar}
-                            img_content={item.post_archive}
-                            category={item.category}
-                            title={item.title}
-                            click_type_review={< ReviewButton />}
-                            click_type_like={< LikeButton postId={item.id} />}
-                            userLoged={verifiedLoginAndReview(item.id, fakeUser.arrIdsPost)}
+                            key={doc.id}
+                            user_id={doc.user_id}
+                            user_name={doc.user_name}
+                            avatar={doc.avatar}
+                            title={doc.title}
+                            category={doc.category}
+                            content={doc.content}
+                            img_content={doc.img_content}
+                            click_type_like={< LikeButton postId={doc.id} />}
                         />
                     )
                 })}

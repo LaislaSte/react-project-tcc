@@ -5,14 +5,51 @@ import { onChangeHeart } from '../../utils/ArraysAndFunctions';
 
 import { AiOutlineClose, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import Button from '../button/Button';
+import { UserAuth } from '../../services/UserContext';
+import { async } from '@firebase/util';
 
 const LikeButton = ({ postId }) => {
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
 
-    const registerReview = () => {
+    const { getReviews, ereviews } = UserAuth();
+
+    //função que verifica nas revisões se há um post atribuido à ela
+    const onChangeHeart = (id) => {
+        getReviews(id);
+        //pode ser pego todas as revisões existentes no banco e filtra-las com findIndex para achar em qual indice eles se encontram
+        // let index = reviews.findIndex(i => i.post_id === id);
+        if (index !== -1) {
+            return true
+        }
+        return false
+
+        // ou fazer uma query na tabela reviews onde pega todos os posts com o id passado para a função
+        console.log(ereviews);
+    }
+
+    //colocar no useContext
+    const registerReview = async () => {
         console.log('user e conteudo registrado em revisoes, setado o contador e primeira data de revisao');
+        try {
+            await addDoc(collection(db, "review"), {
+                uid: user?.uid,
+                userPhoto: user?.photoURL,
+                imgContent: imgURL,
+                name: name,
+                title: title,
+                content: content,
+                category: favCategory_user,
+                data: serverTimestamp(),
+                reviewData: '22/30/22'
+            });
+            alert('Flashcard e Review criado!');
+            cleanForm();
+            navigate('/explore');
+        } catch (err) {
+            console.log(err)
+        }
         showPopUp()
     }
     const removeReview = () => {
