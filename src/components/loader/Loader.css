@@ -1,4 +1,4 @@
-.loader-container{
+.loader-container {
     background-color: var(--BACKGROUND_DARK);
     position: fixed;
     height: 100vh;
@@ -8,5 +8,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 3;
+    z-index: 999;
 }
