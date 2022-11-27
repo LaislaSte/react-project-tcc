@@ -104,29 +104,6 @@ const UserDetail = () => {
                     )
                 })
                 }
-                {/* {euser?.espost?.map((item, index) => {
-                    <>
-                        <div className="posts-container">
-                            <Post
-                                key={index}
-                                postId={item.eid}
-                                user_id={item.euid}
-                                // user_name={name}
-                                // avatar={imgURL}
-                                user_name={euser.name}
-                                avatar={euser.avatar}
-                                title={item.etitle}
-                                category={item.ecategory}
-                                content={item.econtent}
-                                img_content={item.econtentImg}
-                                click_type_like={<LikeButton postId={item.eid} />}
-                                internalUser={false}
-                            />
-                        </div>
-                    </>
-
-
-                })} */}
 
             </main>
 
