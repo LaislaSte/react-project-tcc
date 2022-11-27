@@ -155,40 +155,30 @@ const Config = () => {
 
                     <div className="selects-container">
                         <p>Escolha suas preferências de estudo (até 5) </p>
+
+                        {categorys && (
+                            <p>Preferências já selecionadas: {categorys.map((i, index) => {
+                                return (<p key={index}> {i} </p>)
+                            })} </p>
+                        )}
+
                         <div className='checked-boxes-container' >
-                            {/* {categorys.filter(i => i.includes())} */}
 
-                            {
-                                arrCategorys.forEach(element => {
-                                    //o array post será o que vem do banco, ou seja, todos os posts
-                                    let index = categorys.findIndex(obj => obj === element);
-                                    if (index !== -1) {
-                                        return (
-                                            <p> array Selected: {element[index]} </p>
-                                        )
-                                    } else {
-                                        return (
-                                            <p> array unSelected: {element[index]} </p>
-                                        )
-                                    }
-                                })
-                            }
+                            {arrCategorys.map((item, index) => {
+                                return (
+                                    <div className="form-checked-box" key={index}>
+                                        <input
+                                            type="checkbox"
+                                            id={item}
+                                            value={item}
+                                            onChange={handleCheckboxChange}
+                                        />
 
-                            {/* {arrCategorys.map((item, index) => {
-                            return (
-                            <div className="form-checked-box" key={index}>
-                                <input
-                                    type="checkbox"
-                                    id={item.id}
-                                    value={item.name}
-                                    onChange={handleCheckboxChange}
-                                />
+                                        <label htmlFor={item}>{item}</label>
 
-                                <label htmlFor={item.id}>{item.name}</label>
-
-                            </div>
-                            )
-                            })} */}
+                                    </div>
+                                )
+                            })}
                         </div>
 
                         {showMessage(category) && <p className='input-error-message'> Selecione até 5 categoria </p>}
