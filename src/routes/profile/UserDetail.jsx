@@ -66,13 +66,13 @@ const UserDetail = () => {
 
                 <div className="profile-container">
                     <div className="img-background">
-                        <img src={euser?.avatar ? euser?.avatar : avatarDefault} alt="" />
+                        <img src={euser?.avatar || avatarDefault} alt="" />
                     </div>
                 </div>
 
                 <div className="bio">
                     <h2>{euser?.name ? euser?.name : 'Sem Nome'}</h2>
-                    {euser?.bio ? euser?.bio : 'Nada por aqui'}
+                    {euser?.bio ? euser?.bio : 'Nada psor aqui'}
                 </div>
 
             </header>

@@ -73,7 +73,7 @@ export const CostumerProvider = ({ children }) => {
                 setName(doc.data().name);
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
-                setUposts(doc.data().userPosts);
+                // setUposts(doc.data().userPosts);
 
                 if (name) {
                     break

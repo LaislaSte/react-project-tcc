@@ -31,14 +31,14 @@ const Profile = () => {
 
     // function 
     useEffect(() => {
-        // const callUser = () => {
-        getUserId();
-        // setUserPosts(uposts);
-        // }
+        const callUser = () => {
+            getUserId();
+            // setUserPosts(uposts);
+        }
 
         // return () => {
         //     //useEffect antes de renderizar novamente, execute a função
-        //     callUser()
+        callUser()
         // }
 
     }, [])
