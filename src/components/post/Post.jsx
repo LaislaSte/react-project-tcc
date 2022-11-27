@@ -61,7 +61,7 @@ export const Post = ({
 
                     <div className="header-content-user" onClick={goToUserPage}>
                         <div className="header-user-avatar">
-                            <img src={avatar || avatarDefault} alt="avatar do usuário do post" className='header-user-avatar-img' />
+                            <img src={avatar ? avatar : avatarDefault} alt="avatar do usuário do post" className='header-user-avatar-img' />
                         </div>
                         <p> {user_name ? user_name : 'Sem Nome'} </p>
                     </div>

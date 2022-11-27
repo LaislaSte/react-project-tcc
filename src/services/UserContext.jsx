@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // auth:
 import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
 // firestore: 
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp, arrayRemove } from "firebase/firestore";
 
 // ARCHIVES FROM PROJECT
 import { db, auth, provider } from './Banco';
@@ -16,35 +16,27 @@ const collectionRef = collection(db, 'users');
 
 export const CostumerProvider = ({ children }) => {
     //states
-    // usuario externo/especifico 
-    const [euser, setEuser] = useState(null);
-
     // dados do usuários:
     const [user, setUser] = useState(null);
-    const [id, setId] = useState('');
     const [uid, setUid] = useState(null);
+    const [id, setId] = useState('');
     const [imgUrl, setImgUrl] = useState(null);
     const [bios, setBios] = useState('');
     const [name, setName] = useState('');
     const [categorys, setCategorys] = useState('');
+    const [uposts, setUposts] = useState([]);
+    const [reviews, setReviews] = useState([]);
 
-    // para os posts 
-    const [users, setUsers] = useState([]);
-    const [posts, setPosts] = useState([]);
+    // usuario externo/especifico 
+    const [euser, setEuser] = useState(null);
     const [eposts, setEposts] = useState([]);
 
-    //para as reviews
-    const [ereviews, setEreviews] = useState([]);
-
-    // para outras funcionalidades
-    const [submiting, setSubmiting] = useState(null);
-    const [loading, setLoading] = useState(false);
-    // const [authenticated, setAuthenticated] = useState(false);
-    const [loader, setLoader] = useState(false);
+    // dados do feed
+    const [users, setUsers] = useState([]);
+    const [posts, setPosts] = useState([]);
 
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
-
 
 
     // useEffect 
@@ -52,9 +44,13 @@ export const CostumerProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setUid(currentUser.uid);
+            // console.log('user setado pelos dados do currentUser/ useEffecct Context', user);
             setName(currentUser.displayName);
             setImgUrl(currentUser.photoURL);
             getUserId();
+            getUsers();
+            getPosts();
+            getReviews();
         });
         return () => {
             unsubscribe();
@@ -65,7 +61,7 @@ export const CostumerProvider = ({ children }) => {
         FUNÇÕES PARA OS USERS 
     =================================== */
 
-    //pega as informações do user logado
+    //pega as informações do user logado e seus posts
     const getUserId = async () => {
         const q = query(collection(db, "users"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
@@ -77,14 +73,43 @@ export const CostumerProvider = ({ children }) => {
                 setName(doc.data().name);
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
+                setUposts(doc.data().userPosts);
+
                 if (name) {
                     break
                 }
             }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        const secondq = query(collection(db, "post"), where("uid", "==", uid));
+        const secondquerySnapshot = await getDocs(secondq);
+        const d = [];
+        try {
+            secondquerySnapshot.forEach((doc) => {
+                const posts = {
+                    eid: doc.id,
+                    euid: doc.data().uid,
+                    etitle: doc.data().title,
+                    econtent: doc.data().content,
+                    econtentImg: doc.data().imgContent,
+                    ecategory: doc.data().category
+                }
+
+                // console.log('logando pela query para pegar post/ getUserId: ', posts);
+                d.push(posts);
+            });
+
+            setUposts(d);
+            // console.log('logando estados posts/ fun getUserId: ', uposts);
+
         } catch (error) {
             console.log(error);
         }
     }
+
 
     // que pegue todos os users da tabela para rederiza-los no filtro de busca  
     const getUsers = async () => {
@@ -116,67 +141,63 @@ export const CostumerProvider = ({ children }) => {
     //pega as informações de perfil de um user especifico para renderizar informações de perfil (nome, foto e bio) 
     // que pegue posts de um usuario especifico passando seu uid 
     const getExternalUser = async (euid) => {
-        getExternalPosts(euid);
         const q = query(collection(db, "users"), where("uid", "==", euid));
         const querySnapshot = await getDocs(q);
+
         querySnapshot.forEach((doc) => {
-            setEuser({ name: doc.data().name, bio: doc.data().bios, avatar: doc.data().imgURL, espost: eposts });
-        });
-
-        console.log('dados do post da juma imgContent/ userContext: ', euser?.espost?.map(i => i.econtentImg));
+            setEuser({
+                name: doc.data().name,
+                bio: doc.data().userBio,
+                avatar: doc.data().imgURL
+            })
+        })
     }
 
-    const getExternalPosts = async (euid) => {
-        const secondq = query(collection(db, "post"), where("uid", "==", euid));
-        const secondquerySnapshot = await getDocs(secondq);
-        const d = [];
-        try {
-            secondquerySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                const posts = {
-                    eid: doc.id,
-                    euid: doc.data().uid,
-                    etitle: doc.data().title,
-                    econtent: doc.data().content,
-                    econtentImg: doc.data().imgContent,
-                    ecategory: doc.data().category
-                }
-                d.push(posts);
-            });
-
-            setEposts(d);
-            // console.log('logando estados posts/ fun getExternalPosts: ', eposts);
-
-        } catch (error) {
-            console.log(error);
-        }
-
+    const getExternalPost = async (euid) => {
+        const q = query(collection(db, "post"), where("uid", "==", euid));
+        const querySnapshot = await getDocs(q);
+        const dataPost = []
+        querySnapshot.forEach((doc) => {
+            const post = {
+                eid: doc.id,
+                euid: doc.data().uid,
+                etitle: doc.data().title,
+                econtent: doc.data().content,
+                econtentImg: doc.data().imgContent,
+                ecategory: doc.data().category
+            }
+            dataPost.push(post);
+            console.log(dataPost);
+            setEposts(dataPost);
+            console.log(eposts);
+        })
     }
-
 
     //FUNÇÃO PARA CADASTRO COM O AUTHENTICATED E FIRESTORE
     const registerWithEmailAndPassword = async (name, email, password) => {
-        setLoader(true);
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const user = res.user;
             await addDoc(collectionRef, {
                 uid: user.uid,
                 name: name,
+                imgURL: user.photoURL,
                 password,
                 authProvider: "local",
                 email,
             });
+
+            alert('usuario criado');
+            getUsers();
         } catch (err) {
             console.error(err);
             alert(err.message);
         }
-        setLoader(false);
     };
 
     //FUNÇÃO PARA EXCLUIR USER COM O AUTHENTICATED E FIRESTORE
     const revomeUser = () => {
-        setLoader(true)
+
         deleteUser(user).then(() => {
             console.log('usuário deletado: AUTH');
         }).catch((error) => {
@@ -190,7 +211,7 @@ export const CostumerProvider = ({ children }) => {
             alert(err.message);
         }
 
-        setLoader(false)
+        getUsers();
     }
 
     //FUNÇÕES DE LOGIN, LOGIN COM GOOGLE E LOGOUT
@@ -269,29 +290,7 @@ export const CostumerProvider = ({ children }) => {
                 console.log('updateDoc error: ', error)
             });
 
-    }
-
-    const updateUserEmail = (user_email) => {
-        updateEmail(user, user_email).then(() => {
-            // Email updated!
-            console.log('e-mail de usuário atualizado');
-        }).catch((error) => {
-            // An error occurred
-            console.log(error);
-        });
-    }
-
-    //FUNÇÃO DE VERIFICAÇÃO DE E-MAIL
-    const verifiedUserEmail = () => {
-        sendEmailVerification(user)
-            .then((result) => {
-                // Email verification sent!
-                console.log('e-mail de verificação enviado', result);
-                return true;
-            }).catch((error) => {
-                console.log(error);
-                return false;
-            })
+        getUsers();
     }
 
 
@@ -302,19 +301,31 @@ export const CostumerProvider = ({ children }) => {
     // FUNÇÃO DE CADASTRO DE POST 
     const sendPost = async (title, content, cat, img_content) => {
         try {
-            const newDoc = await addDoc(collection(db, "post"), {
+            const postDoc = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
+                userPhoto: user?.photoURL,
+                imgContent: img_content,
                 name: name,
-                userAvatar: user?.photoURL,
                 title: title,
                 content: content,
-                contentImg: img_content,
                 category: cat,
-                date: serverTimestamp()
+                likes: 0
+            });
+            alert('Flashcard criado!');
+
+            await updateDoc(doc(db, "users", id), {
+                userPosts: arrayUnion(postDoc)
             });
 
+            getPosts();
+        } catch (err) {
+            console.log(err)
+        }
+
+        try {
+
         } catch (error) {
-            console.log(error)
+
         }
     }
 
@@ -345,13 +356,19 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //FUNÇÃO DE DELETAR POST
-    const deletePost = (postId) => {
+    const deletePost = async (postId) => {
         console.log('post deletado', postId);
+
+        // await updateDoc(doc(db, "users", id), {
+        //     userPosts: arrayRemove(postDoc);
+        // });
+        // getPosts();
     }
 
     //FUNÇÃO DE ATUALIZAR POST
-    const updatePost = () => {
-        console.log('post atualizado')
+    const updatePost = (postId) => {
+        console.log('post atualizado');
+        // getPosts();
     }
 
 
@@ -360,11 +377,25 @@ export const CostumerProvider = ({ children }) => {
     =================================== */
 
     //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
-    const registerReview = async (title, content, cat, img_content) => {
-
+    const registerReview = async (postId, uid, userPhoto, imgContent, user_name, title, content, category) => {
+        try {
+            await addDoc(collection(db, "review"), {
+                postId: postId,
+                uid: uid,
+                userPhoto: userPhoto,
+                imgContent: imgContent,
+                name: user_name,
+                title: title,
+                content: content,
+                category: category,
+                dateAdd: serverTimestamp()
+            });
+            alert('Post adicionado nas revisões!');
+        } catch (err) {
+            console.log(err)
+        }
+        getReviews();
     }
-
-    //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
     const getReviews = async () => {
@@ -373,29 +404,35 @@ export const CostumerProvider = ({ children }) => {
         const d = []
 
         querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
             const review = {
                 id: doc.id,
-                // user_name: doc.data().name,
-                // user_id: doc.data().uid,
-                // avatar: doc.data().userPhoto,
-                // title: doc.data().title,
-                // category: doc.data().category,
-                // content: doc.data().content,
-                // img_content: doc.data().imgContent,
+                postId: doc.data().postId,
+                uid: doc.data().uid,
+                userPhoto: doc.data().userPhoto,
+                imgContent: doc.data().imgContent,
+                name: doc.data().name,
+                title: doc.data().title,
+                content: doc.data().content,
+                category: doc.data().category,
+                dateAdd: doc.data().dateAdd
             }
             d.push(review);
         });
 
         if (d) {
-            setPosts(d);
+            setReviews(d);
         }
+
+
     }
+
+    //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
+
 
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, name, imgUrl, bios, categorys, euser, posts, users, ereviews, registerWithEmailAndPassword, updateUserProfile, updateUserEmail, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, verifiedUserEmail, getExternalUser, getUsers, getPosts, sendPost, updatePost, deletePost, registerReview, getReviews }}>
+        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, sendPost, updatePost, deletePost, registerReview, getReviews, getUserId }}>
             {children}
         </CostumerContext.Provider>
     )

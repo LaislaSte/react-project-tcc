@@ -41,10 +41,12 @@ const Navbar = () => {
     const showNavbar = () => setNavbar(!navbar);
     // console.log()s
 
+    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
     const goToUserPage = () => {
         const result = users.filter(item => item.ename.toLowerCase().includes(query));
         const id = result[0].euid;
-        getExternalUser(id);
+        // getExternalUser(id);
+        // console.log('chamado getExternalUser do navbar');
         navigate(`/user/${id}`);
         setQuery('');
         // browserHistory.push(`/${id}`)
@@ -92,21 +94,21 @@ const Navbar = () => {
 
                 <li className='item-logo'> <h1>MemorizeStudio</h1> </li>
 
-                <li className='item-searchbar'>
-                    <Input
-                        text='Pesquisar'
-                        type='text'
-                        icon={<BsSearch />}
-                        className='input-outline-secondary'
-                        value={query}
-                        onchange={(e) => { setQuery(e.target.value) }}
-                    />
-                </li>
-
                 {user
                     // caso o usuario esteja autenticado as informações exibidas no navbar mudam
                     ? (
                         <>
+                            <li className='item-searchbar'>
+                                <Input
+                                    text='Pesquisar'
+                                    type='text'
+                                    icon={<BsSearch />}
+                                    className='input-outline-secondary'
+                                    value={query}
+                                    onchange={(e) => { setQuery(e.target.value) }}
+                                />
+                            </li>
+
                             <li className='nav-text'>
                                 <Link to='/explore' className='item-link' onClick={goToProfilePage}>
                                     <RiSearch2Line />

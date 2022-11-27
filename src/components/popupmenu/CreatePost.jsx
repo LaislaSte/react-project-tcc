@@ -1,7 +1,7 @@
 // HOOKS AND LIBS 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -34,7 +34,7 @@ const CreatePost = ({ funPopUp }) => {
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { name, uid } = UserAuth();
+    const { name, uid, registerReview, id } = UserAuth();
 
     // functions 
 
@@ -55,7 +55,7 @@ const CreatePost = ({ funPopUp }) => {
         setFavCategory_user([]);
         setImage(null);
         setImgURL('');
-        showPopUp()
+        funPopUp()
     }
 
     //habilita mensagem de erro ao selecionar mais de uma categoria
@@ -77,6 +77,7 @@ const CreatePost = ({ funPopUp }) => {
         if (!file) return;
         // const url = '';
 
+        //cadastrado imagem no storage
         try {
             if (file) {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
@@ -106,17 +107,23 @@ const CreatePost = ({ funPopUp }) => {
             console.log(error);
         }
 
+        //cadastrado informações do post
         try {
-            await addDoc(collection(db, "post"), {
+            const postDoc = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL,
                 imgContent: imgURL,
-                name: name,
+                name: user?.displayName,
                 title: title,
                 content: content,
                 category: favCategory_user,
                 likes: 0
             });
+
+            await updateDoc(doc(db, "users", id), {
+                userPosts: arrayUnion(postDoc)
+            });
+
             alert('Flashcard criado!');
             // cleanForm();
             // navigate('/explore');
@@ -124,24 +131,23 @@ const CreatePost = ({ funPopUp }) => {
             console.log(err)
         }
 
-        try {
-            await addDoc(collection(db, "review"), {
-                uid: user?.uid,
-                userPhoto: user?.photoURL,
-                imgContent: imgURL,
-                name: name,
-                title: title,
-                content: content,
-                category: favCategory_user,
-                data: serverTimestamp(),
-                reviewData: '22/30/22'
-            });
-            alert('Flashcard e Review criado!');
-            cleanForm();
-            navigate('/explore');
-        } catch (err) {
-            console.log(err)
-        }
+        //adicionar post à revisão
+        // try {
+        //     registerReview(
+        //         user?.uid,
+        //         user?.photoURL,
+        //         imgURL,
+        //         name,
+        //         title,
+        //         content,
+        //         favCategory_user
+        //     )
+        // } catch (error) {
+        //     console.log(error)
+        // }
+
+        cleanForm();
+        navigate('/explore');
     }
 
     return (

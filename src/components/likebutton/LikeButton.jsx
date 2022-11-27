@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import './LikeButton.css';
 import { onChangeHeart } from '../../utils/ArraysAndFunctions';
+import { useNavigate } from 'react-router-dom';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+// ARCHIVES FROM PROJECT
+import { fakeUser } from '../../utils/ArraysAndFunctions';
+import imageDefault from '../../assets/icons/uploadDefault.svg'
+import avatarDefault from '../../assets/icons/avatarDefault.svg'
+import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
+import { db, auth, storage } from '../../services/Banco';
 
 
 import { AiOutlineClose, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
@@ -8,60 +19,48 @@ import Button from '../button/Button';
 import { UserAuth } from '../../services/UserContext';
 import { async } from '@firebase/util';
 
-const LikeButton = ({ postId }) => {
+const LikeButton = ({
+    postId,
+    uid,
+    userPhoto,
+    imgContent,
+    user_name,
+    title,
+    content,
+    category,
+}) => {
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
 
-    const { getReviews, ereviews } = UserAuth();
-
-    //função que verifica nas revisões se há um post atribuido à ela
-    const onChangeHeart = (id) => {
-        getReviews(id);
-        //pode ser pego todas as revisões existentes no banco e filtra-las com findIndex para achar em qual indice eles se encontram
-        // let index = reviews.findIndex(i => i.post_id === id);
-        if (index !== -1) {
-            return true
-        }
-        return false
-
-        // ou fazer uma query na tabela reviews onde pega todos os posts com o id passado para a função
-        console.log(ereviews);
-    }
+    // imports 
+    const navigate = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
+    const { registerReview, reviews } = UserAuth();
 
     //colocar no useContext
-    const registerReview = async () => {
-        console.log('user e conteudo registrado em revisoes, setado o contador e primeira data de revisao');
-        try {
-            await addDoc(collection(db, "review"), {
-                uid: user?.uid,
-                userPhoto: user?.photoURL,
-                imgContent: imgURL,
-                name: name,
-                title: title,
-                content: content,
-                category: favCategory_user,
-                data: serverTimestamp(),
-                reviewData: '22/30/22'
-            });
-            alert('Flashcard e Review criado!');
-            cleanForm();
-            navigate('/explore');
-        } catch (err) {
-            console.log(err)
-        }
-        showPopUp()
+    const addReview = () => {
+        registerReview(
+            postId,
+            user.uid,
+            userPhoto,
+            imgContent,
+            user_name,
+            title,
+            content,
+            category
+        )
     }
+
     const removeReview = () => {
         console.log('user e conteudo removido das revisoes');
-        showPopUp()
     }
 
     return (
         <>
             <div className="post-like-container">
                 {
-                    onChangeHeart(postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
+                    onChangeHeart(reviews, postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
                 }
             </div>
 
@@ -69,7 +68,7 @@ const LikeButton = ({ postId }) => {
                 <AiOutlineClose onClick={showPopUp} />
                 <div className="popup-container">
 
-                    {onChangeHeart(postId)
+                    {onChangeHeart(reviews, postId)
                         ? (
                             <>
                                 <h1>Deseja remover este post das suas revisões?</h1>
@@ -84,7 +83,7 @@ const LikeButton = ({ postId }) => {
                             <>
                                 <h1>Deseja registrar este post nas suas revisões?</h1>
                                 <div className="btns-popup">
-                                    <Button type='button' bg_color='secondary' fun={registerReview} text='sim' />
+                                    <Button type='button' bg_color='secondary' fun={addReview} text='sim' />
                                     <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
                                 </div>
                             </>

@@ -27,48 +27,21 @@ const Profile = () => {
 
     // imports
     const [user, loading, error] = useAuthState(auth);
-    const { bios, imgUrl, name, uid, getExternalUser, euser } = UserAuth();
+    const { bios, imgUrl, name, uposts, getUserId } = UserAuth();
 
     // function 
-    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
     useEffect(() => {
-        const callUser = () => {
-            try {
-                // setEuser(getExternalUser(id));
-                // const res = await getExternalUser(id);
-                getExternalUser(uid);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        callUser()
+        // const callUser = () => {
+        getUserId();
+        // setUserPosts(uposts);
+        // }
+
+        // return () => {
+        //     //useEffect antes de renderizar novamente, execute a função
+        //     callUser()
+        // }
 
     }, [])
-
-    // // useeffect 
-    // useEffect(
-    //     () => {
-    //         fetchUserInfos();
-    //     },
-    //     [user]
-    // )
-
-    // // functions 
-    // const fetchUserInfos = async () => {
-    //     try {
-    //         // setName(user?.displayName);
-    //         // setImgURL(user?.photoURL);
-    //         setBio(bios);
-    //         console.log(bios)
-    //         console.log(user?.photoURL)
-    //         console.log(name)
-    //         console.log(user)
-
-    //     } catch (err) {
-    //         console.error(err);
-    //         alert("An error occured while fetching user data");
-    //     }
-    // };
 
     return (
         <div className='Profile'>
@@ -90,7 +63,7 @@ const Profile = () => {
                 </div>
 
                 <div className="bio">
-                    <h2>{name}</h2>
+                    <h2>{user.displayName}</h2>
                     {bios}
                 </div>
 
@@ -104,7 +77,7 @@ const Profile = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
                 <div className="posts-container">
-                    {euser?.espost?.map((item, index) => {
+                    {uposts.map((item, index) => {
                         return (
                             <Post
                                 key={index}

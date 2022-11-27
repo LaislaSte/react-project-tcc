@@ -118,8 +118,8 @@ export const fakeReviews = [
 ]
 
 //função que verifica nas revisões se há um post atribuido à ela
-export const onChangeHeart = (id) => {
-    let index = fakeReviews.findIndex(i => i.post_id === id);
+export const onChangeHeart = (reviews, id) => {
+    let index = reviews.findIndex(i => i.postId === id);
 
     if (index !== -1) {
         return true
