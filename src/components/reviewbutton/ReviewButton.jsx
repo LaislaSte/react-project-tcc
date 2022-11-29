@@ -1,21 +1,80 @@
 import React, { useState } from 'react';
+import moment from 'moment/moment';
 import './ReviewButton.css'
 import Button from '../button/Button';
 import { AiOutlineClose } from 'react-icons/ai';
 
-const ReviewButton = ({ postId }) => {
+import { findPostsOfUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
+import { dateChangeReview, testMoment } from '../../utils/fakeData'
+
+const ReviewButton = ({ reviewId }) => {
+
+    //usestate
+    const [isReviwed, setIsReviwed] = useState(false);
 
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
 
     const updateReview = () => {
-        console.log('user e conteudo registrado como revisão setado no contador e atualizando ele na tabela revisao mais a nova data de revisao');
+        // console.log('setado no contador e atualizando ele na tabela revisao mais a nova data de revisao');
+         const isReviwed = true;
+        //  setIsReviwed(true);
+
+         // const aa = testMoment();
+ 
+         // pegar a data atual no banco e colocar em current date
+         const currentDate = moment();
+         const counter = 0
+         const result = dateChangeReview(currentDate, isReviwed, counter);
+         const newDate = result.date;
+         const newCounter = result.count;
+         console.log('nova data: ', newDate, 'novo contador: ', newCounter);
+ 
+         //atualiza o documento com os novos valores dos parametros data de review e contador
+         // updateReview(reviewId, newDate, newCounter);
+ 
+        //  setIsReviwed(false);
+         isReviwed = false;
+         alert('revisão atualizada');
         showPopUp()
     }
 
     const deleteReview = () => {
         console.log('excluir revisão');
         showPopUp()
+    }
+
+     // functions 
+    //ao clicar em já revisei
+
+    const alreadyReviewed = () => {
+        // const isReviwed = true;
+        setIsReviwed(true);
+
+        // const aa = testMoment();
+
+        // pegar a data atual no banco e colocar em current date
+        const currentDate = moment();
+        const counter = 0
+        const result = dateChangeReview(currentDate, isReviwed, counter);
+        const newDate = result.date;
+        const newCounter = result.count;
+
+        //atualiza o documento com os novos valores dos parametros data de review e contador
+        // updateReview(newDate, newCounter);
+
+        setIsReviwed(false);
+        // isReviwed = false;
+        alert('revisão atualizada');
+        // Navigate('/review');
+    }
+
+    function verifiedLoginAndReview(id_post, arrPost) {
+        //há um post atribuido a revisao? se sim return true 
+        const a = onChangeHeart(id_post);
+
+        //o post é do user logado? se sim return true 
+        const b = findPostsOfUser(arrPost);
     }
 
     return (

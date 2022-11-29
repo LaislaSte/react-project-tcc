@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
 // firestore: 
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp, arrayRemove } from "firebase/firestore";
+//moment:
+import moment from 'moment/moment';
 
 // ARCHIVES FROM PROJECT
 import { db, auth, provider } from './Banco';
@@ -70,7 +72,12 @@ export const CostumerProvider = ({ children }) => {
             for (var i in querySnapshot.docs) {
                 const doc = querySnapshot.docs[i]
                 setId(doc.id);
-                setName(doc.data().name);
+                if(!name){
+                    setName(doc.data().name);
+                }
+                if(!imgUrl){
+                    setImgUrl(doc.data().imgURL);
+                }
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
                 // setUposts(doc.data().userPosts);
@@ -167,9 +174,7 @@ export const CostumerProvider = ({ children }) => {
                 ecategory: doc.data().category
             }
             dataPost.push(post);
-            console.log(dataPost);
             setEposts(dataPost);
-            console.log(eposts);
         })
     }
 
@@ -298,7 +303,7 @@ export const CostumerProvider = ({ children }) => {
     =================================== */
 
     // FUNÇÃO DE CADASTRO DE POST 
-    const sendPost = async (title, content, cat, img_content) => {
+    const registerPost = async (title, content, cat, img_content) => {
         try {
             const postDoc = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
@@ -310,7 +315,8 @@ export const CostumerProvider = ({ children }) => {
                 category: cat,
                 likes: 0
             });
-            alert('Flashcard criado!');
+            getPosts();
+            // alert('Flashcard criado!');
 
             await updateDoc(doc(db, "users", id), {
                 userPosts: arrayUnion(postDoc)
@@ -376,11 +382,12 @@ export const CostumerProvider = ({ children }) => {
     =================================== */
 
     //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
-    const registerReview = async (postId, uid, userPhoto, imgContent, user_name, title, content, category) => {
+    const registerReview = async (postId, euid, userPhoto, imgContent, user_name, title, content, category) => {
         try {
             await addDoc(collection(db, "revision"), {
                 postId: postId,
-                uid: uid,
+                uid: euid,
+                userAdded: uid,
                 userPhoto: userPhoto,
                 imgContent: imgContent,
                 name: user_name,
@@ -397,7 +404,7 @@ export const CostumerProvider = ({ children }) => {
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
     const getReviews = async () => {
-        const q = query(collection(db, "review"), where('uid', '==', uid));
+        const q = query(collection(db, "revision"), where('userAdded', '==', uid));
         const querySnapshot = await getDocs(q);
         const d = []
 
@@ -405,6 +412,7 @@ export const CostumerProvider = ({ children }) => {
             const review = {
                 id: doc.id,
                 postId: doc.data().postId,
+                userAdded: doc.data().userAdded,
                 uid: doc.data().uid,
                 userPhoto: doc.data().userPhoto,
                 imgContent: doc.data().imgContent,
@@ -414,6 +422,9 @@ export const CostumerProvider = ({ children }) => {
                 category: doc.data().category,
                 dateAdd: doc.data().dateAdd
             }
+
+            // const dateChanged = review.dateAdd.moment(); 
+            // console.log();
             d.push(review);
         });
 
@@ -430,7 +441,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, sendPost, updatePost, deletePost, registerReview, getReviews, getUserId }}>
+        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, registerPost, updatePost, deletePost, registerReview, getReviews, getUserId }}>
             {children}
         </CostumerContext.Provider>
     )

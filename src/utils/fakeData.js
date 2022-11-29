@@ -9,12 +9,12 @@ import moment from "moment/moment";
 
 export const testMoment = () => {
 
-    const m = moment();
+    const fakeDateAdded = moment();
 
-    console.log('original moment: ', m.toString());
+    console.log('original moment: ', fakeDateAdded.toString());
 
     //adicionando minutos
-    m.add(10, 'm');
+    const newDate = fakeDateAdded.add(5, 'd');
 
     //adicionando horas
     //h ou hours
@@ -28,23 +28,27 @@ export const testMoment = () => {
     //     'minutes': 3
     // });
 
-    console.log('after manipulation: ', m.toString());
+    // console.log('after manipulation: ', m.toString());
 
     //funciona da mesma maneira para subtrair, basta substituir add por subtract
 
     //pode obter o começo de determinada hora, dia, mes, ano etc
 
     //retorna o começo da hora 
-    console.log('after manipulation: ', m.startOf('h').toString());
-    console.log('after manipulation: ', m.endOf('day').toString());
+    // console.log('after manipulation: ', m.startOf('h').toString());
+    // console.log('after manipulation: ', m.endOf('day').toString());
+    const obj = { currentDate: fakeDateAdded, newDate: newDate }
+
+    return obj
 }
 
 
 
 // const registerDate = moment();
 
-export const dateChageReview = (currentDate, isReviwed, count) => {
+export const dateChangeReview = (currentDate, isReviwed, count) => {
     const counter = count;
+    console.log('counter: ', counter, 'está revisado', isReviwed, 'data: ', currentDate);
 
     // for (i = 0; i < 6; 1++) {
     //     if (isReviwed) {

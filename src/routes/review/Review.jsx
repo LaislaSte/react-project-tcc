@@ -7,7 +7,7 @@ import './Review.css';
 import { post, findPostsOfUser, fakeUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
 import { testMoment } from '../../utils/fakeData';
 import { UserAuth } from '../../services/UserContext';
-import {dateChageReview} from '../../utils/fakeData'
+import { dateChageReview } from '../../utils/fakeData';
 
 /*PAGES AND COMPONENTS */
 import Navbar from '../../components/navbar/Navbar';
@@ -37,36 +37,6 @@ const Review = () => {
 
     }, [])
 
-    // functions 
-    //ao clicar em já revisei
-
-    const alreadyReviewed = () => {
-        // const isReviwed = true;
-        setIsReviwed(true);
-
-        // pegar a data atual no banco e colocar em current date
-        const currentDate = moment();
-        const counter = 0
-        const result = dateChageReview(currentDate, isReviwed, counter);
-        const newDate = result.date;
-        const newCounter = result.count;
-
-        //atualiza o documento com os novos valores dos parametros data de review e contador
-        // updateReview(newDate, newCounter);
-
-        setIsReviwed(false);
-        // isReviwed = false;
-        alert('revisão atualizada');
-        // Navigate('/review');
-    }
-
-    function verifiedLoginAndReview(id_post, arrPost) {
-        //há um post atribuido a revisao? se sim return true 
-        const a = onChangeHeart(id_post);
-
-        //o post é do user logado? se sim return true 
-        const b = findPostsOfUser(arrPost);
-    }
 
     return (
         <>
@@ -117,24 +87,27 @@ const Review = () => {
 
                     </div>
                 )}
+
+
                 {/* teste para mapear as reviews */}
                 {reviews.map(doc => {
                     return (
                         <Post
                             key={doc.id}
-                            user_id={doc.user_id}
-                            user_name={doc.user_name}
-                            avatar={doc.avatar}
+                            user_id={doc.uid}
+                            user_name={doc.name}
+                            avatar={doc.userPhoto}
                             title={doc.title}
                             category={doc.category}
                             content={doc.content}
-                            img_content={doc.img_content}
-                            click_type_like={< LikeButton postId={doc.id} />}
+                            img_content={doc.imgContent}
+                            click_type_like={< LikeButton postId={doc.postId} />}
+                            click_type_review={ <ReviewButton postId={doc.id} /> }
                         />
-                    )
+                )
                 })}
 
-                {post.map(doc => {
+                {/* {post.map(doc => {
                     return (
                         <Post
                             key={doc.id}
@@ -148,7 +121,7 @@ const Review = () => {
                             click_type_like={< LikeButton postId={doc.id} />}
                         />
                     )
-                })}
+                })} */}
             </main>
 
         </>

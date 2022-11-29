@@ -48,7 +48,7 @@
 
 ### NOT DONE
 
-- **importante** adicionar função de add ou remover resisão no like button
+- **importante** adicionar função de add ou remover revisão no like button
 
 - criar função que pega o id dos elementos do componente category e o deixa selecionado (com um css diferente)
 - colocar um dropdown no change email e senha

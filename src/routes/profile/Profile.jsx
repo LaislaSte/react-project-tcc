@@ -63,7 +63,7 @@ const Profile = () => {
                 </div>
 
                 <div className="bio">
-                    <h2>{user.displayName}</h2>
+                    <h2>{name || user.displayName || 'sem Nome'}</h2>
                     {bios}
                 </div>
 
