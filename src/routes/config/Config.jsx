@@ -157,9 +157,12 @@ const Config = () => {
                         <p>Escolha suas preferências de estudo (até 5) </p>
 
                         {categorys && (
-                            <p>Preferências já selecionadas: {categorys.map((i, index) => {
-                                return (<p key={index}> {i} </p>)
-                            })} </p>
+                            <>
+                                <p>Preferências já selecionadas: </p>
+                                {categorys.map((i, index) => {
+                                    return (<p key={index}> {i} </p>)
+                                })}
+                            </>
                         )}
 
                         <div className='checked-boxes-container' >

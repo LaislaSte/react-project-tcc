@@ -80,10 +80,10 @@ const UserDetail = () => {
             <main className="section-posts">
                 <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
 
-                {eposts.map((item, index) => {
-                    return (
-                        <>
-                            <div className="posts-container">
+                <div className="posts-container">
+                    {eposts.map((item, index) => {
+                        return (
+                            <>
                                 <Post
                                     key={index}
                                     postId={item.eid}
@@ -99,11 +99,11 @@ const UserDetail = () => {
                                     click_type_like={<LikeButton postId={item.eid} />}
                                     internalUser={false}
                                 />
-                            </div>
-                        </>
-                    )
-                })
-                }
+                            </>
+                        )
+                    })
+                    }
+                </div>
 
             </main>
 

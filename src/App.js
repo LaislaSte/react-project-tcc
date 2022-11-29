@@ -45,17 +45,17 @@ function App() {
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
-  // useEffect(
-  //   () => {
-  //     if (loading) {
-  //       //a loading screen/component
-  //       return;
-  //     }
-  //     if (user) navigate('/explore');
+  useEffect(
+    () => {
+      if (loading) {
+        //a loading screen/component
+        return;
+      }
+      if (user) navigate('/explore');
 
-  //   },
-  //   [user, loading]
-  // );
+    },
+    [user, loading]
+  );
 
   return (
     <>
