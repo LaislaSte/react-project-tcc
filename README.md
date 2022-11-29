@@ -69,13 +69,15 @@
 - **verificar** verificar cadastro de url do storage (nao está cadastrando a url) [ok]
 - **verificar** organizar nomes dos diretórios no storage (pasta profile com uid e nome do file e pasta postContent com uid e nome do file) [ok]
 - criar query para importar posts de usuário logado atarves do uid [ok]
+- **verificar** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente [ok]
+- **verificar** filtrar categorias existentes (perfil do user) para ficar pré selecionadas no config e no componente categorys de pesquisa [ok]
 
 ---
 
 ### NOT DONE
 
-- **verificar** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente
-- **verificar** filtrar categorias existentes (perfil do user) para ficar pré selecionadas no config e no componente categorys de pesquisa
+- **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
+- **importante** função para atualizar revisão com nova data de revisão
 
 binho:
 
@@ -84,9 +86,6 @@ binho:
 - **importante** função para deletar post
 - **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário;
 - **verificar** função para filtrar posts likeados pelo usuário (se existe uma review com as inf. desse post);
-
-- **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
-- **importante** função para atualizar revisão com nova data de revisão
 
 ---
 
