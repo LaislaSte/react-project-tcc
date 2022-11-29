@@ -355,11 +355,25 @@ export const CostumerProvider = ({ children }) => {
 
     //FUNÇÃO DE DELETAR POST
     const deletePost = async (postId) => {
-        console.log('post deletado', postId);
+        // console.log('post deletado', postId);
+        const q = query(collection(db, "users"), where("userPosts", "array-contains", postId));
+        const querySnapshot = await getDocs(q);
 
-        // await updateDoc(doc(db, "users", id), {
-        //     userPosts: arrayRemove(postDoc);
-        // });
+        // Deletando post da coleção post - OK
+        await deleteDoc(doc(db, 'post', postId));
+        navigate('/explore');
+        console.log(postId);
+
+        // Deletando referencia do post no array "userPosts" da coleção users -
+        // Descobrir como escolher um elemento do array
+        try {
+            await updateDoc(doc(db, "users", id), {
+                userPosts: arrayRemove(postId)
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        
         // getPosts();
     }
 

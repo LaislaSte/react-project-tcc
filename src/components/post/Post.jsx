@@ -38,7 +38,7 @@ export const Post = ({
     const onClickSM1 = () => setShowMore1(!showMore1);
 
     // imports 
-    const { deletePost } = UserAuth();
+    const { deletePost, UpdatePost } = UserAuth();
     const navigate = useNavigate();
 
     // functions 
@@ -48,6 +48,9 @@ export const Post = ({
         onClickSM1();
     }
 
+    const clickUpdatePost = () => {
+        UpdatePost(postId);
+    }
     /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
     const goToUserPage = () => {
         navigate(`/user/${user_id}`);

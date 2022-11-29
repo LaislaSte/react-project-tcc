@@ -1,5 +1,5 @@
 // HOOKS AND LIBS 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ARCHIVES FROM PROJECT
 import './Review.css';
@@ -45,7 +45,7 @@ const Review = () => {
         // pegar a data atual no banco e colocar em current date
         const currentDate = moment();
         const counter = 0
-        const result = dateChageReview(currentDate, isReviwed, counter);
+        const result = dateChangeReview(currentDate, isReviwed, counter);
         const newDate = result.date;
         const newCounter = result.count;
 

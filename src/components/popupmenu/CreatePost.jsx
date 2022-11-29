@@ -99,7 +99,7 @@ const CreatePost = ({ funPopUp }) => {
                 )
 
                 const url = await getDownloadURL(postRef);
-                setImgURL(url)
+                setImgURL(url);
 
                 // todo: delete the previous profile image of the user
             }
