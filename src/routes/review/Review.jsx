@@ -1,11 +1,13 @@
 // HOOKS AND LIBS 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useEffect } from 'react';
+import moment from 'moment';
 
 // ARCHIVES FROM PROJECT
 import './Review.css';
 import { post, findPostsOfUser, fakeUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
-import { testMoment } from '../../utils/fakeFata';
+import { testMoment } from '../../utils/fakeData';
 import { UserAuth } from '../../services/UserContext';
+import {dateChageReview} from '../../utils/fakeData'
 
 /*PAGES AND COMPONENTS */
 import Navbar from '../../components/navbar/Navbar';
