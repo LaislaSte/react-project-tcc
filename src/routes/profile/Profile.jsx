@@ -90,7 +90,18 @@ const Profile = () => {
                                 category={item.ecategory}
                                 content={item.econtent}
                                 img_content={item.econtentImg}
-                                click_type_like={<LikeButton postId={item.eid} />}
+                                click_type_like={
+                                    <LikeButton
+                                        postId={item.eid}
+                                        uid={user.uid}
+                                        userPhoto={imgUrl}
+                                        imgContent={item.econtentImg}
+                                        user_name={name}
+                                        title={item.etitle}
+                                        content={item.econtent}
+                                        category={item.ecategory}
+                                    />
+                                }
                             />
                         )
                     })}

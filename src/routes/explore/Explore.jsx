@@ -124,7 +124,18 @@ const Explore = () => {
                             category={doc.category}
                             content={doc.content}
                             img_content={doc.img_content}
-                            click_type_like={< LikeButton postId={doc.id} />}
+                            click_type_like={
+                                <LikeButton
+                                    postId={doc.id}
+                                    uid={doc.user_id}
+                                    userPhoto={doc.avatar}
+                                    imgContent={doc.img_content}
+                                    user_name={doc.user_name}
+                                    title={doc.title}
+                                    content={doc.content}
+                                    category={doc.category}
+                                />
+                            }
                         />
                     )
                 })}

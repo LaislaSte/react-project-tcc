@@ -42,7 +42,7 @@ const LikeButton = ({
     const addReview = () => {
         registerReview(
             postId,
-            user.uid,
+            uid,
             userPhoto,
             imgContent,
             user_name,

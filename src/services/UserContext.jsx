@@ -289,10 +289,9 @@ export const CostumerProvider = ({ children }) => {
             }).catch((error) => {
                 console.log('updateDoc error: ', error)
             });
-
-        getUsers();
     }
 
+    // sendPasswordResetEmail(auth, email)
 
     /* ================================
         FUNÇÕES PARA OS POSTS 
@@ -317,7 +316,6 @@ export const CostumerProvider = ({ children }) => {
                 userPosts: arrayUnion(postDoc)
             });
 
-            getPosts();
         } catch (err) {
             console.log(err)
         }
@@ -366,7 +364,8 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //FUNÇÃO DE ATUALIZAR POST
-    const updatePost = (postId) => {
+    const updatePost = (postId, title, content, cat, img_content) => {
+
         console.log('post atualizado');
         // getPosts();
     }
@@ -379,7 +378,7 @@ export const CostumerProvider = ({ children }) => {
     //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
     const registerReview = async (postId, uid, userPhoto, imgContent, user_name, title, content, category) => {
         try {
-            await addDoc(collection(db, "review"), {
+            await addDoc(collection(db, "revision"), {
                 postId: postId,
                 uid: uid,
                 userPhoto: userPhoto,
@@ -394,7 +393,6 @@ export const CostumerProvider = ({ children }) => {
         } catch (err) {
             console.log(err)
         }
-        getReviews();
     }
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa

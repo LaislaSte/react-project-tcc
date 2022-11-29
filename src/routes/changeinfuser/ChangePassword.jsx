@@ -20,7 +20,7 @@ const ChangePassword = () => {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [email, setEmail] = useState("");
 
-    const { sendPasswordReset } = UserAuth()
+    // const { sendPasswordReset } = UserAuth()
     const [user, loading, error] = useAuthState(auth);
 
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const ChangePassword = () => {
 
         if (confirmEmail === '') {
             alert('preencha corretamente o formulário');
-            return
+            // return
         }
 
     }
@@ -63,7 +63,7 @@ const ChangePassword = () => {
                     text='Enviar'
                     type='submit'
                     bg_color='secondary'
-                    fun={() => sendPasswordReset(confirmEmail)}
+                // fun={() => sendPasswordReset(confirmEmail)}
                 />
             </form>
 
