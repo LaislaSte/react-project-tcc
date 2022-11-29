@@ -33,7 +33,6 @@ function App() {
   useEffect(
     () => {
       if (loading) {
-        //a loading screen/component
         return;
       }
       if (user) navigate('/explore');
