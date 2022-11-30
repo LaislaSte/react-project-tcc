@@ -139,6 +139,10 @@ a:hover {
   display: block;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /* login and register links */
 @media (max-width: 821px) {
   .footer .label .colorfull-text {
@@ -178,6 +182,7 @@ a:hover {
 .popup-container {
   width: auto;
   max-width: 100%;
+  min-width: 25rem;
   height: auto;
   max-height: 100%;
   background-color: var(--BACKGROUND_DARK);

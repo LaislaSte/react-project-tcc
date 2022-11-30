@@ -83,22 +83,24 @@ const CreatePost = ({ funPopUp }) => {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
                 const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
 
-                const uploadTask = uploadBytesResumable(postRef, file);
-                uploadTask.on(
-                    'state_changed',
-                    snapshot => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        // setProgress(progress);
-                    },
-                    error => {
-                        console.error(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-                    }
-                )
-
                 const url = await getDownloadURL(postRef);
+                if (!url) {
+                    const uploadTask = uploadBytesResumable(postRef, file);
+                    uploadTask.on(
+                        'state_changed',
+                        snapshot => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            // setProgress(progress);
+                        },
+                        error => {
+                            console.error(error);
+                        },
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                            setImgURL(getDownloadURL(postRef));
+                        }
+                    )
+                }
                 setImgURL(url)
 
                 // todo: delete the previous profile image of the user
@@ -111,8 +113,8 @@ const CreatePost = ({ funPopUp }) => {
         try {
             const postDoc = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
-                userPhoto: user?.photoURL,
-                imgContent: imgURL,
+                userPhoto: user?.photoURL ? user?.photoURL : null,
+                imgContent: imgURL ? imgURL : null,
                 name: user?.displayName,
                 title: title,
                 content: content,

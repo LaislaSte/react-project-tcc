@@ -6,6 +6,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 import { findPostsOfUser, onChangeHeart } from '../../utils/ArraysAndFunctions';
 import { dateChangeReview, testMoment } from '../../utils/fakeData'
+import { UserAuth } from '../../services/UserContext';
 
 const ReviewButton = ({ reviewId }) => {
 
@@ -15,58 +16,34 @@ const ReviewButton = ({ reviewId }) => {
     const [popUp, setPopUp] = useState(false);
     const showPopUp = () => setPopUp(!popUp);
 
-    const updateReview = () => {
+    //imports
+    const { updateReview } = UserAuth();
+
+    const alreadyReviewed = () => {
         // console.log('setado no contador e atualizando ele na tabela revisao mais a nova data de revisao');
-         const isReviwed = true;
+        let isReviwed = true;
         //  setIsReviwed(true);
 
-         // const aa = testMoment();
- 
-         // pegar a data atual no banco e colocar em current date
-         const currentDate = moment();
-         const counter = 0
-         const result = dateChangeReview(currentDate, isReviwed, counter);
-         const newDate = result.date;
-         const newCounter = result.count;
-         console.log('nova data: ', newDate, 'novo contador: ', newCounter);
- 
-         //atualiza o documento com os novos valores dos parametros data de review e contador
-         // updateReview(reviewId, newDate, newCounter);
- 
+        // const aa = testMoment();
+
+        // pegar a data atual no banco e colocar em current date
+        const currentDate = moment();
+        const counter = 5
+        const result = dateChangeReview(currentDate, isReviwed, counter);
+        console.log('nova data: ', result.date, 'novo contador: ', result.count);
+
+        //atualiza o documento com os novos valores dos parametros data de review e contador
+        // updateReview(reviewId, newDate, newCounter);
+
         //  setIsReviwed(false);
-         isReviwed = false;
-         alert('revisão atualizada');
+        isReviwed = false;
+        alert('revisão atualizada');
         showPopUp()
     }
 
     const deleteReview = () => {
         console.log('excluir revisão');
         showPopUp()
-    }
-
-     // functions 
-    //ao clicar em já revisei
-
-    const alreadyReviewed = () => {
-        // const isReviwed = true;
-        setIsReviwed(true);
-
-        // const aa = testMoment();
-
-        // pegar a data atual no banco e colocar em current date
-        const currentDate = moment();
-        const counter = 0
-        const result = dateChangeReview(currentDate, isReviwed, counter);
-        const newDate = result.date;
-        const newCounter = result.count;
-
-        //atualiza o documento com os novos valores dos parametros data de review e contador
-        // updateReview(newDate, newCounter);
-
-        setIsReviwed(false);
-        // isReviwed = false;
-        alert('revisão atualizada');
-        // Navigate('/review');
     }
 
     function verifiedLoginAndReview(id_post, arrPost) {
@@ -93,7 +70,7 @@ const ReviewButton = ({ reviewId }) => {
                     <div className="popup-content">
                         <h1>Continuar revisando este post?</h1>
                         <div className="btns-popup">
-                            <Button type='button' bg_color='secondary' fun={updateReview} text='sim' />
+                            <Button type='button' bg_color='secondary' fun={alreadyReviewed} text='sim' />
                             <Button type='button' bg_color='secondary' fun={deleteReview} text='não' />
                         </div>
                     </div>

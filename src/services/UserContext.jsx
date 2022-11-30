@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 // auth:
 import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
 // firestore: 
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp, arrayRemove } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp, arrayRemove, increment } from "firebase/firestore";
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 //moment:
 import moment from 'moment/moment';
 
@@ -28,6 +29,8 @@ export const CostumerProvider = ({ children }) => {
     const [categorys, setCategorys] = useState('');
     const [uposts, setUposts] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
 
     // usuario externo/especifico 
     const [euser, setEuser] = useState(null);
@@ -72,15 +75,16 @@ export const CostumerProvider = ({ children }) => {
             for (var i in querySnapshot.docs) {
                 const doc = querySnapshot.docs[i]
                 setId(doc.id);
-                if(!name){
+                if (!name) {
                     setName(doc.data().name);
                 }
-                if(!imgUrl){
+                if (!imgUrl) {
                     setImgUrl(doc.data().imgURL);
                 }
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
-                // setUposts(doc.data().userPosts);
+                setFollowing(doc.data().following);
+                setFollowers(doc.data().followers);
 
                 if (name) {
                     break
@@ -90,6 +94,39 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error);
         }
+
+        //get name e foto de user que o user logado está seguindo
+        const dataFollowing = [];
+        for (const followingId of following) {
+            const q = query(collection(db, "users"), where("uid", "==", followingId));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                const following = {
+                    uid: followingId,
+                    name: doc.data().name,
+                    avatar: doc.data().imgURL
+                }
+                dataFollowing.push(following);
+            })
+        }
+        setFollowing(dataFollowing);
+
+        //get name e foto de user que quem está seguindo user logado
+        const dataFollowers = [];
+        for (const followerId of followers) {
+            const q = query(collection(db, "users"), where("uid", "==", followerId));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                const follower = {
+                    uid: followerId,
+                    name: doc.data().name,
+                    avatar: doc.data().imgURL
+                }
+                dataFollowers.push(follower);
+            })
+        }
+        setFollowing(dataFollowers);
+
 
         const secondq = query(collection(db, "post"), where("uid", "==", uid));
         const secondquerySnapshot = await getDocs(secondq);
@@ -133,7 +170,6 @@ export const CostumerProvider = ({ children }) => {
                     eavatar: doc.data().imgURL,
                     ebios: doc.data().bios
                 }
-                // console.log(userObj);
                 d.push(userObj);
             });
 
@@ -150,14 +186,118 @@ export const CostumerProvider = ({ children }) => {
     const getExternalUser = async (euid) => {
         const q = query(collection(db, "users"), where("uid", "==", euid));
         const querySnapshot = await getDocs(q);
+        let following = null
+        let followers = null
+        const dataUser = [];
 
         querySnapshot.forEach((doc) => {
-            setEuser({
+            following = doc.data().following
+            followers = doc.data().followers
+
+            const user = {
+                id: doc.id,
                 name: doc.data().name,
                 bio: doc.data().userBio,
-                avatar: doc.data().imgURL
-            })
+                avatar: doc.data().imgURL,
+                following: following ? following : [],
+                followers: followers ? followers : []
+            }
+            dataUser.push(user);
+        });
+
+        dataUser.forEach(async e => {
+            if (e.following) {
+                // pega os dados de quem este user está seguindo
+                const dataFollowing = [];
+                for (const followingId of e.following) {
+                    const q = query(collection(db, "users"), where("uid", "==", followingId));
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => {
+                        const following = {
+                            uid: followingId,
+                            name: doc.data().name,
+                            avatar: doc.data().imgURL
+                        }
+                        dataFollowing.push(following);
+                        e.following = dataFollowing;
+                    })
+                }
+            }
+
+            if (e.followers) {
+                //pega os dados de quem está seguindo este user
+                const dataFollowers = [];
+                for (const followerId of e.followers) {
+                    const q = query(collection(db, "users"), where("uid", "==", followerId));
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => {
+                        const follower = {
+                            uid: followerId,
+                            name: doc.data().name,
+                            avatar: doc.data().imgURL
+                        }
+                        dataFollowers.push(follower);
+                        e.followers = dataFollowers;
+                    })
+                }
+            }
         })
+
+
+
+        setEuser(dataUser);
+    }
+
+    const addFollowing = async (euid) => {
+        //atualizando doc do usuário logado adicionando em um array (following) o uid que que ele quer seguir
+        console.log(id);
+        try {
+            await updateDoc(doc(db, "users", id), {
+                following: arrayUnion(euid)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        //para adicionar o uid do usuário logado aos dados do user a quem ele está seguindo
+        const q = query(collection(db, "users"), where("uid", "==", euid));
+        const querySnapshot = await getDocs(q);
+        const eid = '';
+        querySnapshot.forEach((doc) => {
+            eid = doc.id
+        });
+        console.log(eid);
+
+        //atualizando doc do usuário de quem o usuário logado quer seguir, adicionando uid do logged user a um array (followers)
+        try {
+            await updateDoc(doc(db, "users", eid), {
+                followers: arrayUnion(uid)
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const removeFollowing = async (euid) => {
+        // const other = { euid: euid, ename: name, eimg: photoURL }
+        await updateDoc(doc(db, "users", id), {
+            following: arrayRemove(euid)
+        });
+
+        //para remover o uid do usuário logado dos dados do user a quem ele está seguindo
+        const q = query(collection(db, "users"), where("uid", "==", euid));
+        const querySnapshot = await getDocs(q);
+        const eid = '';
+        querySnapshot.forEach((doc) => {
+            eid = doc.id
+        });
+
+        //atualizando doc do usuário de quem o usuário logado quer seguir, removendo uid do logged user do array (followers)
+        // const me = { uid: uid, uname: name, uimg: imgUrl }
+        await updateDoc(doc(db, "users", eid), {
+            followers: arrayRemove(uid)
+        });
     }
 
     const getExternalPost = async (euid) => {
@@ -201,6 +341,7 @@ export const CostumerProvider = ({ children }) => {
     };
 
     //FUNÇÃO PARA EXCLUIR USER COM O AUTHENTICATED E FIRESTORE
+    //excluir todas as instancias desse usuarios, como os post
     const revomeUser = () => {
 
         deleteUser(user).then(() => {
@@ -305,7 +446,7 @@ export const CostumerProvider = ({ children }) => {
     // FUNÇÃO DE CADASTRO DE POST 
     const registerPost = async (title, content, cat, img_content) => {
         try {
-            const postDoc = await addDoc(collection(db, "post"), {
+            await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL,
                 imgContent: img_content,
@@ -318,19 +459,10 @@ export const CostumerProvider = ({ children }) => {
             getPosts();
             // alert('Flashcard criado!');
 
-            await updateDoc(doc(db, "users", id), {
-                userPosts: arrayUnion(postDoc)
-            });
-
         } catch (err) {
             console.log(err)
         }
 
-        try {
-
-        } catch (error) {
-
-        }
     }
 
     // que pegue todos os posts da tabela para renderizar no explore 
@@ -361,12 +493,10 @@ export const CostumerProvider = ({ children }) => {
 
     //FUNÇÃO DE DELETAR POST
     const deletePost = async (postId) => {
-        console.log('post deletado', postId);
-
-        // await updateDoc(doc(db, "users", id), {
-        //     userPosts: arrayRemove(postDoc);
-        // });
-        // getPosts();
+        await deleteDoc(doc(db, 'post', postId));
+        // navigate('/explore');
+        getPosts();
+        getUserId();
     }
 
     //FUNÇÃO DE ATUALIZAR POST
@@ -374,6 +504,19 @@ export const CostumerProvider = ({ children }) => {
 
         console.log('post atualizado');
         // getPosts();
+    }
+
+    //para adicionar adicionar 1 like no post
+    const addLikePost = async (postId) => {
+        updateDoc(doc(db, "post", postId), {
+            likes: +1
+        })
+    }
+    //para remover 1 like no post
+    const removeLikePost = async (postId) => {
+        updateDoc(doc(db, "post", postId), {
+            likes: -1
+        })
     }
 
 
@@ -441,7 +584,7 @@ export const CostumerProvider = ({ children }) => {
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, registerPost, updatePost, deletePost, registerReview, getReviews, getUserId }}>
+        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, followers, following, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, registerPost, updatePost, deletePost, registerReview, getReviews, getUserId, addFollowing, removeFollowing, addLikePost, removeLikePost }}>
             {children}
         </CostumerContext.Provider>
     )

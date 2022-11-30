@@ -126,6 +126,15 @@ export const onChangeHeart = (reviews, id) => {
     }
     return false
 }
+//função que verifica nos followings do user se há um id passado 
+export const onChangeFollow = (followings, id) => {
+    let index = followings.findIndex(i => i.uid === id);
+
+    if (index !== -1) {
+        return true
+    }
+    return false
+}
 
 //Função que verifique se o post é do user ou não
 //Função que busque no banco os post cadastrados atraves dos ids passados pelos dados do user

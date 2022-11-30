@@ -88,8 +88,6 @@ const Explore = () => {
             </div>
 
             <main className="posts-container">
-                <h1>Bem Vindo! Usuário Logado: </h1>
-                <p>{user?.displayName}</p>
 
                 {query.length > 2 && (
                     <div className="result-search-container-posts">
@@ -119,7 +117,7 @@ const Explore = () => {
                             key={doc.id}
                             user_id={doc.user_id}
                             user_name={doc.user_name}
-                            avatar={doc.avatar}
+                            avatar={doc.avatar ? doc.avatar : null}
                             title={doc.title}
                             category={doc.category}
                             content={doc.content}
@@ -128,7 +126,7 @@ const Explore = () => {
                                 <LikeButton
                                     postId={doc.id}
                                     uid={doc.user_id}
-                                    userPhoto={doc.avatar}
+                                    userPhoto={doc.avatar ? doc.avatar : null}
                                     imgContent={doc.img_content}
                                     user_name={doc.user_name}
                                     title={doc.title}

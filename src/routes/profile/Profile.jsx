@@ -84,7 +84,7 @@ const Profile = () => {
                                 postId={item.eid}
                                 internalUser={true}
                                 user_id={user.uid}
-                                user_name={name}
+                                user_name={name ? name : user.displayName}
                                 avatar={imgUrl}
                                 title={item.etitle}
                                 category={item.ecategory}

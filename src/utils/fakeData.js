@@ -47,9 +47,10 @@ export const testMoment = () => {
 // const registerDate = moment();
 
 export const dateChangeReview = (currentDate, isReviwed, count) => {
-    const counter = count;
-    console.log('counter: ', counter, 'está revisado', isReviwed, 'data: ', currentDate);
+    let counter = count;
+    console.log('counter: ', counter, 'está revisado', isReviwed, 'data: ', currentDate.toString());
 
+    let newDate = currentDate;
     // for (i = 0; i < 6; 1++) {
     //     if (isReviwed) {
     //         counter = counter + 1
@@ -63,36 +64,42 @@ export const dateChangeReview = (currentDate, isReviwed, count) => {
         isReviwed = false
     }
 
-    const newDate = '';
+    // const newDate = '';
     const restartLoop = false;
+    const swithRoutine = () => {
+        switch (counter) {
+            case 1:
+                newDate = currentDate.add(5, 'h');
+                break;
+            case 2:
+                newDate = currentDate.add(2, 'd');
+                break;
+            case 3:
+                newDate = currentDate.add(5, 'd');
+                break;
+            case 4:
+                newDate = currentDate.add(7, 'd');
+                break;
+            case 5:
+                newDate = currentDate.add(10, 'd');
+                break;
+            case 6:
+                restartLoop = true
+                break;
 
-    // if(restartLoop === true ){
-
-    // }
-
-    switch (counter) {
-        case counter === 1:
-            newDate = currentDate.add(5, 'h');
-            break;
-        case counter === 2:
-            newDate = currentDate.add(2, 'd');
-            break;
-        case counter === 3:
-            newDate = currentDate.add(5, 'd');
-            break;
-        case counter === 4:
-            newDate = currentDate.add(7, 'd');
-            break;
-        case counter === 5:
-            newDate = currentDate.add(10, 'd');
-            break;
-        case counter === 6:
-            restartLoop = true
-            break;
-
-        default:
-            break;
+            default:
+                throw console.error('nenhuma das opções selecionadas');
+                break;
+        }
     }
+
+    swithRoutine();
+
+    while (restartLoop === true) {
+        swithRoutine();
+    }
+
+    console.log('counter after: ', counter, 'está revisado after: ', isReviwed, 'data after: ', newDate.toString());
 
     const result = {
         date: newDate,

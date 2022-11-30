@@ -101,3 +101,23 @@
     }
 
 }
+
+
+/* modal of go to page component  */
+
+.external-user-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.follower-modal-h1 {
+    margin-bottom: 2.5rem;
+}
+
+.modal-follows-container {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--BACKGROUND_DARK_DARKER);
+}

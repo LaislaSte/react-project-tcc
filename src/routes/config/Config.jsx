@@ -17,7 +17,8 @@ import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import TxtArea from '../../components/txtarea/TxtArea';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage } from '../../services/Banco';
+import { auth, storage } from '../../services/Banco';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 const Config = () => {
@@ -32,13 +33,14 @@ const Config = () => {
 
     // imports 
     const { name, imgUrl, bios, categorys, uid, updateUserProfile } = UserAuth();
+    const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
     // useeffect 
     useEffect(
         () => {
-            setImgURL(imgUrl);
-            setUserName(name);
+            setImgURL(imgUrl ? imgUrl : user.photoURL);
+            setUserName(name ? name : user.displayName);
             setBios(bios);
         },
         []
@@ -114,9 +116,7 @@ const Config = () => {
 
             <div className="config-container">
 
-                {/* <div className="close-icon-container"> */}
                 <Link to='/profile'> <AiOutlineClose className='close-icon-container config-link' /> </Link>
-                {/* </div> */}
 
                 <form onSubmit={handleSubmit} className="config-form-container" name='form1'>
                     <div className="user-img-container">

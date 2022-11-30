@@ -23,6 +23,7 @@ export const Post = ({
     avatar,
     category,
     title,
+    likes,
     img_content,
     click_type_review,
     click_type_like,
@@ -67,33 +68,36 @@ export const Post = ({
                     </div>
 
 
-                    {internalUser && (
-                        <div className="header-icons">
-                            <BiTrash onClick={onClickSM1} />
-                            <div className={showMore1 ? 'modal open' : 'modal'}>
-                                <AiOutlineClose onClick={onClickSM1} />
-                                <div className="popup-container">
-                                    <h1>Certeza que deseja excluir?</h1>
-                                    <div className="btns-popup">
-                                        <Button text='Sim' fun={clickDeletePost} bg_color='secondary' type='button' />
-                                        <Button text='Não' fun={onClickSM1} bg_color='secondary' type='button' />
+                    {internalUser
+                        ? (
+                            <div className="header-icons">
+                                <BiTrash onClick={onClickSM1} />
+                                <div className={showMore1 ? 'modal open' : 'modal'}>
+                                    <AiOutlineClose onClick={onClickSM1} />
+                                    <div className="popup-container">
+                                        <h1>Certeza que deseja excluir?</h1>
+                                        <div className="btns-popup">
+                                            <Button text='Sim' fun={clickDeletePost} bg_color='secondary' type='button' />
+                                            <Button text='Não' fun={onClickSM1} bg_color='secondary' type='button' />
+                                        </div>
                                     </div>
                                 </div>
+
+                                <BiPencil onClick={onClickSM} />
+                                {showMore
+                                    ? (
+                                        <UpdatePost
+                                            funPopUp={onClickSM}
+                                            postId={postId}
+                                        />
+                                    )
+                                    : null
+                                }
+
                             </div>
-
-                            <BiPencil onClick={onClickSM} />
-                            {showMore
-                                ? (
-                                    <UpdatePost
-                                        funPopUp={onClickSM}
-                                        postId={postId}
-                                    />
-                                )
-                                : null
-                            }
-
-                        </div>
-                    )}
+                        )
+                        : null
+                    }
 
                 </div>
 
@@ -104,15 +108,18 @@ export const Post = ({
 
                     <p> {content} </p>
                     <div className="img-content-container">
-                        {img_content && (
-                            <>
-                                <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
-                                <div className={modal ? "modal open" : 'modal'}>
-                                    <img src={img_content} alt="" />
-                                    <MdClose onClick={onCickImg} />
-                                </div>
-                            </>
-                        )}
+                        {img_content
+                            ? (
+                                <>
+                                    <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                                    <div className={modal ? "modal open" : 'modal'}>
+                                        <img src={img_content} alt="" />
+                                        <MdClose onClick={onCickImg} />
+                                    </div>
+                                </>
+                            )
+                            : null
+                        }
                     </div>
 
 

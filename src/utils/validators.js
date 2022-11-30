@@ -24,7 +24,7 @@ const postContentValid = (postContent) => {
 }
 
 const titleValid = (title) => {
-	return title?.toString().length < 20;
+	return title?.toString().length < 40;
 }
 
 const validCBpost = (arr) => {
