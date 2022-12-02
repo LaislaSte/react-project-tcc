@@ -33,12 +33,13 @@ export const CostumerProvider = ({ children }) => {
     const [following, setFollowing] = useState([]);
 
     // usuario externo/especifico 
-    const [euser, setEuser] = useState(null);
+    const [euser, setEuser] = useState([]);
     const [eposts, setEposts] = useState([]);
 
     // dados do feed
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [notification, setNotificatio] = useState(false);
 
     //instanciado um navigate para navegação de rotas
     const navigate = useNavigate();
@@ -75,16 +76,52 @@ export const CostumerProvider = ({ children }) => {
             for (var i in querySnapshot.docs) {
                 const doc = querySnapshot.docs[i]
                 setId(doc.id);
-                if (!name) {
-                    setName(doc.data().name);
-                }
-                if (!imgUrl) {
-                    setImgUrl(doc.data().imgURL);
-                }
+                if (!name) { setName(doc.data().name); }
+                if (!imgUrl) { setImgUrl(doc.data().imgURL); }
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
-                setFollowing(doc.data().following);
-                setFollowers(doc.data().followers);
+
+                const ufollowing = doc.data().following ? doc.data().following : false;
+                const ufollowers = doc.data().followers ? doc.data().followers : false;
+                setFollowing(ufollowing);
+                setFollowers(ufollowers);
+
+                if (following) {
+                    for (const followingId of following) {
+                        const q = query(collection(db, "users"), where("uid", "==", followingId));
+                        const dataFollowing = [];
+                        getDocs(q).then(result => {
+                            result.forEach((doc) => {
+                                const following = {
+                                    uid: followingId,
+                                    name: doc.data().name,
+                                    avatar: doc.data().imgURL
+                                }
+                                dataFollowing.push(following);
+                                setFollowing(dataFollowing);
+                            })
+                        })
+                    }
+                }
+
+                //pega os dados de quem está seguindo este user
+                if (followers) {
+                    for (const followerId of followers) {
+                        const q = query(collection(db, "users"), where("uid", "==", followerId));
+                        const dataFollowers = [];
+                        getDocs(q).then(result => {
+                            result.forEach((doc) => {
+                                const follower = {
+                                    uid: followerId,
+                                    name: doc.data().name,
+                                    avatar: doc.data().imgURL
+                                }
+                                dataFollowers.push(follower);
+                                setFollowers(dataFollowers);
+                            })
+                        })
+                    }
+                }
 
                 if (name) {
                     break
@@ -95,37 +132,37 @@ export const CostumerProvider = ({ children }) => {
             console.log(error);
         }
 
-        //get name e foto de user que o user logado está seguindo
-        const dataFollowing = [];
-        for (const followingId of following) {
-            const q = query(collection(db, "users"), where("uid", "==", followingId));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                const following = {
-                    uid: followingId,
-                    name: doc.data().name,
-                    avatar: doc.data().imgURL
-                }
-                dataFollowing.push(following);
-            })
-        }
-        setFollowing(dataFollowing);
+        // //get name e foto de user que o user logado está seguindo
+        // const dataFollowing = [];
+        // for (const followingId of following) {
+        //     const q = query(collection(db, "users"), where("uid", "==", followingId));
+        //     const querySnapshot = await getDocs(q);
+        //     querySnapshot.forEach((doc) => {
+        //         const following = {
+        //             uid: followingId,
+        //             name: doc.data().name,
+        //             avatar: doc.data().imgURL
+        //         }
+        //         dataFollowing.push(following);
+        //     })
+        // }
+        // setFollowing(dataFollowing);
 
-        //get name e foto de user que quem está seguindo user logado
-        const dataFollowers = [];
-        for (const followerId of followers) {
-            const q = query(collection(db, "users"), where("uid", "==", followerId));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                const follower = {
-                    uid: followerId,
-                    name: doc.data().name,
-                    avatar: doc.data().imgURL
-                }
-                dataFollowers.push(follower);
-            })
-        }
-        setFollowing(dataFollowers);
+        // //get name e foto de user que quem está seguindo user logado
+        // const dataFollowers = [];
+        // for (const followerId of followers) {
+        //     const q = query(collection(db, "users"), where("uid", "==", followerId));
+        //     const querySnapshot = await getDocs(q);
+        //     querySnapshot.forEach((doc) => {
+        //         const follower = {
+        //             uid: followerId,
+        //             name: doc.data().name,
+        //             avatar: doc.data().imgURL
+        //         }
+        //         dataFollowers.push(follower);
+        //     })
+        // }
+        // setFollowing(dataFollowers);
 
 
         const secondq = query(collection(db, "post"), where("uid", "==", uid));
@@ -139,7 +176,8 @@ export const CostumerProvider = ({ children }) => {
                     etitle: doc.data().title,
                     econtent: doc.data().content,
                     econtentImg: doc.data().imgContent,
-                    ecategory: doc.data().category
+                    ecategory: doc.data().category,
+                    elikes: doc.data().likes
                 }
 
                 // console.log('logando pela query para pegar post/ getUserId: ', posts);
@@ -154,8 +192,7 @@ export const CostumerProvider = ({ children }) => {
         }
     }
 
-
-    // que pegue todos os users da tabela para rederiza-los no filtro de busca  
+    // que pegue todos os users da coleção para rederiza-los no filtro de busca  
     const getUsers = async () => {
         const q = query(collection(db, "users"));
         const querySnapshot = await getDocs(q);
@@ -186,71 +223,67 @@ export const CostumerProvider = ({ children }) => {
     const getExternalUser = async (euid) => {
         const q = query(collection(db, "users"), where("uid", "==", euid));
         const querySnapshot = await getDocs(q);
-        let following = null
-        let followers = null
-        const dataUser = [];
 
         querySnapshot.forEach((doc) => {
-            following = doc.data().following
-            followers = doc.data().followers
+            const following = doc.data().following
+            const followers = doc.data().followers
 
             const user = {
                 id: doc.id,
                 name: doc.data().name,
                 bio: doc.data().userBio,
                 avatar: doc.data().imgURL,
-                following: following ? following : [],
-                followers: followers ? followers : []
+                following: following ? following : false,
+                followers: followers ? followers : false
             }
-            dataUser.push(user);
+
+            // pega os dados de quem este user está seguindo
+            if (user.following) {
+                for (const followingId of user.following) {
+                    const q = query(collection(db, "users"), where("uid", "==", followingId));
+                    const dataFollowing = [];
+                    getDocs(q).then(result => {
+                        result.forEach((doc) => {
+                            const following = {
+                                uid: followingId,
+                                name: doc.data().name,
+                                avatar: doc.data().imgURL
+                            }
+                            dataFollowing.push(following);
+                            user.following = dataFollowing;
+                        })
+                    })
+                }
+            }
+
+            //pega os dados de quem está seguindo este user
+            if (user.followers) {
+                for (const followerId of user.followers) {
+                    const q = query(collection(db, "users"), where("uid", "==", followerId));
+                    const dataFollowers = [];
+                    getDocs(q).then(result => {
+                        result.forEach((doc) => {
+                            const follower = {
+                                uid: followerId,
+                                name: doc.data().name,
+                                avatar: doc.data().imgURL
+                            }
+                            dataFollowers.push(follower);
+                            user.followers = dataFollowers;
+                        })
+                    })
+                }
+            }
+
+            // dataUser.push(user);
+            setEuser(user);
+            console.log(euser);
         });
 
-        dataUser.forEach(async e => {
-            if (e.following) {
-                // pega os dados de quem este user está seguindo
-                const dataFollowing = [];
-                for (const followingId of e.following) {
-                    const q = query(collection(db, "users"), where("uid", "==", followingId));
-                    const querySnapshot = await getDocs(q);
-                    querySnapshot.forEach((doc) => {
-                        const following = {
-                            uid: followingId,
-                            name: doc.data().name,
-                            avatar: doc.data().imgURL
-                        }
-                        dataFollowing.push(following);
-                        e.following = dataFollowing;
-                    })
-                }
-            }
-
-            if (e.followers) {
-                //pega os dados de quem está seguindo este user
-                const dataFollowers = [];
-                for (const followerId of e.followers) {
-                    const q = query(collection(db, "users"), where("uid", "==", followerId));
-                    const querySnapshot = await getDocs(q);
-                    querySnapshot.forEach((doc) => {
-                        const follower = {
-                            uid: followerId,
-                            name: doc.data().name,
-                            avatar: doc.data().imgURL
-                        }
-                        dataFollowers.push(follower);
-                        e.followers = dataFollowers;
-                    })
-                }
-            }
-        })
-
-
-
-        setEuser(dataUser);
     }
 
     const addFollowing = async (euid) => {
         //atualizando doc do usuário logado adicionando em um array (following) o uid que que ele quer seguir
-        console.log(id);
         try {
             await updateDoc(doc(db, "users", id), {
                 following: arrayUnion(euid)
@@ -262,12 +295,10 @@ export const CostumerProvider = ({ children }) => {
         //para adicionar o uid do usuário logado aos dados do user a quem ele está seguindo
         const q = query(collection(db, "users"), where("uid", "==", euid));
         const querySnapshot = await getDocs(q);
-        const eid = '';
+        let eid = '';
         querySnapshot.forEach((doc) => {
             eid = doc.id
         });
-        console.log(eid);
-
         //atualizando doc do usuário de quem o usuário logado quer seguir, adicionando uid do logged user a um array (followers)
         try {
             await updateDoc(doc(db, "users", eid), {
@@ -276,6 +307,8 @@ export const CostumerProvider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
+
+        getExternalUser(euid);
     }
 
 
@@ -288,16 +321,17 @@ export const CostumerProvider = ({ children }) => {
         //para remover o uid do usuário logado dos dados do user a quem ele está seguindo
         const q = query(collection(db, "users"), where("uid", "==", euid));
         const querySnapshot = await getDocs(q);
-        const eid = '';
+        let eid = '';
         querySnapshot.forEach((doc) => {
             eid = doc.id
         });
-
         //atualizando doc do usuário de quem o usuário logado quer seguir, removendo uid do logged user do array (followers)
         // const me = { uid: uid, uname: name, uimg: imgUrl }
         await updateDoc(doc(db, "users", eid), {
             followers: arrayRemove(uid)
         });
+
+        getExternalUser(euid);
     }
 
     const getExternalPost = async (euid) => {
@@ -311,7 +345,8 @@ export const CostumerProvider = ({ children }) => {
                 etitle: doc.data().title,
                 econtent: doc.data().content,
                 econtentImg: doc.data().imgContent,
-                ecategory: doc.data().category
+                ecategory: doc.data().category,
+                elikes: doc.data().likes
             }
             dataPost.push(post);
             setEposts(dataPost);
@@ -467,8 +502,7 @@ export const CostumerProvider = ({ children }) => {
 
     // que pegue todos os posts da tabela para renderizar no explore 
     const getPosts = async () => {
-        const q = query(collection(db, "post"));
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(collection(db, "post"));
         const d = []
 
         querySnapshot.forEach((doc) => {
@@ -482,6 +516,7 @@ export const CostumerProvider = ({ children }) => {
                 category: doc.data().category,
                 content: doc.data().content,
                 img_content: doc.data().imgContent,
+                likes: doc.data().likes
             }
             d.push(post);
         });
@@ -500,7 +535,19 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //FUNÇÃO DE ATUALIZAR POST
-    const updatePost = (postId, title, content, cat, img_content) => {
+    const updatePost = (postId, title, cat, content, img_content) => {
+        try {
+            updateDoc(doc(db, 'post', postId), {
+                title: title,
+                category: cat,
+                content: content,
+                imgContent: img_content,
+            })
+            getUserId();
+            alert('mudança no post feita')
+        } catch (error) {
+            console.log(error)
+        }
 
         console.log('post atualizado');
         // getPosts();
@@ -508,15 +555,17 @@ export const CostumerProvider = ({ children }) => {
 
     //para adicionar adicionar 1 like no post
     const addLikePost = async (postId) => {
-        updateDoc(doc(db, "post", postId), {
+        await updateDoc(doc(db, "post", postId), {
             likes: +1
         })
+        getReviews();
     }
     //para remover 1 like no post
     const removeLikePost = async (postId) => {
-        updateDoc(doc(db, "post", postId), {
+        await updateDoc(doc(db, "post", postId), {
             likes: -1
-        })
+        });
+        getReviews();
     }
 
 
@@ -524,67 +573,136 @@ export const CostumerProvider = ({ children }) => {
         FUNÇÕES PARA AS REVISÕES 
     =================================== */
 
-    //TODO -> FUNÇÃO PARA CADASTRO DE REVISÃO
+    //cadastro de revisão
     const registerReview = async (postId, euid, userPhoto, imgContent, user_name, title, content, category) => {
+
+        // neste caso ele é registrado no banco primeiramente com uma data que conta 5 horas a partir do momento instanciado
+        // const futureDate = moment().add(1, 'm').format('YYYY-M-D');
+        const futureDate = moment();
+        // console.log('before manipulation', futureDate.format('DD-MM-YYYY HH:mm').toString());
+        futureDate.add(5, 'h');
+        // console.log('after manipulation', futureDate.format('DD-MM-YYYY HH:mm').toString());
+
+        //o moment pode pegar uma data q passar, basta apenas especificar qual seu formato, use o boolean para strict-mode
+        // moment("20-10-2010 4:30",       "DD-MM-YYYY HH:mm", true); //OU:
+        // moment('24/12/2019 09:15', "DD MM YYYY hh:mm", true);
+
+        // ao enviar dados do firebase para a função que recebe a date como string, transforma em timestamp, altera, e retorna
         try {
             await addDoc(collection(db, "revision"), {
                 postId: postId,
                 uid: euid,
                 userAdded: uid,
-                userPhoto: userPhoto,
-                imgContent: imgContent,
+                userPhoto: userPhoto ? userPhoto : false,
+                imgContent: imgContent ? imgContent : false,
                 name: user_name,
                 title: title,
                 content: content,
                 category: category,
-                dateAdd: serverTimestamp()
+                futureDate: futureDate.format('DD-MM-YYYY HH:mm').toString(),
+                counter: 0
             });
+
+            getReviews();
             alert('Post adicionado nas revisões!');
         } catch (err) {
             console.log(err)
         }
+
+    }
+
+    //para deletar revisão
+    const removeReview = async (reviewId) => {
+        await deleteDoc(doc(db, 'revision', reviewId));
+        alert('revisão deletada');
+        getReviews();
     }
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
     const getReviews = async () => {
+        {/* teste para renderizar reviews de tempos em tempos */ }
+        //para isso a query seria 
+
+        // pegue todas as revisoes do usuário logado
         const q = query(collection(db, "revision"), where('userAdded', '==', uid));
         const querySnapshot = await getDocs(q);
         const d = []
 
         querySnapshot.forEach((doc) => {
-            const review = {
-                id: doc.id,
-                postId: doc.data().postId,
-                userAdded: doc.data().userAdded,
-                uid: doc.data().uid,
-                userPhoto: doc.data().userPhoto,
-                imgContent: doc.data().imgContent,
-                name: doc.data().name,
-                title: doc.data().title,
-                content: doc.data().content,
-                category: doc.data().category,
-                dateAdd: doc.data().dateAdd
-            }
+            //para cada revisão pegue a data do documento para fazer comparação
+            // console.log('getting futureDate/ getReviews: ', doc.data().futureDate);
+            const currentMoment = doc.data().futureDate;
+            // console.log('data vinda do db: ', currentMoment);
+            //transformando numa instancia de tempo
+            const a = moment(currentMoment, "DD-MM-YYYY HH:mm", true);
+            // console.log('data vinda do db transformada em obj moment: ', a);
+            //instanciando um momento atual para fazer comparações:
+            const currentDate = moment();
+            //se a data desse doc for anterior a atual ou a mesma que a atual, pegue os dados desse doc e coloque em reviews
+            // if (a.isBefore(currentDate) || a.isSame(currentDate) ) {
+            if (!a.isAfter(currentDate)) {
+                const review = {
+                    id: doc.id,
+                    postId: doc.data().postId,
+                    userAdded: doc.data().userAdded,
+                    uid: doc.data().uid,
+                    userPhoto: doc.data().userPhoto,
+                    imgContent: doc.data().imgContent,
+                    name: doc.data().name,
+                    title: doc.data().title,
+                    content: doc.data().content,
+                    category: doc.data().category,
+                    futureDate: doc.data().futureDate,
+                    counter: doc.data().counter
+                }
 
-            // const dateChanged = review.dateAdd.moment(); 
-            // console.log();
-            d.push(review);
+                d.push(review);
+            }
         });
 
         if (d) {
             setReviews(d);
         }
+        if (reviews.length >= 5) {
+            setNotificatio(true);
+        }
 
+        // ai no caso é só apenas renderizar na rota as reviews o que vier
+        // se os reviews.lenght for >= 10 bolinha de aviso active
 
     }
 
     //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
+    const updateReview = async (reviewId, newDate, counter) => {
 
+        // ao clicar no btn já revisei a revisao é atualizada para uma nova data de revisao e um novo contador
+        try {
+            await updateDoc(doc(db, 'revision', reviewId), {
+                futureDate: newDate,
+                counter: counter
+            })
+            getReviews();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     //INSTANCIA COSTUMER CONTEXT SENDO RETORNADA NO COMPONENTE PASSANDO PARA O SEU PROVEDOR AS FUNÇÕES CRUD, LOGIN E LOGOUT
     return (
-        <CostumerContext.Provider value={{ user, uid, id, imgUrl, bios, categorys, uposts, followers, following, euser, eposts, posts, users, reviews, registerWithEmailAndPassword, updateUserProfile, revomeUser, logInWithEmailAndPassword, signInWithGoogle, logout, getExternalUser, getExternalPost, getUsers, getPosts, registerPost, updatePost, deletePost, registerReview, getReviews, getUserId, addFollowing, removeFollowing, addLikePost, removeLikePost }}>
+        <CostumerContext.Provider value={{
+            user, uid, id, imgUrl, bios, categorys, uposts, followers, following, euser, users,
+            eposts, posts,
+            reviews, notification,
+
+            registerWithEmailAndPassword, logInWithEmailAndPassword, signInWithGoogle, logout,
+
+            getExternalUser, getUsers, getUserId, updateUserProfile, revomeUser, addFollowing, removeFollowing,
+
+            getExternalPost, getPosts, registerPost, updatePost, deletePost, addLikePost, removeLikePost,
+
+            registerReview, getReviews, updateReview, removeReview
+        }}>
             {children}
         </CostumerContext.Provider>
     )

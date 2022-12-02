@@ -18,7 +18,9 @@
     padding: 1.5rem;
     max-width: 600px;
     width: 100%;
+    max-height: 100vh;
     height: max-content;
+    margin: 1rem;
     text-align: center;
     overflow-y: auto;
 }
@@ -69,7 +71,7 @@
     font: var(--LIGHT);
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
     margin: .5rem 0 1rem 0;
 }

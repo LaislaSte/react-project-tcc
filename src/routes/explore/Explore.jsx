@@ -40,6 +40,12 @@ const Explore = () => {
                 <Navbar />
                 {/* <Categorys /> */}
 
+                <div className="aa">
+                    <h1>
+                        google ads
+                    </h1>
+                </div>
+
                 <div className="search-filter">
                     <Input
                         type="search"
@@ -53,11 +59,15 @@ const Explore = () => {
                     <select onChange={(e) => { setQuery(e.target.value); }} className="custom-select input-outline-primary" aria-label="Filter Countries By Region">
                         {categorys
                             ? (
-                                categorys.map((item, index) => {
-                                    return (
-                                        <option key={index} value={item}> {item} </option>
-                                    )
-                                })
+                                <>
+                                    <option value="All"> Tudo </option>
+                                    {categorys.map((item, index) => {
+                                        return (
+
+                                            <option key={index} value={item}> {item} </option>
+                                        )
+                                    })}
+                                </>
                             )
                             : (
                                 <>
@@ -70,22 +80,12 @@ const Explore = () => {
                                 </>
                             )
                         }
-
-                        {/* <option value="Sociologia">Sociologia</option>
-                        <option value="História">História</option>
-                        <option value="Biologia">Biologia</option> */}
                     </select>
 
                 </div>
 
                 <CreateButton />
             </header>
-
-            <div className="aa">
-                <h1>
-                    google ads
-                </h1>
-            </div>
 
             <main className="posts-container">
 
@@ -122,6 +122,7 @@ const Explore = () => {
                             category={doc.category}
                             content={doc.content}
                             img_content={doc.img_content}
+                            likes={doc.likes}
                             click_type_like={
                                 <LikeButton
                                     postId={doc.id}

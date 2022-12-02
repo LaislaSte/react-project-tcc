@@ -21,15 +21,23 @@
     color: var(--TEXT_LIGHT);
 }
 
-.header-button-profile .header-profile-icon {
+.header-button-profile svg {
     width: 100%;
     height: 100%;
     cursor: pointer;
     transition: var(--transition);
 }
 
-.header-button-profile .header-profile-icon:hover {
+.header-button-profile svg:hover {
     color: var(--SECONDARY_800);
+}
+
+.header-button-profile {
+    margin-right: 3rem;
+}
+
+.header-button-profile button:hover {
+    color: var(--TEXT_LIGHT);
 }
 
 
@@ -107,7 +115,24 @@
 
 .external-user-container {
     display: flex;
-    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.external-user-modal-img-container {
+    max-height: 1.5rem;
+    height: 2rem;
+    max-width: 1.5rem;
+    width: 2rem;
+    border-radius: 50%;
+}
+
+.external-user-modal-img-container img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .follower-modal-h1 {

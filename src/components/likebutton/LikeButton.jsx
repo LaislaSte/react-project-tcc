@@ -21,6 +21,7 @@ import { async } from '@firebase/util';
 
 const LikeButton = ({
     postId,
+    reviewId,
     uid,
     userPhoto,
     imgContent,
@@ -36,7 +37,7 @@ const LikeButton = ({
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { registerReview, reviews } = UserAuth();
+    const { registerReview, reviews, removeReview, addLikePost, removeLikePost } = UserAuth();
 
     //colocar no useContext
     const addReview = () => {
@@ -49,11 +50,16 @@ const LikeButton = ({
             title,
             content,
             category
-        )
+        );
+
+        addLikePost(postId);
+        showPopUp();
     }
 
-    const removeReview = () => {
-        console.log('user e conteudo removido das revisoes');
+    const delteReview = () => {
+        removeReview(reviewId);
+        removeLikePost(postId);
+        showPopUp();
     }
 
     return (
@@ -73,7 +79,7 @@ const LikeButton = ({
                             <>
                                 <h1>Deseja remover este post das suas revisões?</h1>
                                 <div className="btns-popup">
-                                    <Button type='button' bg_color='secondary' fun={removeReview} text='sim' />
+                                    <Button type='button' bg_color='secondary' fun={delteReview} text='sim' />
                                     <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
                                 </div>
                             </>

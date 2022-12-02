@@ -71,14 +71,18 @@ const Config = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const file = e.target[0]?.files[0];
+        if (!file) return;
+        let newURL = '';
+
         if (!imgURL) {
-            const file = e.target[0]?.files[0];
-            if (!file) return;
 
             try {
                 if (file) {
                     const imageName = uid + '.' + file?.name?.split('.')?.pop();
                     const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
+                    const url = await getDownloadURL(postRef);
+                    newURL = url;
 
                     const uploadTask = uploadBytesResumable(postRef, file);
                     uploadTask.on(
@@ -91,22 +95,31 @@ const Config = () => {
                             console.error(error);
                         },
                         () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
+                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
                         }
                     )
+                }
 
-                    // todo: delete the previous profile image od the user
+
+                try {
+                    updateUserProfile(newURL, name_user, bios_user, category);
+                } catch (error) {
+                    console.log(error);
                 }
             } catch (error) {
                 console.log(error);
             }
         }
 
+
         try {
             updateUserProfile(imgURL, name_user, bios_user, category);
         } catch (error) {
             console.log(error);
         }
+        // todo: delete the previous profile image od the user
+
+
 
         navigate("/profile");
     }

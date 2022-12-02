@@ -26,7 +26,7 @@ const Navbar = () => {
     const [query, setQuery] = useState("");
 
     //imports
-    const { logout, getUsers, users, getExternalUser, getPosts } = UserAuth();
+    const { logout, getUsers, users, getExternalUser, getPosts, notification } = UserAuth();
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
 
@@ -128,7 +128,7 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li className='nav-text'>
-                                <div className='item-link' onClick={() => { logout() }}>
+                                <div className={notification ? 'input-message item-link' : 'item-link'} onClick={() => { logout() }}>
                                     <BiLogOut />
                                     Logout
                                 </div>

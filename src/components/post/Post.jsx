@@ -71,6 +71,7 @@ export const Post = ({
                     {internalUser
                         ? (
                             <div className="header-icons">
+
                                 <BiTrash onClick={onClickSM1} />
                                 <div className={showMore1 ? 'modal open' : 'modal'}>
                                     <AiOutlineClose onClick={onClickSM1} />
@@ -89,6 +90,10 @@ export const Post = ({
                                         <UpdatePost
                                             funPopUp={onClickSM}
                                             postId={postId}
+                                            utitle={title}
+                                            ucontent={content}
+                                            uimgURL={img_content}
+                                            ucategory={category}
                                         />
                                     )
                                     : null
@@ -128,6 +133,7 @@ export const Post = ({
                 <div className="footer-post">
                     {click_type_review}
                     {click_type_like}
+                    {likes}
                 </div>
 
             </div>

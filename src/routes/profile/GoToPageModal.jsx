@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import avatarDefault from '../../assets/img-avatar.png';
 
 const GoToPageModal = ({ uid, name, avatar }) => {
     const navigate = useNavigate();
@@ -11,7 +12,9 @@ const GoToPageModal = ({ uid, name, avatar }) => {
     return (
 
         <div key={uid} onClick={goToUserPage} className="external-user-container">
-            <img src={avatar} alt="" />
+            <div className="external-user-modal-img-container">
+                <img src={avatar ? avatar : avatarDefault} alt="" />
+            </div>
             <h2> {name} </h2>
         </div>
 

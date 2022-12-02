@@ -75,15 +75,16 @@ const CreatePost = ({ funPopUp }) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
         if (!file) return;
-        // const url = '';
+        let newURL = '';
 
         //cadastrado imagem no storage
         try {
             if (file) {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
                 const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
-
                 const url = await getDownloadURL(postRef);
+                newURL = url;
+
                 if (!url) {
                     const uploadTask = uploadBytesResumable(postRef, file);
                     uploadTask.on(
@@ -96,12 +97,10 @@ const CreatePost = ({ funPopUp }) => {
                             console.error(error);
                         },
                         () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-                            setImgURL(getDownloadURL(postRef));
+                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
                         }
                     )
                 }
-                setImgURL(url)
 
                 // todo: delete the previous profile image of the user
             }
@@ -114,7 +113,7 @@ const CreatePost = ({ funPopUp }) => {
             const postDoc = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
                 userPhoto: user?.photoURL ? user?.photoURL : null,
-                imgContent: imgURL ? imgURL : null,
+                imgContent: newURL ? newURL : null,
                 name: user?.displayName,
                 title: title,
                 content: content,

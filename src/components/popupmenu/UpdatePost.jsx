@@ -24,6 +24,10 @@ import uploadFile from '../../services/uploadFile';
 const UpdatePost = ({
     funPopUp,
     postId,
+    utitle,
+    ucontent,
+    uimgURL,
+    ucategory
 }) => {
     // states 
     const [title, setTitle] = useState('');
@@ -39,42 +43,14 @@ const UpdatePost = ({
     const { updatePost, uid } = UserAuth();
 
     // useeffect 
-    // useEffect(
-    //     () => {
-    //         const fetchPost = async () => {
-    //             const q = query(collection(db, "post"), where("uid", "==", user?.uid));
-    //             const querySnapshot = await getDocs(q);
-
-    //             try {
-    //                 // for (var i in querySnapshot.docs) {
-    //                 //     const doc = querySnapshot.docs[i]
-    //                 //     setId(doc.id);
-    //                 //     if (name) {
-    //                 //         break
-    //                 //     }
-    //                 // }
-    //                 querySnapshot.forEach((doc) => {
-    //                     // setId(doc.id);
-    //                     if (doc.id === postId) {
-    //                         setTitle(doc.data().title);
-    //                         setContent(doc.data().content);
-    //                         setImgURL(doc.data().imgURL);
-    //                         setFavCategory_user(doc.data().category);
-    //                     }
-
-    //                 });
-    //             } catch (error) {
-    //                 console.log(error);
-    //             }
-    //         };
-
-    //         return () => {
-    //             fetchPost();
-    //         };
-
-    //     },
-    //     []
-    // )
+    useEffect(
+        () => {
+            setTitle(utitle);
+            setContent(ucontent);
+            setImgURL(uimgURL);
+        },
+        []
+    )
 
     // functions 
     const handleOnChangeCB = (event) => {
@@ -88,53 +64,69 @@ const UpdatePost = ({
 
     const showMessage = (fav) => {
         if (fav) {
-            return !validCBpost(fav)
+            return !validCBpost(fav);
         }
     }
 
     const formValidUpdatePost = () => {
-        return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
+        return postContentValid(content) && titleValid(title);
     }
 
 
     //função que chama o atualizar post do context
     const onClickUpdatePost = async (e) => {
         e.preventDefault();
-        const file = e.target[0]?.files[0];
+        const file = e.target[5]?.files[0];
         if (!file) return;
+        console.log('chada função');
 
         try {
             if (file) {
                 const imageName = uid + '.' + file?.name?.split('.')?.pop();
                 const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
+                let newURL = '';
+                const url = await getDownloadURL(postRef);
+                newURL = url;
 
-                const uploadTask = uploadBytesResumable(postRef, file);
-                uploadTask.on(
-                    'state_changed',
-                    snapshot => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        // setProgress(progress);
-                    },
-                    error => {
-                        console.error(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then(url => { setImgURL(url) })
-                    }
-                )
+                // setImgURL(url);
+                // console.log('setado estado pra essa url', imgURL);
 
-                // todo: delete the previous profile image od the user
+                if (!url) {
+                    const uploadTask = uploadBytesResumable(postRef, file);
+                    uploadTask.on(
+                        'state_changed',
+                        snapshot => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            // setProgress(progress);
+                        },
+                        error => {
+                            console.error(error);
+                        },
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
+                        }
+                    )
+                }
+
+
+                console.log('dentro do trycat', newURL);
+                try {
+                    //passar por parametro os states:
+                    updatePost(postId, title, favCategory_user, content, newURL);
+                } catch (error) {
+                    console.log(error);
+                }
+
+                // todo: delete the previous profile image of the user
             }
         } catch (error) {
             console.log(error);
         }
 
-        try {
-            //passar por parametro os states:
-            // updatePost(imgURL, name_user, bios_user, category);
-        } catch (error) {
-            console.log(error);
-        }
+
+
+
+        // funPopUp();
     }
 
     return (
@@ -172,7 +164,8 @@ const UpdatePost = ({
                         showMessage={content && !postContentValid(content)}
                     />
 
-                    <p>Adicione uma categoria</p>
+                    <p> Categoria selecionada anteriormente: </p>
+                    <p> {ucategory} </p>
 
                     <div className='checked-boxes-container' >
                         {fakeUser.arrIdsCategorys.map((item, index) => {

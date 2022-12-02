@@ -24,7 +24,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
 
     // imports
-    const { logInWithEmailAndPassword, signInWithGoogle, loader } = UserAuth();
+    const { logInWithEmailAndPassword, signInWithGoogle, getPosts, getReviews } = UserAuth();
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -46,9 +46,8 @@ const Login = () => {
 
     const handleClick = () => {
         logInWithEmailAndPassword(email, password);
-        while (loader) {
-            return <Loader />
-        }
+        getPosts();
+        getReviews();
         navigate('/explore');
     }
 

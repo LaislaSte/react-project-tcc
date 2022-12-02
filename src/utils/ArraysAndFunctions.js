@@ -128,11 +128,13 @@ export const onChangeHeart = (reviews, id) => {
 }
 //função que verifica nos followings do user se há um id passado 
 export const onChangeFollow = (followings, id) => {
-    let index = followings.findIndex(i => i.uid === id);
-
-    if (index !== -1) {
-        return true
+    if (followings.length > 0) {
+        let index = followings.findIndex(i => i.uid === id);
+        if (index !== -1) {
+            return true
+        }
     }
+
     return false
 }
 

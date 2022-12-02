@@ -24,10 +24,10 @@ import Button from '../../components/button/Button';
 
 const UserDetail = () => {
     // states 
-    const [name, setName] = useState("");
-    const [imgURL, setImgURL] = useState("");
-    const [bio, setBio] = useState("");
-    const [userPosts, setUserPosts] = useState([]);
+    // const [name, setName] = useState("");
+    // const [imgURL, setImgURL] = useState("");
+    // const [bio, setBio] = useState("");
+    // const [userPosts, setUserPosts] = useState([]);
     // const [euser, setEuser] = useState({});
     // const [eposts, setEposts] = useState({});
 
@@ -41,7 +41,7 @@ const UserDetail = () => {
     const { id } = useParams();
 
     // imports
-    const { getExternalUser, getExternalPost, euser, eposts, addFollowing, removeFollowing } = UserAuth();
+    const { getExternalUser, getExternalPost, euser, eposts, uid, addFollowing, removeFollowing } = UserAuth();
 
 
 
@@ -50,8 +50,8 @@ const UserDetail = () => {
     useEffect(() => {
 
         const getUser = () => {
-            getExternalPost(id);
             getExternalUser(id);
+            getExternalPost(id);
         }
         // return () => {
         getUser()
@@ -59,41 +59,11 @@ const UserDetail = () => {
 
     }, [id])
 
-    const following = [
-        {
-            uid: '01',
-            name: 'Giovana',
-            avatar: 'a'
-        },
-        {
-            uid: '02',
-            name: 'Lucas',
-            avatar: 'a'
-        }
-    ]
-    const followers = [
-        {
-            uid: '01',
-            name: 'Giovana',
-            avatar: 'a'
-        },
-        {
-            uid: '02',
-            name: 'Lucas',
-            avatar: 'a'
-        },
-        {
-            uid: '03',
-            name: 'Marcos',
-            avatar: 'a'
-        }
-    ]
-
     const callAddFollower = () => {
-        addFollowing(id)
+        addFollowing(id);
     }
     const callRemoveFollower = () => {
-        removeFollowing(id)
+        removeFollowing(id);
     }
 
     return (
@@ -120,45 +90,50 @@ const UserDetail = () => {
                     {euser.bio ? euser.bio : 'Nada por aqui'}
 
                     <div className="network">
-                        <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {following.length} </p>
+                        <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {euser.following ? euser.following.length : 0} </p>
                         {
                             <div className={modalFollowing ? "modal open" : 'modal'}>
                                 <MdClose onClick={changeModalFollowing} />
                                 <div className="popup-container">
                                     <h1 className='follower-modal-h1'> Seguindo </h1>
-                                    {following.map(i => {
-                                        return (
-                                            <div className="modal-follows-container">
-                                                <GoToPageModal
-                                                    className='modal-follows-container'
-                                                    uid={i.uid}
-                                                    name={i.name}
-                                                    avatar={i.avatar}
-                                                    text='Seguindo'
-                                                />
-                                            </div>
-                                        )
-                                    })}
+                                    {euser.following
+                                        ? euser.following.map(i => {
+                                            return (
+                                                <div className="modal-follows-container">
+                                                    <GoToPageModal
+                                                        uid={i.uid}
+                                                        name={i.name}
+                                                        avatar={i.avatar}
+                                                        text='Seguindo'
+                                                    />
+                                                </div>
+                                            )
+                                        })
+                                        : null
+                                    }
                                 </div>
                             </div>
                         }
-                        <p onClick={changeModalFollowers} className='cursor-pointer'> Seguidores: {followers.length} </p>
+                        <p onClick={changeModalFollowers} className='cursor-pointer'> Seguidores: {euser.followers ? euser.followers.length : 0} </p>
                         {
                             <div className={modalFollowers ? "modal open" : 'modal'}>
                                 <MdClose onClick={changeModalFollowers} />
                                 <div className="popup-container">
                                     <h1 className='follower-modal-h1'>Seguidores</h1>
-                                    {followers.map(i => {
-                                        return (
-                                            <GoToPageModal
-                                                className='popup-container'
-                                                uid={i.uid}
-                                                name={i.name}
-                                                avatar={i.avatar}
-                                                text='seguidores'
-                                            />
-                                        )
-                                    })}
+                                    {euser.followers
+                                        ? euser.followers.map(i => {
+                                            return (
+                                                <GoToPageModal
+                                                    className='popup-container'
+                                                    uid={i.uid}
+                                                    name={i.name}
+                                                    avatar={i.avatar}
+                                                    text='seguidores'
+                                                />
+                                            )
+                                        })
+                                        : null
+                                    }
                                 </div>
                             </div>
                         }
@@ -167,13 +142,13 @@ const UserDetail = () => {
                 </div>
 
                 <div className="header-button-profile">
-                    {onChangeFollow(following, id)
+                    {onChangeFollow(euser.followers ? euser.followers : [], uid)
                         ? (
                             <Button
-                                text='Seguir'
+                                text='Deixar de seguir'
                                 type='button'
                                 bg_color='primary'
-                                fun={callAddFollower}
+                                fun={callRemoveFollower}
                             />
                         )
                         : (
@@ -181,7 +156,7 @@ const UserDetail = () => {
                                 text='Seguir'
                                 type='button'
                                 bg_color='primary'
-                                fun={callRemoveFollower}
+                                fun={callAddFollower}
                             />
                         )
                     }
@@ -202,13 +177,25 @@ const UserDetail = () => {
                                     user_id={item.euid}
                                     // user_name={name}
                                     // avatar={imgURL}
-                                    user_name={euser?.name ? euser?.name : 'Sem Nome'}
-                                    avatar={euser?.avatar ? euser.avatar : null}
+                                    user_name={euser.name ? euser.name : 'Sem Nome'}
+                                    avatar={euser.avatar ? euser.avatar : null}
                                     title={item.etitle}
                                     category={item.ecategory}
                                     content={item.econtent}
                                     img_content={item.econtentImg}
-                                    click_type_like={<LikeButton postId={item.eid} />}
+                                    likes={item.elikes}
+                                    click_type_like={
+                                        <LikeButton
+                                            postId={item.eid}
+                                            uid={item.euid}
+                                            user_name={euser.name ? euser.name : 'Sem Nome'}
+                                            userPhoto={euser.avatar ? euser.avatar : null}
+                                            title={item.etitle}
+                                            category={item.ecategory}
+                                            content={item.econtent}
+                                            imgContent={item.econtent}
+                                        />
+                                    }
                                     internalUser={false}
                                 />
                             </>
