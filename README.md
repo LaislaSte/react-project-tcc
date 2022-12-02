@@ -43,15 +43,22 @@
 - **importante** filtragem de post por categoria [ok];
 - **importante** ADICIONAR O DIVS PARA O GOOGLE ADS [ok]
 - **importante** limitar a quantidade de categorias selecionadas nas configurações e na criação de post [ok]
+- **importante** adicionar função de add ou remover revisão no like button [ok]
 
 ---
 
 ### NOT DONE
 
-- **importante** adicionar função de add ou remover revisão no like button
-
 - criar função que pega o id dos elementos do componente category e o deixa selecionado (com um css diferente)
 - colocar um dropdown no change email e senha
+
+- arrumar estilo dos selects do filter, ou criar um select
+- verificar bug onde foto de perfil dos seguidores e seguindo não estão aparecendo no modal
+- mostrar o componente page not found nas paginas que nao existem
+
+- ajustar o layout de biografia dos perfis [ok]
+- mudar de lugar os google ads para antes do filter [ok]
+- **verificar** o botao seguir e deixar de seguir não está como esperado [ok]
 
 ---
 
@@ -71,31 +78,38 @@
 - criar query para importar posts de usuário logado atarves do uid [ok]
 - **verificar** importar posts especificos, com uid do respectivo usuário passado pelo parametro da url, para renderiza-los ao seu perfil correspondente [ok]
 - **verificar** filtrar categorias existentes (perfil do user) para ficar pré selecionadas no config e no componente categorys de pesquisa [ok]
+- **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário [ok]
+- **verificar** função para filtrar posts likeados pelo usuário (se existe uma review com as inf. desse post); [ok]
+- **importante** função para deletar post [ok]
+- **verificar** função para atualizar revisão com nova data de revisão [ok]
+- **verificar** funções de adicionar e remover seguidor [ok]
+- **importante** verificar se o arrayRemove do removerFollower remove da maneira correta [ok]
+- **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário [ok]
+- **importante** função para atualizar post [ok]
 
 ---
 
 ### NOT DONE
 
-- **importante** função para cadastrar revisão com as informações do respectivo post selecionado pelo usuário
-- **importante** função para atualizar revisão com nova data de revisão
-
-binho:
+- **verificar** cadastro de imagem no storage
 
 - adicionar a função sendPost ao context
-- **importante** função para atualizar post
-- **importante** função para deletar post
-- **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário;
-- **verificar** função para filtrar posts likeados pelo usuário (se existe uma review com as inf. desse post);
 
 ---
 
-- **verificar** como atualizar os diretórios storage
-- **verificar** add google ads
 - **verificar** fazer deploy
 
-- **verificar** função para mudança de senha atravez de e-mail
-- **verificar** função para mudança de e-mail
-- **verificar** função para confirmação de e-mail
+#### ARRUMAR BUGS ANTES DO DEPLOY:
+
+- mudança de estilo no botao like na pagina explore
+- mudança de estilo no botao de seguir e para de seguir na pagina de usuario externo
+- ajustar o filter de perfis ou remover do navbar (já que vai ser possivel procurar em explore) os ids se confundem com a query
+- atualizar as querys para mudar os componentes toda vez que houver alguma mudança
+
+* **verificar** add google ads
+* **verificar** função para mudança de senha atravez de e-mail
+* **verificar** função para mudança de e-mail
+* **verificar** função para confirmação de e-mail
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
 
