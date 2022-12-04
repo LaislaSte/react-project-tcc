@@ -29,6 +29,7 @@ export const CostumerProvider = ({ children }) => {
     const [categorys, setCategorys] = useState('');
     const [uposts, setUposts] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [allReviews, setAllReviews] = useState([]);
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
 
@@ -379,7 +380,7 @@ export const CostumerProvider = ({ children }) => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-            // sendEmailVerification(res.user, )
+            sendEmailVerification(res.user,)
             const user = res.user;
             await addDoc(collectionRef, {
                 uid: user.uid,
@@ -696,6 +697,7 @@ export const CostumerProvider = ({ children }) => {
         const q = query(collection(db, "revision"), where('userAdded', '==', uid));
         const querySnapshot = await getDocs(q);
         const d = [];
+        const allData = [];
 
         querySnapshot.forEach((doc) => {
             //para cada revisão pegue a data do documento para fazer comparação
@@ -732,6 +734,25 @@ export const CostumerProvider = ({ children }) => {
             setNotificatio(true);
         }
 
+        querySnapshot.forEach((doc) => {
+            const review = {
+                id: doc.id,
+                postId: doc.data().postId,
+                userAdded: doc.data().userAdded,
+                uid: doc.data().uid,
+                userPhoto: doc.data().userPhoto,
+                imgContent: doc.data().imgContent,
+                name: doc.data().name,
+                title: doc.data().title,
+                content: doc.data().content,
+                category: doc.data().category,
+                futureDate: doc.data().futureDate,
+                counter: doc.data().counter
+            }
+            allData.push(review);
+            setAllReviews(allData);
+        })
+
     }
 
     //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
@@ -754,7 +775,7 @@ export const CostumerProvider = ({ children }) => {
         <CostumerContext.Provider value={{
             user, uid, id, imgUrl, bios, categorys, uposts, followers, following, euser, users,
             eposts, posts,
-            reviews, notification,
+            reviews, notification, allReviews,
 
             registerWithEmailAndPassword, logInWithEmailAndPassword, signInWithGoogle, logout,
 

@@ -38,14 +38,14 @@ const LikeButton = ({
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { registerReview, reviews, getReviews, removeReview, addLikePost, removeLikePost } = UserAuth();
+    const { registerReview, allReviews, getReviews, removeReview, addLikePost, removeLikePost } = UserAuth();
 
-    // useEffect(() => {
-    //     const getAllReviews = () => {
-    //         getReviews();
-    //     }
-    //     getAllReviews();
-    // }, [])
+    useEffect(() => {
+        const getAllReviews = () => {
+            getReviews();
+        }
+        getAllReviews();
+    }, [])
 
     //colocar no useContext
     const addReview = () => {
@@ -74,7 +74,7 @@ const LikeButton = ({
         <>
             <div className="post-like-container">
                 {
-                    onChangeHeart(reviews, postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
+                    onChangeHeart(allReviews, postId) ? (<AiFillHeart className='post-like-container-icon' onClick={showPopUp} />) : (<AiOutlineHeart className='post-like-container-icon' onClick={showPopUp} />)
                 }
             </div>
 
@@ -82,7 +82,7 @@ const LikeButton = ({
                 <AiOutlineClose onClick={showPopUp} />
                 <div className="popup-container">
 
-                    {onChangeHeart(reviews, postId)
+                    {onChangeHeart(allReviews, postId)
                         ? (
                             <>
                                 <h1>Deseja remover este post das suas revisões?</h1>
