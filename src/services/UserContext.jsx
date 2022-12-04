@@ -209,7 +209,7 @@ export const CostumerProvider = ({ children }) => {
                     euid: doc.data().uid,
                     ename: doc.data().name,
                     eavatar: doc.data().imgURL,
-                    ebios: doc.data().bios
+                    ebios: doc.data().userBio
                 }
                 d.push(userObj);
             });
@@ -626,16 +626,16 @@ export const CostumerProvider = ({ children }) => {
     //para adicionar adicionar 1 like no post
     const addLikePost = async (postId) => {
         await updateDoc(doc(db, "post", postId), {
-            likes: +1
+            likes: increment(1)
         })
-        getReviews();
+        getPosts();
     }
     //para remover 1 like no post
     const removeLikePost = async (postId) => {
         await updateDoc(doc(db, "post", postId), {
-            likes: -1
+            likes: increment(-1)
         });
-        getReviews();
+        getPosts();
     }
 
 
@@ -649,15 +649,8 @@ export const CostumerProvider = ({ children }) => {
         // neste caso ele é registrado no banco primeiramente com uma data que conta 5 horas a partir do momento instanciado
         // const futureDate = moment().add(1, 'm').format('YYYY-M-D');
         const futureDate = moment();
-        // console.log('before manipulation', futureDate.format('DD-MM-YYYY HH:mm').toString());
         futureDate.add(5, 'h');
-        // console.log('after manipulation', futureDate.format('DD-MM-YYYY HH:mm').toString());
 
-        //o moment pode pegar uma data q passar, basta apenas especificar qual seu formato, use o boolean para strict-mode
-        // moment("20-10-2010 4:30",       "DD-MM-YYYY HH:mm", true); //OU:
-        // moment('24/12/2019 09:15', "DD MM YYYY hh:mm", true);
-
-        // ao enviar dados do firebase para a função que recebe a date como string, transforma em timestamp, altera, e retorna
         try {
             await addDoc(collection(db, "revision"), {
                 postId: postId,
@@ -691,29 +684,24 @@ export const CostumerProvider = ({ children }) => {
             eid = doc.id
         })
         deleteDoc(doc(db, 'revision', eid));
-        alert('revisão deletada');
         getReviews();
         getPosts();
+        alert('revisão deletada');
     }
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
     const getReviews = async () => {
-        {/* teste para renderizar reviews de tempos em tempos */ }
-        //para isso a query seria 
 
         // pegue todas as revisoes do usuário logado
         const q = query(collection(db, "revision"), where('userAdded', '==', uid));
         const querySnapshot = await getDocs(q);
-        const d = []
+        const d = [];
 
         querySnapshot.forEach((doc) => {
             //para cada revisão pegue a data do documento para fazer comparação
-            // console.log('getting futureDate/ getReviews: ', doc.data().futureDate);
             const currentMoment = doc.data().futureDate;
-            // console.log('data vinda do db: ', currentMoment);
             //transformando numa instancia de tempo
             const a = moment(currentMoment, "DD-MM-YYYY HH:mm", true);
-            // console.log('data vinda do db transformada em obj moment: ', a);
             //instanciando um momento atual para fazer comparações:
             const currentDate = moment();
             //se a data desse doc for anterior a atual ou a mesma que a atual, pegue os dados desse doc e coloque em reviews
@@ -733,7 +721,6 @@ export const CostumerProvider = ({ children }) => {
                     futureDate: doc.data().futureDate,
                     counter: doc.data().counter
                 }
-
                 d.push(review);
             }
         });
@@ -745,14 +732,10 @@ export const CostumerProvider = ({ children }) => {
             setNotificatio(true);
         }
 
-        // ai no caso é só apenas renderizar na rota as reviews o que vier
-        // se os reviews.lenght for >= 10 bolinha de aviso active
-
     }
 
     //TODO -> FUNÇÃO PARA ATUALIZAR DATA DE REVISÃO
     const updateReview = async (reviewId, newDate, counter) => {
-
         // ao clicar no btn já revisei a revisao é atualizada para uma nova data de revisao e um novo contador
         try {
             await updateDoc(doc(db, 'revision', reviewId), {
