@@ -23,15 +23,20 @@ const Explore = () => {
     const [query, setQuery] = useState("");
 
     // imports 
-    const { posts, categorys } = UserAuth();
+    const { getPosts, getReviews, posts, reviews, categorys } = UserAuth();
     const [user, loading] = useAuthState(auth);
     const navigate = useNavigate();
 
     // useeffect 
     useEffect(() => {
+        console.log('effect runded/ explore');
         if (loading) return;
-        if (!user) return navigate("/");
-        //testar logar categorys do user loged vindo do context
+        if (!user) return navigate("/login");
+        const getAllPosts = () => {
+            getPosts();
+            getReviews();
+        }
+        getAllPosts();
     }, [user, loading]);
 
     return (

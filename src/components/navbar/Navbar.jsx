@@ -31,37 +31,36 @@ const Navbar = () => {
     const [user, loading, error] = useAuthState(auth);
 
     // useeffect 
-    useEffect(() => {
-        if (loading) return;
-        if (!user) return navigate("/");
-        getUsers();
-    }, [user, loading]);
+    // useEffect(() => {
+    //     if (loading) return ;
+    //     if (!user) return navigate("/login");
+    //     // getUsers();
+    // }, [user, loading]);
 
     // functions 
     const showNavbar = () => setNavbar(!navbar);
-    // console.log()s
 
     /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
-    const goToUserPage = () => {
-        const result = users.filter(item => item.ename.toLowerCase().includes(query));
-        const id = result[0].euid;
-        // getExternalUser(id);
-        // console.log('chamado getExternalUser do navbar');
-        navigate(`/user/${id}`);
-        setQuery('');
-        // browserHistory.push(`/${id}`)
-    }
+    // const goToUserPage = () => {
+    //     const result = users.filter(item => item.ename.toLowerCase().includes(query));
+    //     const id = result[0].euid;
+    //     // getExternalUser(id);
+    //     // console.log('chamado getExternalUser do navbar');
+    //     navigate(`/user/${id}`);
+    //     setQuery('');
+    //     // browserHistory.push(`/${id}`)
+    // }
 
     //testar funções:
-    const goToProfilePage = () => {
-        getExternalUser(user.uid);
-    }
-    const goToExplorePage = () => {
-        getPosts();
-    }
-    const goToReviewPage = () => {
-        // getReviews();
-    }
+    // const goToProfilePage = () => {
+    //     getExternalUser(user.uid);
+    // }
+    // const goToExplorePage = () => {
+    //     getPosts();
+    // }
+    // const goToReviewPage = () => {
+    //     // getReviews();
+    // }
 
     return (
         <nav className="navbar">
@@ -98,7 +97,7 @@ const Navbar = () => {
                     // caso o usuario esteja autenticado as informações exibidas no navbar mudam
                     ? (
                         <>
-                            <li className='item-searchbar'>
+                            {/* <li className='item-searchbar'>
                                 <Input
                                     text='Pesquisar'
                                     type='text'
@@ -107,16 +106,18 @@ const Navbar = () => {
                                     value={query}
                                     onchange={(e) => { setQuery(e.target.value) }}
                                 />
-                            </li>
+                            </li> */}
 
                             <li className='nav-text'>
-                                <Link to='/explore' className='item-link' onClick={goToProfilePage}>
+                                {/* <Link to='/explore' className='item-link' onClick={goToProfilePage}> */}
+                                <Link to='/explore' className='item-link'>
                                     <RiSearch2Line />
                                     Explorar
                                 </Link>
                             </li>
                             <li className='nav-text'>
-                                <Link to='/review' className='item-link' onClick={goToExplorePage}>
+                                {/* <Link to='/review' className='item-link' onClick={goToExplorePage}> */}
+                                <Link to='/review' className='item-link'>
                                     <BiHomeAlt />
                                     Revisão
                                 </Link>
@@ -149,7 +150,7 @@ const Navbar = () => {
                 }
             </ul>
 
-            {query.length > 2 && (
+            {/* {query.length > 2 && (
                 <div className="result-search-container">
 
                     <ul className='container-result'>
@@ -184,7 +185,7 @@ const Navbar = () => {
 
                     </ul>
                 </div>
-            )}
+            )} */}
 
         </nav>
     )

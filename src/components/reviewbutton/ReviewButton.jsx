@@ -47,10 +47,10 @@ const ReviewButton = ({
     }
 
     //função para deletar review
-    const dontShowMore = () => {
-        removeReview(reviewId);
-        showPopUp()
-    }
+    // const dontShowMore = () => {
+    //     // removeReview(reviewId);
+    //     showPopUp()
+    // }
 
     function verifiedLoginAndReview(id_post, arrPost) {
         //há um post atribuido a revisao? se sim return true 
@@ -77,7 +77,7 @@ const ReviewButton = ({
                         <h1>Continuar revisando este post?</h1>
                         <div className="btns-popup">
                             <Button type='button' bg_color='secondary' fun={alreadyReviewed} text='sim' />
-                            <Button type='button' bg_color='secondary' fun={dontShowMore} text='não' />
+                            <Button type='button' bg_color='secondary' fun={showPopUp} text='não' />
                         </div>
                     </div>
                 </div>

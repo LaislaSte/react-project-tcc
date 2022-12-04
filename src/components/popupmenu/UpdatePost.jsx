@@ -110,12 +110,7 @@ const UpdatePost = ({
 
 
                 console.log('dentro do trycat', newURL);
-                try {
-                    //passar por parametro os states:
-                    updatePost(postId, title, favCategory_user, content, newURL);
-                } catch (error) {
-                    console.log(error);
-                }
+                updatePost(postId, title, favCategory_user, content, newURL);
 
                 // todo: delete the previous profile image of the user
             }
@@ -123,10 +118,7 @@ const UpdatePost = ({
             console.log(error);
         }
 
-
-
-
-        // funPopUp();
+        funPopUp();
     }
 
     return (

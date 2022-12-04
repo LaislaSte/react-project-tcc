@@ -34,21 +34,33 @@ const Profile = () => {
 
     // imports
     const [user, loading, error] = useAuthState(auth);
-    const { bios, imgUrl, name, uposts, getUserId, following, followers } = UserAuth();
+    // const { bios, imgUrl, name, uposts, getUserId, following, followers } = UserAuth();
+    const { bios, imgUrl, name, uposts, getUserId } = UserAuth();
+
+    const following = [
+        {
+
+        },
+    ]
+
+    const followers = [
+        {
+
+        },
+    ]
 
     // useeffect
     useEffect(() => {
+        console.log('effect runded');
         const callUser = () => {
             getUserId();
-            // setUserPosts(uposts);
         }
-
         // return () => {
         //     //useEffect antes de renderizar novamente, execute a função
         callUser()
         // }
 
-    }, [])
+    }, []);
 
     return (
         <div className='Profile'>
@@ -73,7 +85,7 @@ const Profile = () => {
                     <h2>{name || user.displayName || 'sem Nome'}</h2>
                     {bios}
 
-                    <div className="network">
+                    {/* <div className="network">
                         <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {following ? following.length : 0} </p>
                         {
                             <div className={modalFollowing ? "modal open" : 'modal'}>
@@ -122,7 +134,7 @@ const Profile = () => {
                                 </div>
                             </div>
                         }
-                    </div>
+                    </div> */}
 
                 </div>
 
@@ -140,26 +152,26 @@ const Profile = () => {
                         return (
                             <Post
                                 key={index}
-                                postId={item.eid}
+                                postId={item.id}
                                 internalUser={true}
                                 user_id={user.uid}
                                 user_name={name ? name : user.displayName}
                                 avatar={imgUrl}
-                                title={item.etitle}
-                                category={item.ecategory}
-                                content={item.econtent}
-                                img_content={item.econtentImg}
-                                likes={item.elikes}
+                                title={item.title}
+                                category={item.category}
+                                content={item.content}
+                                img_content={item.img_content}
+                                likes={item.likes}
                                 click_type_like={
                                     <LikeButton
-                                        postId={item.eid}
+                                        postId={item.id}
                                         uid={user.uid}
                                         userPhoto={imgUrl}
-                                        imgContent={item.econtentImg}
+                                        imgContent={item.img_content}
                                         user_name={name || user.displayName}
-                                        title={item.etitle}
-                                        content={item.econtent}
-                                        category={item.ecategory}
+                                        title={item.title}
+                                        content={item.content}
+                                        category={item.category}
                                     />
                                 }
                             />

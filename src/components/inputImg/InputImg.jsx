@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { useRef } from 'react';
 import './InputImg.css';
 
@@ -10,11 +11,24 @@ const InputImg = ({
     //vai receber a url setada em image
     imgPreview,
     //para mudar o estilo do preview
-    imgPreviewClassName = ''
+    imgPreviewClassName = '',
+
+    onSetReference
 }) => {
 
     //quando clicar na div, seria como clicar no input. O input vai, atravez do atributo ref, preencheer a referencia dele msm dentro deste hook do react abaixo 
     const refInput = useRef(null);
+
+    useEffect(
+        () => {
+            if (!onSetReference) {
+                return;
+            }
+            onSetReference(refInput?.current);
+        },
+        [refInput?.current]
+    )
+
 
     //para quando clicar no elemento div, abrir o seletor de arquivos
     //simula um click no input atual que está referenciado
@@ -40,7 +54,7 @@ const InputImg = ({
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file);
         //este metodo é assincrono, entao, apenas quando ele terminar de ler o arquivo a imagem será setada como um objt que irá conter o a url e o arquivo (onloadend - ao fim do caregamento)
-        fileReader.onload = () => {
+        fileReader.onloadend = () => {
             setImage({
                 preview: fileReader.result,
                 file

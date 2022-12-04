@@ -85,40 +85,55 @@
 - **verificar** funções de adicionar e remover seguidor [ok]
 - **importante** verificar se o arrayRemove do removerFollower remove da maneira correta [ok]
 - **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário [ok]
-- **importante** função para atualizar post [ok]
 
 ---
 
 ### NOT DONE
 
-- **verificar** cadastro de imagem no storage
-
-- adicionar a função sendPost ao context
-
----
-
-- **verificar** fazer deploy
-
 #### ARRUMAR BUGS ANTES DO DEPLOY:
 
+- **verificar** função para atualizar post
+- **verificar** cadastro de imagem no storage
+- **verificar** adicionar a função sendPost ao context
 - mudança de estilo no botao like na pagina explore
-- mudança de estilo no botao de seguir e para de seguir na pagina de usuario externo
+- **verificar** testar cadastrar um email inesistente no app
 - ajustar o filter de perfis ou remover do navbar (já que vai ser possivel procurar em explore) os ids se confundem com a query
 - atualizar as querys para mudar os componentes toda vez que houver alguma mudança
 
-* **verificar** add google ads
-* **verificar** função para mudança de senha atravez de e-mail
-* **verificar** função para mudança de e-mail
-* **verificar** função para confirmação de e-mail
+**todos da documentação**
+
+- **verificar** se não estiver logado reenvia para o login e não o public
+- tirar a função de deletar flashcard do botão já revisei e deixar apenas no btn de like [ok]
+
+- **verificar** excluir todos os posts que o usuário fez quando ele obtar por excluir sua conta
+
+- depois que edita uma nova senha (manda um email com o link, ele é redirecionado para a pagina do config novamente com um alert de email enviado)
+- achar uma função, ou ver como funciona a parte de mudnça de e-mail [é viável, mas testar se ele cadastra um e-mail válido]
+  `import { getAuth, updateEmail } from "firebase/auth"; const auth = getAuth(); updateEmail(auth.currentUser, "user@example.com").then(() => { // Email updated! // ... }).catch((error) => { // An error occurred // ... });`
+- retirar funcionalidade de seguir e parar de seguir (não tem necessidade e não atende aos requisitos)
+  OU
+
+- **verificar** fazer deploy
+
+---
+
+- **verificar** add google ads
+- **verificar** função para mudança de senha atravez de e-mail
+- **verificar** função para mudança de e-mail
+- **verificar** função para confirmação de e-mail
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
+
+- criar um feed de seguindo para renderizar posts de quem o usuário segue.
+
+- criar paginas para ver quem segue e quem esta seguindo
+- criar um feed de seguindo para renderizar posts de quem o usuário segue.
+- mudança de estilo no botao de seguir e para de seguir na pagina de usuario externo
+  s
+- criar página de notificações (quem esta seguinto ou quantas revisões tem um post por usuário (como um like))
 
 - utilizar CryptoJs para criptografar tokens dos users
 
 - criar paginas para os links do footer (estruturar lugar para os textos)
 
-- criar paginas para ver quem segue e quem esta seguindo
-
 - criar paginas para ver respondas do post
-
-- criar página de notificações (quem esta seguinto ou quantas revisões tem um post por usuário (como um like))

@@ -28,7 +28,7 @@ const UserDetail = () => {
     // const [imgURL, setImgURL] = useState("");
     // const [bio, setBio] = useState("");
     // const [userPosts, setUserPosts] = useState([]);
-    // const [euser, setEuser] = useState({});
+    // const [euser[0], setEuser[0]] = useState({});
     // const [eposts, setEposts] = useState({});
 
     //modais para os seguidores e seguindo
@@ -51,20 +51,19 @@ const UserDetail = () => {
 
         const getUser = () => {
             getExternalUser(id);
-            getExternalPost(id);
         }
         // return () => {
         getUser()
         // }
 
-    }, [id])
+    }, [id]);
 
-    const callAddFollower = () => {
-        addFollowing(id);
-    }
-    const callRemoveFollower = () => {
-        removeFollowing(id);
-    }
+    // const callAddFollower = () => {
+    //     addFollowing(id);
+    // }
+    // const callRemoveFollower = () => {
+    //     removeFollowing(id);
+    // }
 
     return (
         <div className='Profile'>
@@ -81,15 +80,15 @@ const UserDetail = () => {
 
                 <div className="profile-container">
                     <div className="img-background">
-                        <img src={euser.avatar ? euser.avatar : avatarDefault} alt="" />
+                        <img src={euser[0].eavatar ? euser[0].eavatar : avatarDefault} alt="" />
                     </div>
                 </div>
 
                 <div className="bio">
-                    <h2>{euser.name ? euser.name : 'Sem Nome'}</h2>
-                    {euser.bio ? euser.bio : 'Nada por aqui'}
+                    <h2>{euser[0].ename ? euser[0].ename : 'Sem Nome'}</h2>
+                    {euser[0].ebios ? euser[0].ebios : 'Nada por aqui'}
 
-                    <div className="network">
+                    {/* <div className="network">
                         <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {euser.following ? euser.following.length : 0} </p>
                         {
                             <div className={modalFollowing ? "modal open" : 'modal'}>
@@ -137,11 +136,11 @@ const UserDetail = () => {
                                 </div>
                             </div>
                         }
-                    </div>
+                    </div> */}
 
                 </div>
 
-                <div className="header-button-profile">
+                {/* <div className="header-button-profile">
                     {onChangeFollow(euser.followers ? euser.followers : [], uid)
                         ? (
                             <Button
@@ -160,7 +159,7 @@ const UserDetail = () => {
                             />
                         )
                     }
-                </div>
+                </div> */}
 
             </header>
 
@@ -173,27 +172,25 @@ const UserDetail = () => {
                             <>
                                 <Post
                                     key={index}
-                                    postId={item.eid}
-                                    user_id={item.euid}
-                                    // user_name={name}
-                                    // avatar={imgURL}
-                                    user_name={euser.name ? euser.name : 'Sem Nome'}
-                                    avatar={euser.avatar ? euser.avatar : null}
-                                    title={item.etitle}
-                                    category={item.ecategory}
-                                    content={item.econtent}
-                                    img_content={item.econtentImg}
-                                    likes={item.elikes}
+                                    postId={item.id}
+                                    user_id={item.user_id}
+                                    user_name={euser[0].ename ? euser[0].ename : 'Sem Nome'}
+                                    avatar={euser[0].eavatar ? euser[0].eavatar : null}
+                                    title={item.title}
+                                    category={item.category}
+                                    content={item.content}
+                                    img_content={item.img_content}
+                                    likes={item.likes}
                                     click_type_like={
                                         <LikeButton
-                                            postId={item.eid}
-                                            uid={item.euid}
-                                            user_name={euser.name ? euser.name : 'Sem Nome'}
-                                            userPhoto={euser.avatar ? euser.avatar : null}
-                                            title={item.etitle}
-                                            category={item.ecategory}
-                                            content={item.econtent}
-                                            imgContent={item.econtent}
+                                            postId={item.id}
+                                            uid={item.user_id}
+                                            user_name={euser[0].ename ? euser[0].ename : 'Sem Nome'}
+                                            userPhoto={euser[0].eavatar ? euser[0].eavatar : null}
+                                            title={item.title}
+                                            category={item.category}
+                                            content={item.content}
+                                            imgContent={item.img_content}
                                         />
                                     }
                                     internalUser={false}

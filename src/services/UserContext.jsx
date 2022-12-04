@@ -81,47 +81,47 @@ export const CostumerProvider = ({ children }) => {
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
 
-                const ufollowing = doc.data().following ? doc.data().following : false;
-                const ufollowers = doc.data().followers ? doc.data().followers : false;
-                setFollowing(ufollowing);
-                setFollowers(ufollowers);
+                // const ufollowing = doc.data().following ? doc.data().following : false;
+                // const ufollowers = doc.data().followers ? doc.data().followers : false;
+                // setFollowing(ufollowing);
+                // setFollowers(ufollowers);
 
-                if (following) {
-                    for (const followingId of following) {
-                        const q = query(collection(db, "users"), where("uid", "==", followingId));
-                        const dataFollowing = [];
-                        getDocs(q).then(result => {
-                            result.forEach((doc) => {
-                                const following = {
-                                    uid: followingId,
-                                    name: doc.data().name,
-                                    avatar: doc.data().imgURL
-                                }
-                                dataFollowing.push(following);
-                                setFollowing(dataFollowing);
-                            })
-                        })
-                    }
-                }
+                // if (following) {
+                //     for (const followingId of following) {
+                //         const q = query(collection(db, "users"), where("uid", "==", followingId));
+                //         const dataFollowing = [];
+                //         getDocs(q).then(result => {
+                //             result.forEach((doc) => {
+                //                 const following = {
+                //                     uid: followingId,
+                //                     name: doc.data().name,
+                //                     avatar: doc.data().imgURL
+                //                 }
+                //                 dataFollowing.push(following);
+                //                 setFollowing(dataFollowing);
+                //             })
+                //         })
+                //     }
+                // }
 
-                //pega os dados de quem está seguindo este user
-                if (followers) {
-                    for (const followerId of followers) {
-                        const q = query(collection(db, "users"), where("uid", "==", followerId));
-                        const dataFollowers = [];
-                        getDocs(q).then(result => {
-                            result.forEach((doc) => {
-                                const follower = {
-                                    uid: followerId,
-                                    name: doc.data().name,
-                                    avatar: doc.data().imgURL
-                                }
-                                dataFollowers.push(follower);
-                                setFollowers(dataFollowers);
-                            })
-                        })
-                    }
-                }
+                // //pega os dados de quem está seguindo este user
+                // if (followers) {
+                //     for (const followerId of followers) {
+                //         const q = query(collection(db, "users"), where("uid", "==", followerId));
+                //         const dataFollowers = [];
+                //         getDocs(q).then(result => {
+                //             result.forEach((doc) => {
+                //                 const follower = {
+                //                     uid: followerId,
+                //                     name: doc.data().name,
+                //                     avatar: doc.data().imgURL
+                //                 }
+                //                 dataFollowers.push(follower);
+                //                 setFollowers(dataFollowers);
+                //             })
+                //         })
+                //     }
+                // }
 
                 if (name) {
                     break
@@ -164,32 +164,36 @@ export const CostumerProvider = ({ children }) => {
         // }
         // setFollowing(dataFollowers);
 
+        const userPosts = posts.filter(post => post.user_id === uid);
+        console.log(userPosts);
+        setUposts(userPosts);
+        console.log(userPosts);
 
-        const secondq = query(collection(db, "post"), where("uid", "==", uid));
-        const secondquerySnapshot = await getDocs(secondq);
-        const d = [];
-        try {
-            secondquerySnapshot.forEach((doc) => {
-                const posts = {
-                    eid: doc.id,
-                    euid: doc.data().uid,
-                    etitle: doc.data().title,
-                    econtent: doc.data().content,
-                    econtentImg: doc.data().imgContent,
-                    ecategory: doc.data().category,
-                    elikes: doc.data().likes
-                }
+        // const secondq = query(collection(db, "post"), where("uid", "==", uid));
+        // const secondquerySnapshot = await getDocs(secondq);
+        // const d = [];
+        // try {
+        //     secondquerySnapshot.forEach((doc) => {
+        //         const posts = {
+        //             eid: doc.id,
+        //             euid: doc.data().uid,
+        //             etitle: doc.data().title,
+        //             econtent: doc.data().content,
+        //             econtentImg: doc.data().imgContent,
+        //             ecategory: doc.data().category,
+        //             elikes: doc.data().likes
+        //         }
 
-                // console.log('logando pela query para pegar post/ getUserId: ', posts);
-                d.push(posts);
-            });
+        //         // console.log('logando pela query para pegar post/ getUserId: ', posts);
+        //         d.push(posts);
+        //     });
 
-            setUposts(d);
-            // console.log('logando estados posts/ fun getUserId: ', uposts);
+        //     setUposts(d);
+        //     // console.log('logando estados posts/ fun getUserId: ', uposts);
 
-        } catch (error) {
-            console.log(error);
-        }
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     // que pegue todos os users da coleção para rederiza-los no filtro de busca  
@@ -220,143 +224,162 @@ export const CostumerProvider = ({ children }) => {
 
     //pega as informações de perfil de um user especifico para renderizar informações de perfil (nome, foto e bio) 
     // que pegue posts de um usuario especifico passando seu uid 
-    const getExternalUser = async (euid) => {
-        const q = query(collection(db, "users"), where("uid", "==", euid));
-        const querySnapshot = await getDocs(q);
+    const getExternalUser = (exuid) => {
 
-        querySnapshot.forEach((doc) => {
-            const following = doc.data().following
-            const followers = doc.data().followers
+        const ExternalUser = users.filter(user => user.euid === exuid);
+        console.log(ExternalUser);
+        setEuser(ExternalUser);
+        console.log('state', ExternalUser)
 
-            const user = {
-                id: doc.id,
-                name: doc.data().name,
-                bio: doc.data().userBio,
-                avatar: doc.data().imgURL,
-                following: following ? following : false,
-                followers: followers ? followers : false
-            }
+        const userPosts = posts.filter(post => post.user_id === exuid);
+        console.log(userPosts);
+        setEposts(userPosts);
+        console.log('state', eposts);
 
-            // pega os dados de quem este user está seguindo
-            if (user.following) {
-                for (const followingId of user.following) {
-                    const q = query(collection(db, "users"), where("uid", "==", followingId));
-                    const dataFollowing = [];
-                    getDocs(q).then(result => {
-                        result.forEach((doc) => {
-                            const following = {
-                                uid: followingId,
-                                name: doc.data().name,
-                                avatar: doc.data().imgURL
-                            }
-                            dataFollowing.push(following);
-                            user.following = dataFollowing;
-                        })
-                    })
-                }
-            }
+        // const q = query(collection(db, "users"), where("uid", "==", euid));
+        // const querySnapshot = await getDocs(q);
 
-            //pega os dados de quem está seguindo este user
-            if (user.followers) {
-                for (const followerId of user.followers) {
-                    const q = query(collection(db, "users"), where("uid", "==", followerId));
-                    const dataFollowers = [];
-                    getDocs(q).then(result => {
-                        result.forEach((doc) => {
-                            const follower = {
-                                uid: followerId,
-                                name: doc.data().name,
-                                avatar: doc.data().imgURL
-                            }
-                            dataFollowers.push(follower);
-                            user.followers = dataFollowers;
-                        })
-                    })
-                }
-            }
+        // querySnapshot.forEach((doc) => {
+        //     // const following = doc.data().following
+        //     // const followers = doc.data().followers
 
-            // dataUser.push(user);
-            setEuser(user);
-            console.log(euser);
-        });
+        //     const user = {
+        //         // id: doc.id,
+        //         name: doc.data().name,
+        //         bio: doc.data().userBio,
+        //         avatar: doc.data().imgURL,
+        //         // following: following ? following : false,
+        //         // followers: followers ? followers : false
+        //     }
+
+        //     // // pega os dados de quem este user está seguindo
+        //     // if (user.following) {
+        //     //     for (const followingId of user.following) {
+        //     //         const q = query(collection(db, "users"), where("uid", "==", followingId));
+        //     //         const dataFollowing = [];
+        //     //         getDocs(q).then(result => {
+        //     //             result.forEach((doc) => {
+        //     //                 const following = {
+        //     //                     uid: followingId,
+        //     //                     name: doc.data().name,
+        //     //                     avatar: doc.data().imgURL
+        //     //                 }
+        //     //                 dataFollowing.push(following);
+        //     //                 user.following = dataFollowing;
+        //     //             })
+        //     //         })
+        //     //     }
+        //     // }
+
+        //     // //pega os dados de quem está seguindo este user
+        //     // if (user.followers) {
+        //     //     for (const followerId of user.followers) {
+        //     //         const q = query(collection(db, "users"), where("uid", "==", followerId));
+        //     //         const dataFollowers = [];
+        //     //         getDocs(q).then(result => {
+        //     //             result.forEach((doc) => {
+        //     //                 const follower = {
+        //     //                     uid: followerId,
+        //     //                     name: doc.data().name,
+        //     //                     avatar: doc.data().imgURL
+        //     //                 }
+        //     //                 dataFollowers.push(follower);
+        //     //                 user.followers = dataFollowers;
+        //     //             })
+        //     //         })
+        //     //     }
+        //     // }
+
+        //     // dataUser.push(user);
+        //     setEuser(user);
+        //     console.log(euser);
+        // });
 
     }
 
-    const addFollowing = async (euid) => {
-        //atualizando doc do usuário logado adicionando em um array (following) o uid que que ele quer seguir
-        try {
-            await updateDoc(doc(db, "users", id), {
-                following: arrayUnion(euid)
-            });
-        } catch (error) {
-            console.log(error);
-        }
+    // const addFollowing = async (euid) => {
+    //     //atualizando doc do usuário logado adicionando em um array (following) o uid que que ele quer seguir
+    //     try {
+    //         await updateDoc(doc(db, "users", id), {
+    //             following: arrayUnion(euid)
+    //         });
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
 
-        //para adicionar o uid do usuário logado aos dados do user a quem ele está seguindo
-        const q = query(collection(db, "users"), where("uid", "==", euid));
-        const querySnapshot = await getDocs(q);
-        let eid = '';
-        querySnapshot.forEach((doc) => {
-            eid = doc.id
-        });
-        //atualizando doc do usuário de quem o usuário logado quer seguir, adicionando uid do logged user a um array (followers)
-        try {
-            await updateDoc(doc(db, "users", eid), {
-                followers: arrayUnion(uid)
-            });
-        } catch (error) {
-            console.log(error)
-        }
+    //     //para adicionar o uid do usuário logado aos dados do user a quem ele está seguindo
+    //     const q = query(collection(db, "users"), where("uid", "==", euid));
+    //     const querySnapshot = await getDocs(q);
+    //     let eid = '';
+    //     querySnapshot.forEach((doc) => {
+    //         eid = doc.id
+    //     });
+    //     //atualizando doc do usuário de quem o usuário logado quer seguir, adicionando uid do logged user a um array (followers)
+    //     try {
+    //         await updateDoc(doc(db, "users", eid), {
+    //             followers: arrayUnion(uid)
+    //         });
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
 
-        getExternalUser(euid);
-    }
+    //     getExternalUser(euid);
+    // }
+
+    // const removeFollowing = async (euid) => {
+    //     // const other = { euid: euid, ename: name, eimg: photoURL }
+    //     await updateDoc(doc(db, "users", id), {
+    //         following: arrayRemove(euid)
+    //     });
+
+    //     //para remover o uid do usuário logado dos dados do user a quem ele está seguindo
+    //     const q = query(collection(db, "users"), where("uid", "==", euid));
+    //     const querySnapshot = await getDocs(q);
+    //     let eid = '';
+    //     querySnapshot.forEach((doc) => {
+    //         eid = doc.id
+    //     });
+    //     //atualizando doc do usuário de quem o usuário logado quer seguir, removendo uid do logged user do array (followers)
+    //     // const me = { uid: uid, uname: name, uimg: imgUrl }
+    //     await updateDoc(doc(db, "users", eid), {
+    //         followers: arrayRemove(uid)
+    //     });
+
+    //     getExternalUser(euid);
+    // }
+
+    // const getExternalPost = async (exuid) => {
+
+    //     const externalUserPosts = posts.filter(post => post.user_id === exuid);
+    //     console.log(externalUserPosts);
+    //     setUposts(externalUserPosts);
 
 
-    const removeFollowing = async (euid) => {
-        // const other = { euid: euid, ename: name, eimg: photoURL }
-        await updateDoc(doc(db, "users", id), {
-            following: arrayRemove(euid)
-        });
-
-        //para remover o uid do usuário logado dos dados do user a quem ele está seguindo
-        const q = query(collection(db, "users"), where("uid", "==", euid));
-        const querySnapshot = await getDocs(q);
-        let eid = '';
-        querySnapshot.forEach((doc) => {
-            eid = doc.id
-        });
-        //atualizando doc do usuário de quem o usuário logado quer seguir, removendo uid do logged user do array (followers)
-        // const me = { uid: uid, uname: name, uimg: imgUrl }
-        await updateDoc(doc(db, "users", eid), {
-            followers: arrayRemove(uid)
-        });
-
-        getExternalUser(euid);
-    }
-
-    const getExternalPost = async (euid) => {
-        const q = query(collection(db, "post"), where("uid", "==", euid));
-        const querySnapshot = await getDocs(q);
-        const dataPost = []
-        querySnapshot.forEach((doc) => {
-            const post = {
-                eid: doc.id,
-                euid: doc.data().uid,
-                etitle: doc.data().title,
-                econtent: doc.data().content,
-                econtentImg: doc.data().imgContent,
-                ecategory: doc.data().category,
-                elikes: doc.data().likes
-            }
-            dataPost.push(post);
-            setEposts(dataPost);
-        })
-    }
+    //     // const q = query(collection(db, "post"), where("uid", "==", exuid));
+    //     // const querySnapshot = await getDocs(q);
+    //     // const dataPost = []
+    //     // querySnapshot.forEach((doc) => {
+    //     //     const post = {
+    //     //         eid: doc.id,
+    //     //         euid: doc.data().uid,
+    //     //         etitle: doc.data().title,
+    //     //         econtent: doc.data().content,
+    //     //         econtentImg: doc.data().imgContent,
+    //     //         ecategory: doc.data().category,
+    //     //         elikes: doc.data().likes
+    //     //     }
+    //     //     dataPost.push(post);
+    //     //     setEposts(dataPost);
+    //     // })
+    // }
 
     //FUNÇÃO PARA CADASTRO COM O AUTHENTICATED E FIRESTORE
+
     const registerWithEmailAndPassword = async (name, email, password) => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
+
+            // sendEmailVerification(res.user, )
             const user = res.user;
             await addDoc(collectionRef, {
                 uid: user.uid,
@@ -386,10 +409,25 @@ export const CostumerProvider = ({ children }) => {
         });
 
         try {
-            deleteDoc(doc(db, 'users', id));
+            deleteDoc(doc(db, 'users', id)).then(() => {
+                console.log('usuário deletado: DB')
+            })
         } catch (err) {
             console.error(err);
             alert(err.message);
+        }
+
+        try {
+            const secondq = query(collection(db, "post"), where("uid", "==", uid));
+            getDocs(secondq).then(res => {
+                res.forEach((doc) => {
+                    deleteDoc(doc(db, 'post', doc.id));
+                })
+            }).then(() => {
+                console.log('posts do usuário deletado: DB')
+            })
+        } catch (error) {
+            console.log(error);
         }
 
         getUsers();
@@ -399,7 +437,9 @@ export const CostumerProvider = ({ children }) => {
     const logInWithEmailAndPassword = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
-            navigate('/explore');
+
+            res.user ? navigate('explore') : navigate('/login');
+            // navigate('/explore');
         } catch (err) {
             console.error(err);
             alert(err.message);
@@ -472,7 +512,23 @@ export const CostumerProvider = ({ children }) => {
             });
     }
 
-    // sendPasswordResetEmail(auth, email)
+    const updateUserPassword = async (email) => {
+        // const q = query(collection(db, "users"), where("email", "==", email));
+        // const querySnapshot = await getDocs(q);
+        // let validEmail = '';
+        // querySnapshot.forEach((doc) => {
+        //     validEmail = doc.data().email
+        // });
+        // if(validEmail){
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert('E-mail de redefinição de senha enviado');
+                navigate('/config');
+            })
+        // }else {
+        //     alert('Coloque um e-mail cadastrado')
+        // }
+    }
 
     /* ================================
         FUNÇÕES PARA OS POSTS 
@@ -481,19 +537,32 @@ export const CostumerProvider = ({ children }) => {
     // FUNÇÃO DE CADASTRO DE POST 
     const registerPost = async (title, content, cat, img_content) => {
         try {
-            await addDoc(collection(db, "post"), {
+            const createdPost = await addDoc(collection(db, "post"), {
                 uid: user?.uid,
-                userPhoto: user?.photoURL,
-                imgContent: img_content,
+                userPhoto: user?.photoURL ? user?.photoURL : null,
                 name: name,
                 title: title,
                 content: content,
                 category: cat,
+                imgContent: img_content ? img_content : null,
                 likes: 0
             });
-            getPosts();
-            // alert('Flashcard criado!');
 
+            registerReview(
+                createdPost.id,
+                uid,
+                user?.photoURL ? user?.photoURL : null,
+                img_content ? img_content : null,
+                name,
+                title,
+                content,
+                cat
+            );
+
+
+            getPosts();
+            getReviews();
+            alert('Flashcard e revisão criados!');
         } catch (err) {
             console.log(err)
         }
@@ -550,7 +619,8 @@ export const CostumerProvider = ({ children }) => {
         }
 
         console.log('post atualizado');
-        // getPosts();
+        getPosts();
+        getUserId();
     }
 
     //para adicionar adicionar 1 like no post
@@ -604,6 +674,7 @@ export const CostumerProvider = ({ children }) => {
             });
 
             getReviews();
+            getPosts();
             alert('Post adicionado nas revisões!');
         } catch (err) {
             console.log(err)
@@ -612,10 +683,17 @@ export const CostumerProvider = ({ children }) => {
     }
 
     //para deletar revisão
-    const removeReview = async (reviewId) => {
-        await deleteDoc(doc(db, 'revision', reviewId));
+    const removeReview = async (postId) => {
+        const q = query(collection(db, "revision"), where('postId', '==', postId));
+        const querySnapshot = await getDocs(q);
+        let eid = ''
+        querySnapshot.forEach((doc) => {
+            eid = doc.id
+        })
+        deleteDoc(doc(db, 'revision', eid));
         alert('revisão deletada');
         getReviews();
+        getPosts();
     }
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
@@ -697,9 +775,11 @@ export const CostumerProvider = ({ children }) => {
 
             registerWithEmailAndPassword, logInWithEmailAndPassword, signInWithGoogle, logout,
 
-            getExternalUser, getUsers, getUserId, updateUserProfile, revomeUser, addFollowing, removeFollowing,
+            getExternalUser, getUsers, getUserId, updateUserProfile, revomeUser,
+            // addFollowing, removeFollowing,
 
-            getExternalPost, getPosts, registerPost, updatePost, deletePost, addLikePost, removeLikePost,
+            getPosts, registerPost, updatePost, deletePost, addLikePost, removeLikePost,
+            // getExternalPost, 
 
             registerReview, getReviews, updateReview, removeReview
         }}>

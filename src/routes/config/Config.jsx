@@ -39,6 +39,8 @@ const Config = () => {
     // useeffect 
     useEffect(
         () => {
+            //toda vez que eu modificar meu input controlado eu seto tudo de novo
+            console.log('effect ruunded');
             setImgURL(imgUrl ? imgUrl : user.photoURL);
             setUserName(name ? name : user.displayName);
             setBios(bios);

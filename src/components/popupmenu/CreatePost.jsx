@@ -20,6 +20,7 @@ import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import TxtArea from '../txtarea/TxtArea';
+import { useRef } from 'react';
 
 const CreatePost = ({ funPopUp }) => {
     // states 
@@ -31,10 +32,12 @@ const CreatePost = ({ funPopUp }) => {
     const [favCategory_user, setFavCategory_user] = useState([]);
     const [createdPost, setCreatedPost] = useState(null);
 
+    const refInput = useRef(null);
+
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { name, uid, registerReview, id } = UserAuth();
+    const { name, uid, registerPost, id } = UserAuth();
 
     // functions 
 
@@ -75,13 +78,13 @@ const CreatePost = ({ funPopUp }) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
         if (!file) return;
-        let newURL = '';
+        let newURL = null;
 
-        //cadastrado imagem no storage
-        try {
-            if (file) {
-                const imageName = uid + '.' + file?.name?.split('.')?.pop();
-                const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
+        if (file) {
+            try {
+                //cadastrado imagem no storage
+                const imageName = user?.uid + '.' + file?.name?.split('.')?.pop();
+                const postRef = ref(storage, `postContent/user:${user?.uid}/${imageName}`);
                 const url = await getDownloadURL(postRef);
                 newURL = url;
 
@@ -103,52 +106,16 @@ const CreatePost = ({ funPopUp }) => {
                 }
 
                 // todo: delete the previous profile image of the user
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
         }
 
         //cadastrado informações do post
-        try {
-            const postDoc = await addDoc(collection(db, "post"), {
-                uid: user?.uid,
-                userPhoto: user?.photoURL ? user?.photoURL : null,
-                imgContent: newURL ? newURL : null,
-                name: user?.displayName,
-                title: title,
-                content: content,
-                category: favCategory_user,
-                likes: 0
-            });
-
-            await updateDoc(doc(db, "users", id), {
-                userPosts: arrayUnion(postDoc)
-            });
-
-            alert('Flashcard criado!');
-            // cleanForm();
-            // navigate('/explore');
-        } catch (err) {
-            console.log(err)
-        }
-
-        //adicionar post à revisão
-        // try {
-        //     registerReview(
-        //         user?.uid,
-        //         user?.photoURL,
-        //         imgURL,
-        //         name,
-        //         title,
-        //         content,
-        //         favCategory_user
-        //     )
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        registerPost(title, content, favCategory_user, newURL ? newURL : null);
 
         cleanForm();
-        navigate('/explore');
+        funPopUp();
     }
 
     return (
@@ -213,12 +180,18 @@ const CreatePost = ({ funPopUp }) => {
 
                     <div className="input-img-container">
                         <div>
-                            <p>Inserir Imagem</p>
+                            <Button
+                                bg_color='primary'
+                                text='Selecione uma imagem'
+                                fun={() => refInput?.current?.click()}
+                                type='button'
+                            />
                             <InputImg
                                 setImage={setImage}
                                 className='container-img-upload-preview'
                                 imgPreview={image?.preview || imageDefault}
                                 imgPreviewClassName='upload-preview'
+                                onSetReference={(ref) => refInput.current = ref}
                             />
                         </div>
                         <div className="btns-popup">

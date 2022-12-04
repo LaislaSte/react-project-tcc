@@ -18,6 +18,7 @@ import { AiOutlineClose, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import Button from '../button/Button';
 import { UserAuth } from '../../services/UserContext';
 import { async } from '@firebase/util';
+import { useEffect } from 'react';
 
 const LikeButton = ({
     postId,
@@ -37,7 +38,14 @@ const LikeButton = ({
     // imports 
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { registerReview, reviews, removeReview, addLikePost, removeLikePost } = UserAuth();
+    const { registerReview, reviews, getReviews, removeReview, addLikePost, removeLikePost } = UserAuth();
+
+    // useEffect(() => {
+    //     const getAllReviews = () => {
+    //         getReviews();
+    //     }
+    //     getAllReviews();
+    // }, [])
 
     //colocar no useContext
     const addReview = () => {
@@ -57,7 +65,7 @@ const LikeButton = ({
     }
 
     const delteReview = () => {
-        removeReview(reviewId);
+        removeReview(postId);
         removeLikePost(postId);
         showPopUp();
     }
