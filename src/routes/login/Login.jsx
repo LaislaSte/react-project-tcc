@@ -28,14 +28,10 @@ const Login = () => {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
-
     useEffect(
         () => {
-            if (loading) {
-                return;
-            }
+            if (loading) { return; }
             if (user) navigate('/explore');
-
         },
         [user, loading]
     )
@@ -46,8 +42,6 @@ const Login = () => {
 
     const handleClick = () => {
         logInWithEmailAndPassword(email, password);
-        getPosts();
-        getReviews();
         navigate('/explore');
     }
 
@@ -60,7 +54,6 @@ const Login = () => {
                     <div className="brand-content-item">
                         <h1>Acesse</h1>
                         <p className="p-italic">Insira seus dados</p>
-                        <p> Autenticado: {String(user)} </p>
                     </div>
                     <form className="login-form-container" >
                         <Input
@@ -108,7 +101,7 @@ const Login = () => {
                         </h3>
                         <h3 className='label'>
                             Esqueceu sua senha?
-                            <Link to={'/forgetpassword'} className=' colorfull-text' >Clique aqui</Link>
+                            <Link to={'/changepasswordlogout'} className=' colorfull-text' >Clique aqui</Link>
                         </h3>
                     </div>
                 </div>

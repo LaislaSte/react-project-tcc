@@ -20,17 +20,17 @@ const Review = () => {
     const { reviews, getReviews, categorys } = UserAuth();
 
     //useEffect para pegar as revisões
-    // useEffect(() => {
-    //     const callReviews = () => {
-    //         getReviews();
-    //         // setUserPosts(uposts);
-    //     }
-    //     // return () => {
-    //     //     //useEffect antes de renderizar novamente, execute a função
-    //     callReviews()
-    //     // }
+    useEffect(() => {
+        const callReviews = () => {
+            getReviews();
+            // setUserPosts(uposts);
+        }
+        // return () => {
+        //     //useEffect antes de renderizar novamente, execute a função
+        callReviews()
+        // }
 
-    // }, []);
+    }, []);
 
     return (
         <>

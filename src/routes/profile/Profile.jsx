@@ -35,30 +35,17 @@ const Profile = () => {
     // imports
     const [user, loading, error] = useAuthState(auth);
     // const { bios, imgUrl, name, uposts, getUserId, following, followers } = UserAuth();
-    const { bios, imgUrl, name, uposts, getUserId } = UserAuth();
-
-    const following = [
-        {
-
-        },
-    ]
-
-    const followers = [
-        {
-
-        },
-    ]
+    const { bios, imgUrl, name, uposts, getUserId, getPosts, getReviews } = UserAuth();
 
     // useeffect
     useEffect(() => {
         console.log('effect runded');
         const callUser = () => {
             getUserId();
+            getReviews();
+            getPosts();
         }
-        // return () => {
-        //     //useEffect antes de renderizar novamente, execute a função
         callUser()
-        // }
 
     }, []);
 

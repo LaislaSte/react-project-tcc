@@ -45,7 +45,7 @@ export const Post = ({
     // functions 
     //função que chama o deletar post do context
     const clickDeletePost = () => {
-        deletePost(postId);
+        deletePost(postId, img_content);
         onClickSM1();
     }
 
@@ -62,7 +62,7 @@ export const Post = ({
 
                     <div className="header-content-user" onClick={goToUserPage}>
                         <div className="header-user-avatar">
-                            <img src={avatar ? avatar : avatarDefault} alt="avatar do usuário do post" className='header-user-avatar-img' />
+                            <img src={avatar || avatarDefault} alt="avatar do usuário do post" className='header-user-avatar-img' />
                         </div>
                         <p> {user_name ? user_name : 'Sem Nome'} </p>
                     </div>
@@ -116,7 +116,7 @@ export const Post = ({
                         {img_content
                             ? (
                                 <>
-                                    <img src={img_content} alt="imagem do conteúdo do post" onClick={onCickImg} />
+                                    <img src={img_content} alt="imagem do conteúdo do post" className='img-content' onClick={onCickImg} />
                                     <div className={modal ? "modal open" : 'modal'}>
                                         <img src={img_content} alt="" />
                                         <MdClose onClick={onCickImg} />

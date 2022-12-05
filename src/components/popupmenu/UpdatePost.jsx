@@ -48,6 +48,7 @@ const UpdatePost = ({
             setTitle(utitle);
             setContent(ucontent);
             setImgURL(uimgURL);
+            setFavCategory_user(ucategory);
         },
         []
     )
@@ -69,7 +70,7 @@ const UpdatePost = ({
     }
 
     const formValidUpdatePost = () => {
-        return postContentValid(content) && titleValid(title);
+        return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
 
@@ -77,48 +78,35 @@ const UpdatePost = ({
     const onClickUpdatePost = async (e) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
-        if (!file) return;
-        console.log('chada função');
+        console.log(file);
+        if (!file) {
+            updatePost(postId, title, favCategory_user, content, imgURL ? imgURL : null);
+            funPopUp();
+        };
 
-        try {
-            if (file) {
-                const imageName = uid + '.' + file?.name?.split('.')?.pop();
-                const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
-                let newURL = '';
-                const url = await getDownloadURL(postRef);
-                newURL = url;
+        const imageName = uid + '.' + file?.name?.split('.')?.pop();
+        const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
 
-                // setImgURL(url);
-                // console.log('setado estado pra essa url', imgURL);
-
-                if (!url) {
-                    const uploadTask = uploadBytesResumable(postRef, file);
-                    uploadTask.on(
-                        'state_changed',
-                        snapshot => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            // setProgress(progress);
-                        },
-                        error => {
-                            console.error(error);
-                        },
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
-                        }
-                    )
+        if (file) {
+            const uploadTask = uploadBytesResumable(postRef, file);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // setProgress(progress);
+                },
+                error => {
+                    console.error(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                        updatePost(postId, title, favCategory_user, content, url);
+                        funPopUp();
+                    })
                 }
-
-
-                console.log('dentro do trycat', newURL);
-                updatePost(postId, title, favCategory_user, content, newURL);
-
-                // todo: delete the previous profile image of the user
-            }
-        } catch (error) {
-            console.log(error);
+            )
         }
 
-        funPopUp();
     }
 
     return (
@@ -188,7 +176,7 @@ const UpdatePost = ({
                             <InputImg
                                 setImage={setImage}
                                 className='container-img-upload-preview'
-                                imgPreview={image?.preview || imageDefault}
+                                imgPreview={image?.preview || imgURL || imageDefault}
                                 imgPreviewClassName='upload-preview'
                             />
                         </div>

@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // auth:
-import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, updatePassword, sendEmailVerification, updateEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 // firestore: 
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, arrayUnion, serverTimestamp, arrayRemove, increment } from "firebase/firestore";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -10,7 +10,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import moment from 'moment/moment';
 
 // ARCHIVES FROM PROJECT
-import { db, auth, provider } from './Banco';
+import { db, auth, provider, storage } from './Banco';
+import { deleteObject, listAll, ref } from 'firebase/storage';
 
 //instanciado um objeto com o Hook do react createContext
 export const CostumerContext = createContext();
@@ -34,7 +35,7 @@ export const CostumerProvider = ({ children }) => {
     const [following, setFollowing] = useState([]);
 
     // usuario externo/especifico 
-    const [euser, setEuser] = useState([]);
+    const [euser, setEuser] = useState(null);
     const [eposts, setEposts] = useState([]);
 
     // dados do feed
@@ -77,52 +78,10 @@ export const CostumerProvider = ({ children }) => {
             for (var i in querySnapshot.docs) {
                 const doc = querySnapshot.docs[i]
                 setId(doc.id);
-                if (!name) { setName(doc.data().name); }
-                if (!imgUrl) { setImgUrl(doc.data().imgURL); }
+                setName(doc.data().name ? doc.data().name : user.displayName);
+                setImgUrl(doc.data().imgURL ? doc.data().imgURL : user.photoURL);
                 setBios(doc.data().userBio);
                 setCategorys(doc.data().userCategorys);
-
-                // const ufollowing = doc.data().following ? doc.data().following : false;
-                // const ufollowers = doc.data().followers ? doc.data().followers : false;
-                // setFollowing(ufollowing);
-                // setFollowers(ufollowers);
-
-                // if (following) {
-                //     for (const followingId of following) {
-                //         const q = query(collection(db, "users"), where("uid", "==", followingId));
-                //         const dataFollowing = [];
-                //         getDocs(q).then(result => {
-                //             result.forEach((doc) => {
-                //                 const following = {
-                //                     uid: followingId,
-                //                     name: doc.data().name,
-                //                     avatar: doc.data().imgURL
-                //                 }
-                //                 dataFollowing.push(following);
-                //                 setFollowing(dataFollowing);
-                //             })
-                //         })
-                //     }
-                // }
-
-                // //pega os dados de quem está seguindo este user
-                // if (followers) {
-                //     for (const followerId of followers) {
-                //         const q = query(collection(db, "users"), where("uid", "==", followerId));
-                //         const dataFollowers = [];
-                //         getDocs(q).then(result => {
-                //             result.forEach((doc) => {
-                //                 const follower = {
-                //                     uid: followerId,
-                //                     name: doc.data().name,
-                //                     avatar: doc.data().imgURL
-                //                 }
-                //                 dataFollowers.push(follower);
-                //                 setFollowers(dataFollowers);
-                //             })
-                //         })
-                //     }
-                // }
 
                 if (name) {
                     break
@@ -133,71 +92,11 @@ export const CostumerProvider = ({ children }) => {
             console.log(error);
         }
 
-        // //get name e foto de user que o user logado está seguindo
-        // const dataFollowing = [];
-        // for (const followingId of following) {
-        //     const q = query(collection(db, "users"), where("uid", "==", followingId));
-        //     const querySnapshot = await getDocs(q);
-        //     querySnapshot.forEach((doc) => {
-        //         const following = {
-        //             uid: followingId,
-        //             name: doc.data().name,
-        //             avatar: doc.data().imgURL
-        //         }
-        //         dataFollowing.push(following);
-        //     })
-        // }
-        // setFollowing(dataFollowing);
-
-        // //get name e foto de user que quem está seguindo user logado
-        // const dataFollowers = [];
-        // for (const followerId of followers) {
-        //     const q = query(collection(db, "users"), where("uid", "==", followerId));
-        //     const querySnapshot = await getDocs(q);
-        //     querySnapshot.forEach((doc) => {
-        //         const follower = {
-        //             uid: followerId,
-        //             name: doc.data().name,
-        //             avatar: doc.data().imgURL
-        //         }
-        //         dataFollowers.push(follower);
-        //     })
-        // }
-        // setFollowing(dataFollowers);
-
         const userPosts = posts.filter(post => post.user_id === uid);
-        console.log(userPosts);
         setUposts(userPosts);
-        console.log(userPosts);
-
-        // const secondq = query(collection(db, "post"), where("uid", "==", uid));
-        // const secondquerySnapshot = await getDocs(secondq);
-        // const d = [];
-        // try {
-        //     secondquerySnapshot.forEach((doc) => {
-        //         const posts = {
-        //             eid: doc.id,
-        //             euid: doc.data().uid,
-        //             etitle: doc.data().title,
-        //             econtent: doc.data().content,
-        //             econtentImg: doc.data().imgContent,
-        //             ecategory: doc.data().category,
-        //             elikes: doc.data().likes
-        //         }
-
-        //         // console.log('logando pela query para pegar post/ getUserId: ', posts);
-        //         d.push(posts);
-        //     });
-
-        //     setUposts(d);
-        //     // console.log('logando estados posts/ fun getUserId: ', uposts);
-
-        // } catch (error) {
-        //     console.log(error);
-        // }
     }
 
-    // que pegue todos os users da coleção para rederiza-los no filtro de busca  
+    // que pegue todos os users da coleção para rederiza-los no filtro de busca e para filtrar o usuário logado e externo  
     const getUsers = async () => {
         const q = query(collection(db, "users"));
         const querySnapshot = await getDocs(q);
@@ -205,12 +104,11 @@ export const CostumerProvider = ({ children }) => {
 
         try {
             querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
                 const userObj = {
                     euid: doc.data().uid,
-                    ename: doc.data().name,
-                    eavatar: doc.data().imgURL,
-                    ebios: doc.data().userBio
+                    ename: doc.data().name ? doc.data().name : null,
+                    eavatar: doc.data().imgURL ? doc.data().imgURL : null,
+                    ebios: doc.data().userBio ? doc.data().userBio : null
                 }
                 d.push(userObj);
             });
@@ -223,164 +121,10 @@ export const CostumerProvider = ({ children }) => {
 
     }
 
-    //pega as informações de perfil de um user especifico para renderizar informações de perfil (nome, foto e bio) 
-    // que pegue posts de um usuario especifico passando seu uid 
-    const getExternalUser = (exuid) => {
-
-        const ExternalUser = users.filter(user => user.euid === exuid);
-        console.log(ExternalUser);
-        setEuser(ExternalUser);
-        console.log('state', ExternalUser)
-
-        const userPosts = posts.filter(post => post.user_id === exuid);
-        console.log(userPosts);
-        setEposts(userPosts);
-        console.log('state', eposts);
-
-        // const q = query(collection(db, "users"), where("uid", "==", euid));
-        // const querySnapshot = await getDocs(q);
-
-        // querySnapshot.forEach((doc) => {
-        //     // const following = doc.data().following
-        //     // const followers = doc.data().followers
-
-        //     const user = {
-        //         // id: doc.id,
-        //         name: doc.data().name,
-        //         bio: doc.data().userBio,
-        //         avatar: doc.data().imgURL,
-        //         // following: following ? following : false,
-        //         // followers: followers ? followers : false
-        //     }
-
-        //     // // pega os dados de quem este user está seguindo
-        //     // if (user.following) {
-        //     //     for (const followingId of user.following) {
-        //     //         const q = query(collection(db, "users"), where("uid", "==", followingId));
-        //     //         const dataFollowing = [];
-        //     //         getDocs(q).then(result => {
-        //     //             result.forEach((doc) => {
-        //     //                 const following = {
-        //     //                     uid: followingId,
-        //     //                     name: doc.data().name,
-        //     //                     avatar: doc.data().imgURL
-        //     //                 }
-        //     //                 dataFollowing.push(following);
-        //     //                 user.following = dataFollowing;
-        //     //             })
-        //     //         })
-        //     //     }
-        //     // }
-
-        //     // //pega os dados de quem está seguindo este user
-        //     // if (user.followers) {
-        //     //     for (const followerId of user.followers) {
-        //     //         const q = query(collection(db, "users"), where("uid", "==", followerId));
-        //     //         const dataFollowers = [];
-        //     //         getDocs(q).then(result => {
-        //     //             result.forEach((doc) => {
-        //     //                 const follower = {
-        //     //                     uid: followerId,
-        //     //                     name: doc.data().name,
-        //     //                     avatar: doc.data().imgURL
-        //     //                 }
-        //     //                 dataFollowers.push(follower);
-        //     //                 user.followers = dataFollowers;
-        //     //             })
-        //     //         })
-        //     //     }
-        //     // }
-
-        //     // dataUser.push(user);
-        //     setEuser(user);
-        //     console.log(euser);
-        // });
-
-    }
-
-    // const addFollowing = async (euid) => {
-    //     //atualizando doc do usuário logado adicionando em um array (following) o uid que que ele quer seguir
-    //     try {
-    //         await updateDoc(doc(db, "users", id), {
-    //             following: arrayUnion(euid)
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-
-    //     //para adicionar o uid do usuário logado aos dados do user a quem ele está seguindo
-    //     const q = query(collection(db, "users"), where("uid", "==", euid));
-    //     const querySnapshot = await getDocs(q);
-    //     let eid = '';
-    //     querySnapshot.forEach((doc) => {
-    //         eid = doc.id
-    //     });
-    //     //atualizando doc do usuário de quem o usuário logado quer seguir, adicionando uid do logged user a um array (followers)
-    //     try {
-    //         await updateDoc(doc(db, "users", eid), {
-    //             followers: arrayUnion(uid)
-    //         });
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-
-    //     getExternalUser(euid);
-    // }
-
-    // const removeFollowing = async (euid) => {
-    //     // const other = { euid: euid, ename: name, eimg: photoURL }
-    //     await updateDoc(doc(db, "users", id), {
-    //         following: arrayRemove(euid)
-    //     });
-
-    //     //para remover o uid do usuário logado dos dados do user a quem ele está seguindo
-    //     const q = query(collection(db, "users"), where("uid", "==", euid));
-    //     const querySnapshot = await getDocs(q);
-    //     let eid = '';
-    //     querySnapshot.forEach((doc) => {
-    //         eid = doc.id
-    //     });
-    //     //atualizando doc do usuário de quem o usuário logado quer seguir, removendo uid do logged user do array (followers)
-    //     // const me = { uid: uid, uname: name, uimg: imgUrl }
-    //     await updateDoc(doc(db, "users", eid), {
-    //         followers: arrayRemove(uid)
-    //     });
-
-    //     getExternalUser(euid);
-    // }
-
-    // const getExternalPost = async (exuid) => {
-
-    //     const externalUserPosts = posts.filter(post => post.user_id === exuid);
-    //     console.log(externalUserPosts);
-    //     setUposts(externalUserPosts);
-
-
-    //     // const q = query(collection(db, "post"), where("uid", "==", exuid));
-    //     // const querySnapshot = await getDocs(q);
-    //     // const dataPost = []
-    //     // querySnapshot.forEach((doc) => {
-    //     //     const post = {
-    //     //         eid: doc.id,
-    //     //         euid: doc.data().uid,
-    //     //         etitle: doc.data().title,
-    //     //         econtent: doc.data().content,
-    //     //         econtentImg: doc.data().imgContent,
-    //     //         ecategory: doc.data().category,
-    //     //         elikes: doc.data().likes
-    //     //     }
-    //     //     dataPost.push(post);
-    //     //     setEposts(dataPost);
-    //     // })
-    // }
-
     //FUNÇÃO PARA CADASTRO COM O AUTHENTICATED E FIRESTORE
-
     const registerWithEmailAndPassword = async (name, email, password) => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
-
-            sendEmailVerification(res.user,)
             const user = res.user;
             await addDoc(collectionRef, {
                 uid: user.uid,
@@ -388,10 +132,10 @@ export const CostumerProvider = ({ children }) => {
                 imgURL: user.photoURL,
                 password,
                 authProvider: "local",
-                email,
+                email
             });
-
-            alert('usuario criado');
+            setName(name);
+            alert('usuario cadastrado no banco!');
             getUsers();
         } catch (err) {
             console.error(err);
@@ -399,48 +143,132 @@ export const CostumerProvider = ({ children }) => {
         }
     };
 
-    //FUNÇÃO PARA EXCLUIR USER COM O AUTHENTICATED E FIRESTORE
-    //excluir todas as instancias desse usuarios, como os post
-    const revomeUser = () => {
+    //FUNÇÃO PARA EXCLUIR USER COM O AUTHENTICATION, FIRESTORE E STORAGE
+    //excluir todas as instancias desse usuarios, como os post, revisões e imagens cadastradas
+    const revomeUser = async (password) => {
+        const providerQuery = query(collection(db, 'users'), where('uid', '==', uid));
+        const providerSnapshot = await getDocs(providerQuery);
+        let providerLogin = ''
+        providerSnapshot.forEach(doc => {
+            providerLogin = doc.data().authProvider
+        })
 
-        deleteUser(user).then(() => {
-            console.log('usuário deletado: AUTH');
+        if (providerLogin === 'local') {
+            const credential = EmailAuthProvider.credential(
+                auth.currentUser.email,
+                password
+            )
+            await reauthenticateWithCredential(auth.currentUser, credential);
+            //removendo do authentication
+            deleteUser(auth.currentUser).then(() => {
+                console.log('usuário deletado: AUTH');
+            }).catch((error) => {
+                console.log(error, ': AUTH');
+                alert(error.message);
+            });
+        }
+
+        if (providerLogin === 'google') {
+            // Sign in using a popup.
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            const googleCredential = GoogleAuthProvider.credentialFromResult(result);
+            await reauthenticateWithCredential(auth.currentUser, googleCredential);
+            //removendo do authentication
+            deleteUser(auth.currentUser).then(() => {
+                console.log('usuário deletado: AUTH');
+            }).catch((error) => {
+                console.log(error, ': AUTH');
+                alert(error.message);
+            });
+        }
+
+        //removendo do banco de dados
+        deleteDoc(doc(db, 'users', id)).then(() => {
+            console.log('usuário deletado: DB')
         }).catch((error) => {
-            console.log(error, ': AUTH');
-        });
+            console.error(error);
+            alert(error.message);
+        })
 
-        try {
-            deleteDoc(doc(db, 'users', id)).then(() => {
-                console.log('usuário deletado: DB')
+        //deletando do banco os posts desse usuário
+        const secondq = query(collection(db, "post"), where("uid", "==", uid));
+        getDocs(secondq).then(res => {
+            res.forEach((doc) => {
+                deletePost(doc.id, doc.data().imgContent);
             })
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
-
-        try {
-            const secondq = query(collection(db, "post"), where("uid", "==", uid));
-            getDocs(secondq).then(res => {
-                res.forEach((doc) => {
-                    deleteDoc(doc(db, 'post', doc.id));
-                })
-            }).then(() => {
-                console.log('posts do usuário deletado: DB')
-            })
-        } catch (error) {
+        }).then(() => {
+            console.log('posts do usuário deletado: DB')
+        }).catch((error) => {
             console.log(error);
-        }
+            alert(error.message);
+        })
 
-        getUsers();
+        //deletando do banco as revisões desse usuário
+        const thirdq = query(collection(db, "revision"), where("userAdded", "==", uid));
+        const deleteReview = (reviewId) => {
+            deleteDoc(doc(db, 'revision', reviewId));
+        }
+        getDocs(thirdq).then(res => {
+            res.forEach((doc) => {
+                deleteReview(doc.id)
+            })
+        }).then(() => {
+            console.log('revisões do usuário deletadas: DB')
+        }).catch((error) => {
+            console.log(error);
+            alert(error.message);
+        })
+
+        // Create a reference under which you want to list
+        const postsRef = ref(storage, `/postContent/user:${uid}`);
+        const profileRef = ref(storage, `/profile/user:${uid}`)
+
+        // Find all the prefixes and items.
+        listAll(postsRef)
+            .then((res) => {
+                res.items.forEach((itemRef) => {
+                    if (itemRef !== null) {
+                        const imgRef = ref(storage, itemRef);
+                        deleteObject(imgRef).then(() => {
+                            // File deleted successfully
+                            console.log('reference deletada hi from imgReference: ');
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }
+                });
+            }).catch((error) => {
+                console.log(error);
+                alert(error.message);
+            });
+
+        listAll(profileRef)
+            .then((res) => {
+                res.items.forEach((itemRef) => {
+                    // All the items under listRef.
+                    if (itemRef !== null) {
+                        const imgRef = ref(storage, itemRef);
+                        deleteObject(imgRef).then(() => {
+                            // File deleted successfully
+                            console.log('reference deletada hi from imgReference: ');
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }
+                });
+            }).catch((error) => {
+                console.log(error);
+                alert(error.message);
+            });
+
     }
 
     //FUNÇÕES DE LOGIN, LOGIN COM GOOGLE E LOGOUT
     const logInWithEmailAndPassword = async (email, password) => {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
-
             res.user ? navigate('explore') : navigate('/login');
-            // navigate('/explore');
         } catch (err) {
             console.error(err);
             alert(err.message);
@@ -451,9 +279,8 @@ export const CostumerProvider = ({ children }) => {
         signInWithPopup(auth, provider)
             .then((result) => {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
                 const userGoogle = result.user;
-
+                setUser(userGoogle);
                 const q = query(collectionRef, where("uid", "==", userGoogle.uid));
                 const docs = getDocs(q);
                 if (docs.docs.length === 0) {
@@ -462,73 +289,169 @@ export const CostumerProvider = ({ children }) => {
                         name: user.displayName,
                         authProvider: "google",
                         email: user.email,
+                        imgURL: user.photoURL
                     });
                 }
 
-                console.log(userGoogle);
-                setUser(userGoogle);
                 navigate('/explore');
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 const email = error.customData.email;
                 const credential = GoogleAuthProvider.credentialFromError(error);
-                console.log(errorCode, errorMessage, email, credential);
+                alert(errorCode, errorMessage, email, credential);
             });
     }
 
     const logout = () => {
-        signOut(auth);
-        setUser(null);
-        // setAuthenticated(false);
-        navigate('/');
+        try {
+            //função do provider para deslogar
+            signOut(auth);
+            setUser(null);
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
+        }
     };
 
     //FUNÇÕES DE ATUALIZAÇÃO
     const updateUserProfile = (imgURL, name_user, bios_user, categorys) => {
 
-        try {
-            updateProfile(user, {
-                displayName: name_user,
-                photoURL: imgURL
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        //atualizando nome e foto no provider
+        updateProfile(user, {
+            displayName: name_user,
+            photoURL: imgURL
+        }).then(() => {
+            console.log('usuário atializado: AUTH');
+        }).catch((error) => {
+            console.log(error);
+            alert(error.message);
+        })
 
+        //atualizando informações no banco
         updateDoc(doc(db, "users", id), {
             userBio: bios_user,
             userCategorys: categorys,
             name: name_user,
             imgURL: imgURL
+        }).then(docRef => {
+            console.log(docRef, 'usuário atualizado: DB');
+            setBios(bios_user);
+            setName(name_user);
+            setImgUrl(imgURL);
+            setCategorys(categorys);
+        }).catch((error) => {
+            console.log('updateDoc error: ', error);
+            alert(error.message);
         })
-            .then(docRef => {
-                console.log(docRef, 'atualização com query');
-                setBios(bios_user);
-                setName(name_user);
-                setImgUrl(imgURL);
-                setCategorys(categorys);
-            }).catch((error) => {
-                console.log('updateDoc error: ', error)
-            });
     }
 
-    const updateUserPassword = async (email) => {
-        // const q = query(collection(db, "users"), where("email", "==", email));
-        // const querySnapshot = await getDocs(q);
-        // let validEmail = '';
-        // querySnapshot.forEach((doc) => {
-        //     validEmail = doc.data().email
-        // });
+    //para atualizar senha quando usuário não estiver logado
+    const updateUserPasswordLogOut = async (email) => {
+        const q = query(collection(db, "users"), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        let validEmail = null;
+        querySnapshot.forEach((doc) => {
+            validEmail = doc.data().email
+        });
+        // se não existir um e-mail fornecido:
+        if (validEmail) {
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert('E-mail de redefinição de senha enviado');
+                    navigate('/login');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    alert(error.message, error.code);
+                });
+        } else {
+            alert('E-mail não cadastrado! Cadastre-se no site ou coloque um e-mail cadastrado');
+        }
+
+        // ------------
+
+
         // if(validEmail){
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                alert('E-mail de redefinição de senha enviado');
-                navigate('/config');
-            })
+        // sendPasswordResetEmail(auth, email)
+        //     .then(() => {
+        //         alert('E-mail de redefinição de senha enviado');
+        //         navigate('/login');
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         alert(error.message, error.code);
+        //     });
         // }else {
-        //     alert('Coloque um e-mail cadastrado')
+        //     alert('E-mail não cadastrado! Cadastre-se no site ou coloque um e-mail cadastrado');
         // }
+    }
+
+    const updateUserPasswordLogIn = async (email) => {
+        //usar status de email verificado ou não como condição para a query, se for verificado não há necessidade dela ser feita, caso contrário ela é feita para verificar se há um e-mail relacionado com o usuário logado no banco
+
+        // if (auth.currentUser.emailVerified) {
+        //     sendPasswordResetEmail(auth, auth.currentUser.email)
+        //         .then(() => {
+        //             alert('E-mail de redefinição de senha enviado/ e-mail autenticado!');
+        //             navigate('/config');
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //             alert(error.message, error.code);
+        //         });
+        // } else {
+        const q = query(collection(db, "users"), where('uid', '==', uid), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        let validEmail = '';
+        querySnapshot.forEach((doc) => {
+            validEmail = doc.data().email
+        });
+        if (validEmail) {
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert('E-mail de redefinição de senha enviado/ e-mail existente no db');
+                    navigate('/config');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    alert(error.message, error.code);
+                });
+        } else {
+            alert('Não encontramos nenhum e-mail relacionado à sua conta');
+        }
+        // }
+
+    }
+
+    const updateUserEmail = async (email, password) => {
+
+        const credential = EmailAuthProvider.credential(
+            auth.currentUser.email,
+            password
+        )
+        await reauthenticateWithCredential(auth.currentUser, credential)
+
+        updateEmail(auth.currentUser, email).then(() => {
+            alert('E-mail atualizado');
+            navigate('/config');
+        }).catch((error) => {
+            console.log(error);
+            alert(error.message);
+        });
+
+        // getUserId();
+
+        // sendEmailVerification(auth.currentUser)
+        //     .then(() => {
+        //         alert('E-mail de verificação enviado! ');
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         alert(error.message);
+        //     })
     }
 
     /* ================================
@@ -560,8 +483,10 @@ export const CostumerProvider = ({ children }) => {
                 cat
             );
 
+            addLikePost(createdPost.id);
 
             getPosts();
+            getUserId();
             getReviews();
             alert('Flashcard e revisão criados!');
         } catch (err) {
@@ -572,71 +497,122 @@ export const CostumerProvider = ({ children }) => {
 
     // que pegue todos os posts da tabela para renderizar no explore 
     const getPosts = async () => {
-        const querySnapshot = await getDocs(collection(db, "post"));
-        const d = []
 
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            const post = {
-                id: doc.id,
-                user_name: doc.data().name,
-                user_id: doc.data().uid,
-                avatar: doc.data().userPhoto,
-                title: doc.data().title,
-                category: doc.data().category,
-                content: doc.data().content,
-                img_content: doc.data().imgContent,
-                likes: doc.data().likes
+        try {
+            const querySnapshot = await getDocs(collection(db, "post"));
+            const d = []
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                const post = {
+                    id: doc.id,
+                    user_name: doc.data().name,
+                    user_id: doc.data().uid,
+                    avatar: doc.data().userPhoto,
+                    title: doc.data().title,
+                    category: doc.data().category,
+                    content: doc.data().content,
+                    img_content: doc.data().imgContent,
+                    likes: doc.data().likes
+                }
+                d.push(post);
+            });
+
+            if (d) {
+                setPosts(d);
             }
-            d.push(post);
-        });
-
-        if (d) {
-            setPosts(d);
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
         }
     }
 
     //FUNÇÃO DE DELETAR POST
-    const deletePost = async (postId) => {
-        await deleteDoc(doc(db, 'post', postId));
-        // navigate('/explore');
-        getPosts();
+    const deletePost = async (postId, itemRef) => {
+        deleteDoc(doc(db, 'post', postId)).then(() => {
+            getPosts();
+        });
+
+        // const aq = query(collection(db, "post"), where('postId', '==', postId));
+        // const aquerySnapshot = await getDocs(q);
+        // let uimgRef = ''
+        // aquerySnapshot.forEach((doc) => {
+        //     uimgRef = doc.data().imgContent
+        // });
+
+        if (itemRef !== null) {
+            const imgRef = ref(storage, itemRef);
+            deleteObject(imgRef).then(() => {
+                // File deleted successfully
+                console.log('reference deletada hi from imgReference: ');
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+        const q = query(collection(db, "revision"), where('postId', '==', postId), where('userAdded', '==', uid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            deleteDoc(doc(db, 'revision', doc.id));
+        });
+
+        getReviews();
         getUserId();
     }
 
     //FUNÇÃO DE ATUALIZAR POST
-    const updatePost = (postId, title, cat, content, img_content) => {
-        try {
-            updateDoc(doc(db, 'post', postId), {
-                title: title,
-                category: cat,
-                content: content,
-                imgContent: img_content,
-            })
-            getUserId();
-            alert('mudança no post feita')
-        } catch (error) {
-            console.log(error)
-        }
+    const updatePost = async (postId, title, cat, content, img_content) => {
 
-        console.log('post atualizado');
-        getPosts();
-        getUserId();
+        updateDoc(doc(db, 'post', postId), {
+            title: title,
+            category: cat,
+            content: content,
+            imgContent: img_content,
+        }).then(() => {
+            alert('Mudança no post feita');
+            getPosts();
+            getUserId();
+        }).catch((error) => {
+            console.log(error);
+            alert(error.message);
+        });
+
+        const q = query(collection(db, "revision"), where('postId', '==', postId));
+        const querySnapshot = await getDocs(q);
+        let reviewId = ''
+        querySnapshot.forEach((doc) => {
+            reviewId = doc.id
+        });
+        updateDoc(doc(db, 'revision', reviewId), {
+            title: title,
+            category: cat,
+            content: content,
+            imgContent: img_content
+        }).then(() => {
+            alert('Mudança na revisão feita');
+            getPosts();
+            getUserId();
+        }).catch((error) => {
+            console.log(error);
+            alert(error.message);
+        });
+
     }
 
     //para adicionar adicionar 1 like no post
-    const addLikePost = async (postId) => {
-        await updateDoc(doc(db, "post", postId), {
+    const addLikePost = (postId) => {
+        updateDoc(doc(db, "post", postId), {
             likes: increment(1)
+        }).then(() => {
+            getPosts();
         })
-        getPosts();
     }
     //para remover 1 like no post
-    const removeLikePost = async (postId) => {
-        await updateDoc(doc(db, "post", postId), {
+    const removeLikePost = (postId) => {
+        updateDoc(doc(db, "post", postId), {
             likes: increment(-1)
-        });
-        getPosts();
+        }).then(() => {
+            getPosts();
+        })
     }
 
 
@@ -678,16 +654,21 @@ export const CostumerProvider = ({ children }) => {
 
     //para deletar revisão
     const removeReview = async (postId) => {
-        const q = query(collection(db, "revision"), where('postId', '==', postId));
-        const querySnapshot = await getDocs(q);
-        let eid = ''
-        querySnapshot.forEach((doc) => {
-            eid = doc.id
-        })
-        deleteDoc(doc(db, 'revision', eid));
-        getReviews();
-        getPosts();
-        alert('revisão deletada');
+        try {
+            const q = query(collection(db, "revision"), where('postId', '==', postId));
+            const querySnapshot = await getDocs(q);
+            let eid = ''
+            querySnapshot.forEach((doc) => {
+                eid = doc.id
+            })
+            deleteDoc(doc(db, 'revision', eid));
+            getReviews();
+            getPosts();
+            alert('revisão deletada');
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
+        }
     }
 
     // que pegue todos as reviews da tabela para renderizar na rota review de acordo com sua data certa
@@ -778,8 +759,10 @@ export const CostumerProvider = ({ children }) => {
             reviews, notification, allReviews,
 
             registerWithEmailAndPassword, logInWithEmailAndPassword, signInWithGoogle, logout,
+            updateUserPasswordLogOut, updateUserPasswordLogIn, updateUserEmail,
 
-            getExternalUser, getUsers, getUserId, updateUserProfile, revomeUser,
+            getUsers, getUserId, updateUserProfile, revomeUser,
+            // getExternalUser, 
             // addFollowing, removeFollowing,
 
             getPosts, registerPost, updatePost, deletePost, addLikePost, removeLikePost,

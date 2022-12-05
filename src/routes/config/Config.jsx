@@ -19,6 +19,7 @@ import TxtArea from '../../components/txtarea/TxtArea';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { auth, storage } from '../../services/Banco';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { deleteField } from 'firebase/firestore';
 
 
 const Config = () => {
@@ -28,7 +29,6 @@ const Config = () => {
     const [name_user, setUserName] = useState('');
     const [bios_user, setBios] = useState('');
     const [category, setCategory] = useState([]);
-    const [img_user, setImgUser] = useState(null);
 
 
     // imports 
@@ -40,10 +40,11 @@ const Config = () => {
     useEffect(
         () => {
             //toda vez que eu modificar meu input controlado eu seto tudo de novo
-            console.log('effect ruunded');
+            console.log('effect ruunded / config');
             setImgURL(imgUrl ? imgUrl : user.photoURL);
             setUserName(name ? name : user.displayName);
-            setBios(bios);
+            setBios(bios ? bios : '');
+            setCategory(categorys ? categorys : []);
         },
         []
     )
@@ -52,15 +53,15 @@ const Config = () => {
     const handleCheckboxChange = (event) => {
         let newArray = [...category, event.target.value];
         if (category.includes(event.target.value)) {
-            newArray = newArray.filter(day => day !== event.target.value);
+            newArray = newArray.filter(cat => cat !== event.target.value);
         }
-        if (newArray.length > 5) {
-            showMessage(true);
-            //da para criar uma função para por no form valid
-        }
+        // if (newArray.length > 5) {
+        //     showMessage(true);
+        // }
         setCategory(newArray)
     };
 
+    //habilita mensagem de erro ao selecionar mais de uma categoria
     const showMessage = (fav) => {
         if (fav) {
             return !validCBcategorys(fav)
@@ -74,56 +75,45 @@ const Config = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const file = e.target[0]?.files[0];
-        if (!file) return;
-        let newURL = '';
+        if (!file) {
+            updateUserProfile(
+                imgURL ? imgURL : null,
+                name_user,
+                bios_user,
+                category
+            );
+            navigate("/profile");
+        };
 
-        if (!imgURL) {
-
-            try {
-                if (file) {
-                    const imageName = uid + '.' + file?.name?.split('.')?.pop();
-                    const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
-                    const url = await getDownloadURL(postRef);
-                    newURL = url;
-
-                    const uploadTask = uploadBytesResumable(postRef, file);
-                    uploadTask.on(
-                        'state_changed',
-                        snapshot => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            // setProgress(progress);
-                        },
-                        error => {
-                            console.error(error);
-                        },
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
-                        }
-                    )
+        const imageName = uid + '.' + file?.name?.split('.')?.pop();
+        const postRef = ref(storage, `profile/user:${uid}/${imageName}`);
+        if (file) {
+            const uploadTask = uploadBytesResumable(postRef, file);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // setProgress(progress);
+                },
+                error => {
+                    console.error(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                        updateUserProfile(
+                            url,
+                            name_user,
+                            bios_user,
+                            category
+                        );
+                        navigate("/profile");
+                    })
                 }
+            )
 
-
-                try {
-                    updateUserProfile(newURL, name_user, bios_user, category);
-                } catch (error) {
-                    console.log(error);
-                }
-            } catch (error) {
-                console.log(error);
-            }
         }
 
 
-        try {
-            updateUserProfile(imgURL, name_user, bios_user, category);
-        } catch (error) {
-            console.log(error);
-        }
-        // todo: delete the previous profile image od the user
-
-
-
-        navigate("/profile");
     }
 
     return (
@@ -207,13 +197,14 @@ const Config = () => {
                         type='submit'
                         bg_color='secondary save-button'
                         disable={!formValidUserUpdate()}
+                        change={!formValidUserUpdate()}
                     />
 
                     <div className="config-btns-container">
-                        <Link to='/chsangepassword1'>
+                        <Link to='/changepassword'>
                             <Button text='Editar Senha' type='button' bg_color='primary' />
                         </Link>
-                        <Link to='/changeemail1'>
+                        <Link to='/changeemail'>
                             <Button text='Editar E-mail' type='button' bg_color='primary' />
                         </Link>
                         <Link to='/deleteaccount'>

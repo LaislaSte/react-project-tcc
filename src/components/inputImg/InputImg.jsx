@@ -48,7 +48,7 @@ const InputImg = ({
         }
 
         //se nao, pegar o primeiro arquivo selecionado pelo input e atribuir a var file
-        const file = refInput?.current?.files[0];
+        const file = refInput?.current?.files?.[0];
 
         //para exibir a imagem numa pré visualização. Para isso usa se um metodo readDaraURL da classe global FileReader que le um arquivo e retorna a url deste arquivo. 
         const fileReader = new FileReader();

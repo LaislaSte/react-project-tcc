@@ -46,7 +46,7 @@ const CreatePost = ({ funPopUp }) => {
         setIsChecked(!isChecked);
         let newArray = [...favCategory_user, event.target.value];
         if (favCategory_user.includes(event.target.value)) {
-            newArray = newArray.filter(day => day !== event.target.value);
+            newArray = newArray.filter(cat => cat !== event.target.value);
         }
         setFavCategory_user(newArray);
     };
@@ -77,45 +77,39 @@ const CreatePost = ({ funPopUp }) => {
     const sendPost = async (e) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
-        if (!file) return;
-        let newURL = null;
-
-        if (file) {
-            try {
-                //cadastrado imagem no storage
-                const imageName = user?.uid + '.' + file?.name?.split('.')?.pop();
-                const postRef = ref(storage, `postContent/user:${user?.uid}/${imageName}`);
-                const url = await getDownloadURL(postRef);
-                newURL = url;
-
-                if (!url) {
-                    const uploadTask = uploadBytesResumable(postRef, file);
-                    uploadTask.on(
-                        'state_changed',
-                        snapshot => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            // setProgress(progress);
-                        },
-                        error => {
-                            console.error(error);
-                        },
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(url => { newURL = url })
-                        }
-                    )
-                }
-
-                // todo: delete the previous profile image of the user
-            } catch (error) {
-                console.log(error);
-            }
+        console.log(file);
+        if (!file) {
+            //cadastrado informações do post
+            registerPost(title, content, favCategory_user, imgURL ? imgURL : null);
+            cleanForm();
+            funPopUp();
         }
 
-        //cadastrado informações do post
-        registerPost(title, content, favCategory_user, newURL ? newURL : null);
+        const imageName = uid + '.' + file?.name?.split('.')?.pop();
+        const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
 
-        cleanForm();
-        funPopUp();
+        if (file) {
+            const uploadTask = uploadBytesResumable(postRef, file);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // setProgress(progress);
+                },
+                error => {
+                    console.error(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                        registerPost(title, content, favCategory_user, url);
+                        funPopUp();
+                        cleanForm();
+                    })
+                }
+            )
+        }
+
+
     }
 
     return (
@@ -180,18 +174,18 @@ const CreatePost = ({ funPopUp }) => {
 
                     <div className="input-img-container">
                         <div>
-                            <Button
+                            {/* <Button
                                 bg_color='primary'
                                 text='Selecione uma imagem'
                                 fun={() => refInput?.current?.click()}
                                 type='button'
-                            />
+                            /> */}
                             <InputImg
                                 setImage={setImage}
                                 className='container-img-upload-preview'
                                 imgPreview={image?.preview || imageDefault}
                                 imgPreviewClassName='upload-preview'
-                                onSetReference={(ref) => refInput.current = ref}
+                            // onSetReference={(ref) => refInput.current = ref}
                             />
                         </div>
                         <div className="btns-popup">

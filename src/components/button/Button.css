@@ -27,6 +27,11 @@
     border: solid 1.5px var(--SECONDARY_900);
 }
 
+.disable {
+    background-color: #049dbf70;
+    border: solid 1.5px var(--SECONDARY_900);
+}
+
 .google {
     background-color: var(--TEXT_LIGHT);
     border: solid 1.5px var(--SECONDARY_800);

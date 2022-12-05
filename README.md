@@ -44,21 +44,15 @@
 - **importante** ADICIONAR O DIVS PARA O GOOGLE ADS [ok]
 - **importante** limitar a quantidade de categorias selecionadas nas configurações e na criação de post [ok]
 - **importante** adicionar função de add ou remover revisão no like button [ok]
+- ajustar o layout de biografia dos perfis [ok]
+- mudar de lugar os google ads para antes do filter [ok]
 
 ---
 
 ### NOT DONE
 
-- criar função que pega o id dos elementos do componente category e o deixa selecionado (com um css diferente)
-- colocar um dropdown no change email e senha
-
 - arrumar estilo dos selects do filter, ou criar um select
-- verificar bug onde foto de perfil dos seguidores e seguindo não estão aparecendo no modal
 - mostrar o componente page not found nas paginas que nao existem
-
-- ajustar o layout de biografia dos perfis [ok]
-- mudar de lugar os google ads para antes do filter [ok]
-- **verificar** o botao seguir e deixar de seguir não está como esperado [ok]
 
 ---
 
@@ -85,6 +79,19 @@
 - **verificar** funções de adicionar e remover seguidor [ok]
 - **importante** verificar se o arrayRemove do removerFollower remove da maneira correta [ok]
 - **verificar** função para atualizar numero de likes de um posts quando likeados por um usuário [ok]
+- **verificar** função para atualizar post [ok]
+- **verificar** adicionar a função sendPost ao context [ok]
+- ajustar o filter de perfis ou remover do navbar (já que vai ser possivel procurar em explore) os ids se confundem com a query [ok]
+- tirar a função de deletar flashcard do botão já revisei e deixar apenas no btn de like [ok]
+- mudança de estilo no botao like na pagina explore [ok]
+- atualizar as querys para mudar os componentes toda vez que houver alguma mudança [ok]
+- **verificar** se não estiver logado reenvia para o login e não o public [ok]
+- **verificar** testar cadastrar um email inesistente no app [é possível, mas há uma possibilidade de editar um email quando logado]
+- **verificar** função para mudança de senha atravez de e-mail [ok]
+- **verificar** função para mudança de e-mail [ok]
+- **verificar** renderização de perfil dos usuários externos [OK]
+- **verificar** excluir todos os posts que o usuário fez quando ele optar por excluir sua conta [ok]
+- **verificar** cadastro de imagem no storage/ update post, register post [ok]
 
 ---
 
@@ -92,35 +99,18 @@
 
 #### ARRUMAR BUGS ANTES DO DEPLOY:
 
-- **verificar** função para atualizar post
-- **verificar** cadastro de imagem no storage
-- **verificar** adicionar a função sendPost ao context
-- mudança de estilo no botao like na pagina explore
-- **verificar** testar cadastrar um email inesistente no app
-- ajustar o filter de perfis ou remover do navbar (já que vai ser possivel procurar em explore) os ids se confundem com a query
-- atualizar as querys para mudar os componentes toda vez que houver alguma mudança
+- **verificar** atualização dos checkboxes []
 
-**todos da documentação**
+**verificar requisitos funcionais e não funcionais da documentação para ver se estão batendo com os todos**
 
-- **verificar** se não estiver logado reenvia para o login e não o public
-- tirar a função de deletar flashcard do botão já revisei e deixar apenas no btn de like [ok]
+- **LIMPAR O CODE**
 
-- **verificar** excluir todos os posts que o usuário fez quando ele obtar por excluir sua conta
+- **importante** fazer deploy
 
-- depois que edita uma nova senha (manda um email com o link, ele é redirecionado para a pagina do config novamente com um alert de email enviado)
-- achar uma função, ou ver como funciona a parte de mudnça de e-mail [é viável, mas testar se ele cadastra um e-mail válido]
-  `import { getAuth, updateEmail } from "firebase/auth"; const auth = getAuth(); updateEmail(auth.currentUser, "user@example.com").then(() => { // Email updated! // ... }).catch((error) => { // An error occurred // ... });`
-- retirar funcionalidade de seguir e parar de seguir (não tem necessidade e não atende aos requisitos)
-  OU
-
-- **verificar** fazer deploy
-
----
-
+- #### TODOS PARA DEPOIS DE FAZER DEPLOY:
+- **importante**
+- depois que edita uma nova senha, o usuário é redirecionado para o dominio;
 - **verificar** add google ads
-- **verificar** função para mudança de senha atravez de e-mail
-- **verificar** função para mudança de e-mail
-- **verificar** função para confirmação de e-mail
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
 

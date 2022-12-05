@@ -79,9 +79,16 @@
     margin-top: .5rem;
 }
 
+.img-content-container .img-content {
+    max-height: 75vh;
+    object-fit: contain;
+    border: 1px solid #049dbf63;
+}
+
 .img-content-container img {
     width: 70%;
-    object-fit: cover;
+    object-fit: contain;
+    border-radius: 1rem;
 }
 
 /* --------end of content---------- */

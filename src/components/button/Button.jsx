@@ -6,7 +6,8 @@ const Button = ({
     fun,
     disable = false,
     type,
-    bg_color
+    bg_color,
+    change
 
 }) => {
     return (
@@ -14,7 +15,7 @@ const Button = ({
             type={type}
             onClick={fun}
             disabled={disable}
-            className={`btn ${bg_color}`}
+            className={change ? `btn disable ` : `btn ${bg_color}`}
         >
             {text}
         </button>

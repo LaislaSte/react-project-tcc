@@ -32,10 +32,6 @@
     color: var(--SECONDARY_800);
 }
 
-.header-button-profile {
-    margin-right: 3rem;
-}
-
 .header-button-profile button:hover {
     color: var(--TEXT_LIGHT);
 }
@@ -103,7 +99,7 @@
     }
 
     .header-button-profile {
-        right: 1.5rem;
+        right: 1rem;
         width: 2.5rem;
         height: 2.5rem;
     }
