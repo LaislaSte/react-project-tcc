@@ -35,7 +35,7 @@ const Profile = () => {
     // imports
     const [user, loading, error] = useAuthState(auth);
     // const { bios, imgUrl, name, uposts, getUserId, following, followers } = UserAuth();
-    const { bios, imgUrl, name, uposts, getUserId, getPosts, getReviews } = UserAuth();
+    const { bios, imgUrl, name, uposts, getUserId, getPosts, getReviews, users, following, followers } = UserAuth();
 
     // useeffect
     useEffect(() => {
@@ -72,7 +72,7 @@ const Profile = () => {
                     <h2>{name || user.displayName || 'sem Nome'}</h2>
                     {bios}
 
-                    {/* <div className="network">
+                    <div className="network">
                         <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {following ? following.length : 0} </p>
                         {
                             <div className={modalFollowing ? "modal open" : 'modal'}>
@@ -80,17 +80,24 @@ const Profile = () => {
                                 <div className="popup-container">
                                     <h1 className='follower-modal-h1'> Seguindo </h1>
                                     {following
-                                        ? following.map(i => {
+                                        ? following.map(id => {
                                             return (
-                                                <div className="modal-follows-container">
-                                                    <GoToPageModal
-                                                        className='modal-follows-container'
-                                                        uid={i.uid}
-                                                        name={i.name}
-                                                        avatar={i.avatar}
-                                                        text='Seguindo'
-                                                    />
-                                                </div>
+                                                <>
+                                                    {users.filter(user => user.euid === id).map(user => {
+                                                        return (
+                                                            <>
+                                                                <GoToPageModal
+                                                                    className='popup-container'
+                                                                    uid={user.euid}
+                                                                    name={user.ename}
+                                                                    avatar={user.eavatar}
+                                                                    text='seguidores'
+                                                                />
+                                                            </> 
+                                                        )
+
+                                                    })}
+                                                </>
                                             )
                                         })
                                         : null
@@ -98,22 +105,32 @@ const Profile = () => {
                                 </div>
                             </div>
                         }
+
                         <p onClick={changeModalFollowers} className='cursor-pointer'> Seguidores: {followers ? followers.length : 0} </p>
                         {
                             <div className={modalFollowers ? "modal open" : 'modal'}>
                                 <MdClose onClick={changeModalFollowers} />
                                 <div className="popup-container">
-                                    <h1 className='follower-modal-h1'>Seguidores</h1>
+                                    <h1 className='follower-modal-h1'> Seguidores </h1>
                                     {followers
-                                        ? followers.map(i => {
+                                        ? followers.map(id => {
                                             return (
-                                                <GoToPageModal
-                                                    className='popup-container'
-                                                    uid={i.uid}
-                                                    name={i.name}
-                                                    avatar={i.avatar}
-                                                    text='seguidores'
-                                                />
+                                                <>
+                                                    {users.filter(user => user.euid === id).map(user => {
+                                                        return (
+                                                            <>
+                                                                <GoToPageModal
+                                                                    className='popup-container'
+                                                                    uid={user.euid}
+                                                                    name={user.ename}
+                                                                    avatar={user.eavatar}
+                                                                    text='seguidores'
+                                                                />
+                                                            </> 
+                                                        )
+
+                                                    })}
+                                                </>
                                             )
                                         })
                                         : null
@@ -121,7 +138,7 @@ const Profile = () => {
                                 </div>
                             </div>
                         }
-                    </div> */}
+                    </div>
 
                 </div>
 
