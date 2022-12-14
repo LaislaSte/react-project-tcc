@@ -1,12 +1,17 @@
+// HOOKS AND LIBS 
 import React, { useState } from 'react';
-import './Global.css';
 import { useNavigate, Link } from 'react-router-dom';
-import Button from '../../components/button/Button';
+import { MdClose } from 'react-icons/md';
+
+// ARCHIVES FROM PROJECT
+import './Global.css';
 import { UserAuth } from '../../services/UserContext';
 import avatarDefault from '../../assets/img-avatar.png';
-import Input from '../../components/input/Input';
 import { passConfValid, passwordValid } from '../../utils/validators';
-import { MdClose } from 'react-icons/md';
+
+/*PAGES AND COMPONENTS */
+import Button from '../../components/button/Button';
+import Input from '../../components/input/Input';
 
 const DeleteAccount = () => {
 
@@ -25,8 +30,8 @@ const DeleteAccount = () => {
 
     const deleteAccount = (e) => {
         e.preventDefault();
-        console.log('called')
         revomeUser(password);
+        navigate('/');
     }
 
     const notDeleteAccount = () => {
@@ -86,7 +91,6 @@ const DeleteAccount = () => {
                             type='submit'
                             text='Deletar conta permanentemente'
                             bg_color='secondary'
-                        // disable={!formValid()}
                         />
                     </div>
                 </form>

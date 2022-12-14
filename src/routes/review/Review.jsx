@@ -12,21 +12,20 @@ import ReviewButton from '../../components/reviewbutton/ReviewButton';
 import { Post } from '../../components/post/Post';
 import CreateButton from '../../components/createbutton/CreateButton';
 import LikeButton from '../../components/likebutton/LikeButton';
+import Categorys from '../../components/categorys/Categorys'
 
 const Review = () => {
     //states
     const [query, setQuery] = useState('');
 
+    //imports
     const { reviews, getReviews, categorys } = UserAuth();
 
     //useEffect para pegar as revisões
     useEffect(() => {
         const callReviews = () => {
             getReviews();
-            // setUserPosts(uposts);
         }
-        // return () => {
-        //     //useEffect antes de renderizar novamente, execute a função
         callReviews()
         // }
 
@@ -36,7 +35,7 @@ const Review = () => {
         <>
             <header className="header-main-filter">
                 <Navbar />
-                {/* <Categorys /> */}
+                <CreateButton />
                 <div className="aa">
                     <h1>
                         google ads
@@ -44,33 +43,39 @@ const Review = () => {
                 </div>
 
                 <div className="search-filter">
-                    <select onChange={(e) => { setQuery(e.target.value); }} className="custom-select input-outline-primary" aria-label="Filter Countries By Region">
+                    <ul className='menu-item-category' onChange={(e) => { setQuery(e.target.value); }} >
                         {categorys
                             ? (
                                 <>
-                                    <option value="All"> Tudo </option>
+                                    <li value="All" className="item-category" onClick={(e) => { setQuery(e.target.value) }}> Tudo </li>
                                     {categorys.map((item, index) => {
                                         return (
-
-                                            <option key={index} value={item}> {item} </option>
+                                            <Categorys
+                                                item={item}
+                                                key={index}
+                                                funSetQuery={setQuery}
+                                            />
                                         )
                                     })}
                                 </>
                             )
                             : (
                                 <>
-                                    <option value="All"> Tudo </option>
-                                    {arrCategorys.map((i, index) => {
+                                    <li value="All" className="item-category" onClick={(e) => { setQuery(e.target.value) }} > Tudo </li>
+                                    {arrCategorys.map((item, index) => {
                                         return (
-                                            <option key={index} value={i}>{i}</option>
+                                            <Categorys
+                                                item={item}
+                                                key={index}
+                                                funSetQuery={setQuery}
+                                            />
                                         )
                                     })}
                                 </>
                             )
                         }
-                    </select>
+                    </ul>
                 </div>
-                <CreateButton />
             </header>
 
 
@@ -81,7 +86,7 @@ const Review = () => {
                         {reviews.filter(item => item.category.includes(query)).map(doc => {
                             return (
                                 <Post
-                                    key={doc.id}
+                                    postId={doc.postId}
                                     user_id={doc.user_id}
                                     user_name={doc.user_name}
                                     avatar={doc.avatar}
@@ -101,7 +106,7 @@ const Review = () => {
                 {reviews.map(doc => {
                     return (
                         <Post
-                            key={doc.id}
+                            postId={doc.postId}
                             user_id={doc.uid}
                             user_name={doc.name}
                             avatar={doc.userPhoto}

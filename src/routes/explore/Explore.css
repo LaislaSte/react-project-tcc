@@ -39,6 +39,24 @@
     color: var(--TEXT);
 }
 
+.result-search-container-users {
+    width: 100%;
+    padding: 2rem;
+    background-color: var(--BACKGROUND_DARK);
+}
+
+.user {
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 1.5rem;
+}
+
+.user-content {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
 /* end of search-filter */
 
 @media (max-width: 670px) {

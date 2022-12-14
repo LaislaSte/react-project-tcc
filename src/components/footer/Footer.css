@@ -1,6 +1,5 @@
 .footer-container {
     background-color: var(--BACKGROUND_DARK);
-    /* height: max-content; */
     width: 100%;
     display: flex;
     align-items: center;

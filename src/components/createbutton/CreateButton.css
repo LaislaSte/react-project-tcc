@@ -18,3 +18,10 @@
     height: 100%;
     color: aqua;
 }
+
+@media (max-width: 800px) {
+    .create-button-container {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}

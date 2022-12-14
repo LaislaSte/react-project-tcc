@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from 'react-router-dom';
-//import { BrowserRouter, Routes, Route } from "react-router-dom";
-/*IMPORT THE PAGES/COMPONENTS */
-//import { Login } from "./components/login/Login";
-//import Expenses from "./routes/expenses";
-//import Invoices from "./routes/invoices";
+import { BrowserRouter } from 'react-router-dom';
+
+/*IMPORT THE PAGES/COMPONENTS/ARCHIVES */
+import App from './App';
+import './index.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -1,43 +1,35 @@
 // HOOKS AND LIBS 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
 
 // ARCHIVES FROM PROJECT
 import './CreatePost.css';
-import { fakeUser } from '../../utils/ArraysAndFunctions';
 import imageDefault from '../../assets/icons/uploadDefault.svg'
 import avatarDefault from '../../assets/icons/avatarDefault.svg'
 import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
 import { UserAuth } from '../../services/UserContext';
-import { db, auth, storage } from '../../services/Banco';
+import { auth, storage } from '../../services/Banco';
+import { arrCategorys } from '../../utils/arraysHeader';
 
 /*PAGES AND COMPONENTS */
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import TxtArea from '../txtarea/TxtArea';
-import { useRef } from 'react';
 
 const CreatePost = ({ funPopUp }) => {
     // states 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
-    const [imgURL, setImgURL] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [favCategory_user, setFavCategory_user] = useState([]);
-    const [createdPost, setCreatedPost] = useState(null);
 
-    const refInput = useRef(null);
-
-    // imports 
-    const navigate = useNavigate();
+    // imports
     const [user, loading, error] = useAuthState(auth);
-    const { name, uid, registerPost, id } = UserAuth();
+    const { imgUrl, uid, registerPost, categorys } = UserAuth();
 
     // functions 
 
@@ -57,7 +49,6 @@ const CreatePost = ({ funPopUp }) => {
         setTitle('');
         setFavCategory_user([]);
         setImage(null);
-        setImgURL('');
         funPopUp()
     }
 
@@ -73,21 +64,21 @@ const CreatePost = ({ funPopUp }) => {
         return postContentValid(content) && titleValid(title) && validCBpost(favCategory_user);
     }
 
-    //cadastra um post e uma revisão
+    //envia dados do formulário para cadastrar um post e uma revisão desse post
     const sendPost = async (e) => {
         e.preventDefault();
         const file = e.target[5]?.files[0];
         console.log(file);
+        //se não houver um file, cadastra imagem como null
         if (!file) {
             //cadastrado informações do post
-            registerPost(title, content, favCategory_user, imgURL ? imgURL : null);
+            registerPost(title, content, favCategory_user, null);
             cleanForm();
-            funPopUp();
         }
 
         const imageName = uid + '.' + file?.name?.split('.')?.pop();
         const postRef = ref(storage, `postContent/user:${uid}/${imageName}`);
-
+        //se existir um file cadastre no storage e depois cadastre a url dessa imagem
         if (file) {
             const uploadTask = uploadBytesResumable(postRef, file);
             uploadTask.on(
@@ -102,13 +93,11 @@ const CreatePost = ({ funPopUp }) => {
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then(url => {
                         registerPost(title, content, favCategory_user, url);
-                        funPopUp();
                         cleanForm();
                     })
                 }
             )
         }
-
 
     }
 
@@ -117,13 +106,13 @@ const CreatePost = ({ funPopUp }) => {
 
             <div className="create-post-container">
                 <div className="close-icon-container">
-                    <AiOutlineClose className='close-icon' onClick={funPopUp} />
+                    <AiOutlineClose className='close-icon' onClick={cleanForm} />
                 </div>
 
                 <form onSubmit={sendPost} className="form-create-post">
 
                     <div className="user-img-container">
-                        <img src={user?.photoURL || avatarDefault} alt="" />
+                        <img src={user?.photoURL || imgUrl || avatarDefault} alt="" />
 
                         <Input
                             text='Título'
@@ -135,7 +124,6 @@ const CreatePost = ({ funPopUp }) => {
                             showMessage={title && !titleValid(title)}
                         />
                     </div>
-
 
                     <TxtArea
                         text='Adicione uma descrição'
@@ -150,44 +138,56 @@ const CreatePost = ({ funPopUp }) => {
                     <p>Adicione uma categoria</p>
 
                     <div className='checked-boxes-container' >
-                        {fakeUser.arrIdsCategorys.map((item, index) => {
-                            return (
-                                <div className="form-checked-box" key={index}>
-
-                                    <input
-                                        type="checkbox"
-                                        value={item}
-                                        id={item}
-                                        onChange={handleOnChangeCB}
-                                    />
-
-                                    <label htmlFor={item}>{item}</label>
-
-                                </div>
+                        {categorys.lenght > 0
+                            ? (
+                                <>
+                                    {categorys.map((item, index) => {
+                                        return (
+                                            <div className="form-checked-box" key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={item}
+                                                    id={item}
+                                                    onChange={handleOnChangeCB}
+                                                />
+                                                <label htmlFor={item}>{item}</label>
+                                            </div>
+                                        )
+                                    })}
+                                </>
                             )
-                        })}
+                            : (
+                                <>
+                                    {arrCategorys.map((item, index) => {
+                                        return (
+                                            <div className="form-checked-box" key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={item}
+                                                    id={item}
+                                                    onChange={handleOnChangeCB}
+                                                />
+                                                <label htmlFor={item}>{item}</label>
+                                            </div>
+                                        )
+                                    })}
+                                </>
+                            )
+                        }
 
-                        {/* Tirar a opção de selecionar mais de um. */}
                         {showMessage(favCategory_user) && <p className='input-error-message'> Selecione apenas 1 categoria </p>}
-
                     </div>
 
                     <div className="input-img-container">
                         <div>
-                            {/* <Button
-                                bg_color='primary'
-                                text='Selecione uma imagem'
-                                fun={() => refInput?.current?.click()}
-                                type='button'
-                            /> */}
                             <InputImg
                                 setImage={setImage}
-                                className='container-img-upload-preview'
+                                className='container-img-upload-preview cursor-pointer'
                                 imgPreview={image?.preview || imageDefault}
                                 imgPreviewClassName='upload-preview'
-                            // onSetReference={(ref) => refInput.current = ref}
                             />
                         </div>
+
                         <div className="btns-popup">
                             <Button
                                 text='Apenas postar'

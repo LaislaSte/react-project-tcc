@@ -1,25 +1,23 @@
 // HOOKS AND LIBS 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiOutlineClose } from 'react-icons/ai';
 
 // ARCHIVES FROM PROJECT
 import './CreatePost.css';
-import { fakeUser } from '../../utils/ArraysAndFunctions';
+import { arrCategorys } from '../../utils/arraysHeader';
 import imageDefault from '../../assets/icons/uploadDefault.svg'
 import avatarDefault from '../../assets/icons/avatarDefault.svg'
 import { postContentValid, titleValid, validCBpost } from '../../utils/validators';
 import { UserAuth } from '../../services/UserContext';
-import { db, auth, storage } from '../../services/Banco';
+import { auth, storage } from '../../services/Banco';
 
 /*PAGES AND COMPONENTS */
 import Button from '../button/Button';
 import Input from '../input/Input';
 import InputImg from '../inputImg/InputImg';
 import TxtArea from '../txtarea/TxtArea';
-import uploadFile from '../../services/uploadFile';
 
 const UpdatePost = ({
     funPopUp,
@@ -38,9 +36,8 @@ const UpdatePost = ({
     const [isChecked, setIsChecked] = useState(false);
 
     // imports 
-    const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const { updatePost, uid } = UserAuth();
+    const { updatePost, uid, imgUrl, categorys } = UserAuth();
 
     // useeffect 
     useEffect(
@@ -48,7 +45,6 @@ const UpdatePost = ({
             setTitle(utitle);
             setContent(ucontent);
             setImgURL(uimgURL);
-            setFavCategory_user(ucategory);
         },
         []
     )
@@ -80,7 +76,7 @@ const UpdatePost = ({
         const file = e.target[5]?.files[0];
         console.log(file);
         if (!file) {
-            updatePost(postId, title, favCategory_user, content, imgURL ? imgURL : null);
+            updatePost(postId, title, favCategory_user ? favCategory_user : categorys, content, imgURL ? imgURL : null);
             funPopUp();
         };
 
@@ -100,7 +96,7 @@ const UpdatePost = ({
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                        updatePost(postId, title, favCategory_user, content, url);
+                        updatePost(postId, title, favCategory_user ? favCategory_user : categorys, content, url);
                         funPopUp();
                     })
                 }
@@ -120,7 +116,7 @@ const UpdatePost = ({
                 <form onSubmit={onClickUpdatePost} className="form-create-post">
 
                     <div className="user-img-container">
-                        <img src={user?.photoURL || avatarDefault} alt="" />
+                        <img src={user?.photoURL || imgUrl || avatarDefault} alt="" />
 
                         <Input
                             text='Título'
@@ -132,7 +128,6 @@ const UpdatePost = ({
                             showMessage={title && !titleValid(title)}
                         />
                     </div>
-
 
                     <TxtArea
                         text='Adicione uma descrição'
@@ -148,26 +143,44 @@ const UpdatePost = ({
                     <p> {ucategory} </p>
 
                     <div className='checked-boxes-container' >
-                        {fakeUser.arrIdsCategorys.map((item, index) => {
-                            return (
-                                <div className="form-checked-box" key={index}>
-
-                                    <input
-                                        type="checkbox"
-                                        value={item}
-                                        id={item}
-                                        onChange={handleOnChangeCB}
-                                    />
-
-                                    <label htmlFor={item}>{item}</label>
-
-                                </div>
+                        {categorys.lenght > 0
+                            ? (
+                                <>
+                                    {categorys.map((item, index) => {
+                                        return (
+                                            <div className="form-checked-box" key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={item}
+                                                    id={item}
+                                                    onChange={handleOnChangeCB}
+                                                />
+                                                <label htmlFor={item}>{item}</label>
+                                            </div>
+                                        )
+                                    })}
+                                </>
                             )
-                        })}
+                            : (
+                                <>
+                                    {arrCategorys.map((item, index) => {
+                                        return (
+                                            <div className="form-checked-box" key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={item}
+                                                    id={item}
+                                                    onChange={handleOnChangeCB}
+                                                />
+                                                <label htmlFor={item}>{item}</label>
+                                            </div>
+                                        )
+                                    })}
+                                </>
+                            )
+                        }
 
-                        {/* Tirar a opção de selecionar mais de um. */}
                         {showMessage(favCategory_user) && <p className='input-error-message'> Selecione apenas 1 categoria </p>}
-
                     </div>
 
                     <div className="input-img-container">
@@ -180,6 +193,7 @@ const UpdatePost = ({
                                 imgPreviewClassName='upload-preview'
                             />
                         </div>
+
                         <div className="btns-popup">
                             <Button
                                 text='Salvar'
@@ -190,11 +204,8 @@ const UpdatePost = ({
                         </div>
                     </div>
 
-
                 </form>
-
             </div>
-
         </div>
     )
 }

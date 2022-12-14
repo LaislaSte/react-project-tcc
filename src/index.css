@@ -252,6 +252,30 @@ a:hover {
   transform: scale(1);
 }
 
+.coment-modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  background: var(--BACKGROUND_DARK_DARKER);
+  padding: 5rem 0;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.coment-modal .coment-modal-arrow-down {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 90vh;
+  left: 15vw;
+}
+
 .modal img {
   width: auto;
   max-width: 100%;
@@ -264,7 +288,8 @@ a:hover {
   overflow-y: auto;
 }
 
-.modal svg {
+.modal svg,
+.coment-modal .coment-modal-icon {
   position: fixed;
   top: 2rem;
   right: 2rem;

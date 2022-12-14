@@ -109,36 +109,21 @@
 
 /* modal of go to page component  */
 
-.external-user-container {
+.follow-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
+    padding: .5rem 1rem;
 }
 
-.external-user-modal-img-container {
-    max-height: 1.5rem;
-    height: 2rem;
-    max-width: 1.5rem;
-    width: 2rem;
-    border-radius: 50%;
-}
-
-.external-user-modal-img-container img {
-    height: 100%;
-    width: 100%;
+.follow-container .follow-container-img {
+    height: 2.5rem;
+    width: 2.5rem;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .follower-modal-h1 {
     margin-bottom: 2.5rem;
-}
-
-.modal-follows-container {
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--BACKGROUND_DARK_DARKER);
 }

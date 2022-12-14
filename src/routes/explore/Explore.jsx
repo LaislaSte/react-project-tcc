@@ -1,11 +1,8 @@
 // HOOKS AND LIBS 
 import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 
 // ARCHIVES FROM PROJECT
-import { auth } from "../../services/Banco";
 import './Explore.css';
 import { UserAuth } from "../../services/UserContext";
 import { arrCategorys } from "../../utils/arraysHeader";
@@ -16,40 +13,73 @@ import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import CreateButton from "../../components/createbutton/CreateButton";
 import Input from "../../components/input/Input";
-// import Categorys from '../../components/categorys/Categorys';
+import SearchUser from "./SearchUser";
+import Categorys from "../../components/categorys/Categorys";
+import Modal from '../../components/modal/Modal';
 
 const Explore = () => {
     //states for search
     const [query, setQuery] = useState("");
 
     // imports 
-    const { getPosts, getReviews, posts, reviews, categorys } = UserAuth();
-    const [user, loading] = useAuthState(auth);
-    const navigate = useNavigate();
+    const { getPosts, getReviews, getUsers, users, posts, categorys } = UserAuth();
 
     // useeffect 
     useEffect(() => {
-        console.log('effect runded/ explore');
-        if (loading) return;
-        if (!user) return navigate("/login");
         const getAllPosts = () => {
             getPosts();
+            getUsers();
             getReviews();
         }
         getAllPosts();
-    }, [user, loading]);
+    }, []);
 
     return (
         <>
             <header className="header-content-explore">
                 <Navbar />
-                {/* <Categorys /> */}
+                <Modal />
+                <CreateButton />
 
                 <div className="aa">
                     <h1>
                         google ads
                     </h1>
                 </div>
+
+                {/* elementos para pesquisa */}
+                <ul className='menu-item-category' onChange={(e) => { setQuery(e.target.value); }} >
+                    {categorys
+                        ? (
+                            <>
+                                <li value="All" className="item-category" onClick={(e) => { setQuery(e.target.value) }}> Tudo </li>
+                                {categorys.map((item, index) => {
+                                    return (
+                                        <Categorys
+                                            item={item}
+                                            key={index}
+                                            funSetQuery={setQuery}
+                                        />
+                                    )
+                                })}
+                            </>
+                        )
+                        : (
+                            <>
+                                <li value="All" className="item-category" onClick={(e) => { setQuery(e.target.value) }} > Tudo </li>
+                                {arrCategorys.map((item, index) => {
+                                    return (
+                                        <Categorys
+                                            item={item}
+                                            key={index}
+                                            funSetQuery={setQuery}
+                                        />
+                                    )
+                                })}
+                            </>
+                        )
+                    }
+                </ul>
 
                 <div className="search-filter">
                     <Input
@@ -61,46 +91,31 @@ const Explore = () => {
                         onchange={(e) => setQuery(e.target.value)}
                     />
 
-                    <select onChange={(e) => { setQuery(e.target.value); }} className="custom-select input-outline-primary" aria-label="Filter Countries By Region">
-                        {categorys
-                            ? (
-                                <>
-                                    <option value="All"> Tudo </option>
-                                    {categorys.map((item, index) => {
-                                        return (
-
-                                            <option key={index} value={item}> {item} </option>
-                                        )
-                                    })}
-                                </>
-                            )
-                            : (
-                                <>
-                                    <option value="All"> Tudo </option>
-                                    {arrCategorys.map((i, index) => {
-                                        return (
-                                            <option key={index} value={i}>{i}</option>
-                                        )
-                                    })}
-                                </>
-                            )
-                        }
-                    </select>
-
                 </div>
-
-                <CreateButton />
             </header>
 
-            <main className="posts-container">
 
-                {query.length > 2 && (
+
+            {query.length > 2 && (
+                <>
+
+                    <div className="result-search-container-users">
+                        {users.filter(item => item.ename.includes(query)).map(doc => {
+                            return (
+                                <SearchUser
+                                    uid={doc.euid}
+                                    name={doc.ename}
+                                    avatar={doc.eavatar}
+                                />
+                            )
+                        })}
+                    </div>
+
                     <div className="result-search-container-posts">
-
-                        {posts.filter(item => item.content.includes(query) || item.category.includes(query) || item.title.includes(query) || item.user_name.includes(query)).map(doc => {
+                        {posts.filter(item => item.content.includes(query) || item.category.includes(query) || item.title.includes(query)).map(doc => {
                             return (
                                 <Post
-                                    key={doc.id}
+                                    postId={doc.id}
                                     user_id={doc.user_id}
                                     user_name={doc.user_name}
                                     avatar={doc.avatar}
@@ -108,18 +123,32 @@ const Explore = () => {
                                     category={doc.category}
                                     content={doc.content}
                                     img_content={doc.img_content}
-                                    click_type_like={< LikeButton postId={doc.id} />}
+                                    likes={doc.likes}
+                                    coments={doc.coments}
+                                    click_type_like={
+                                        < LikeButton
+                                            postId={doc.id}
+                                            uid={doc.user_id}
+                                            userPhoto={doc.avatar ? doc.avatar : null}
+                                            imgContent={doc.img_content}
+                                            user_name={doc.user_name}
+                                            title={doc.title}
+                                            content={doc.content}
+                                            category={doc.category}
+                                        />
+                                    }
                                 />
                             )
                         })}
-
                     </div>
-                )}
+                </>
+            )}
 
+            <main className="posts-container">
                 {posts.map(doc => {
                     return (
                         <Post
-                            key={doc.id}
+                            postId={doc.id}
                             user_id={doc.user_id}
                             user_name={doc.user_name}
                             avatar={doc.avatar ? doc.avatar : null}
@@ -128,6 +157,7 @@ const Explore = () => {
                             content={doc.content}
                             img_content={doc.img_content}
                             likes={doc.likes}
+                            coments={doc.coments}
                             click_type_like={
                                 <LikeButton
                                     postId={doc.id}

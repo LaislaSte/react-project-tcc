@@ -2,6 +2,29 @@
 
     Desenvolvimento de projeto de tcc, MemorizeStudio, um site de memorização de conteúdos didáticos básicos.
 
+## Páginas
+
+para add imgs
+[My image](LaislaSte.github.com/react-project-tcc/src/assets/img homepage.jpg)
+
+Experimente esta remarcação:
+
+<!-- ![My Image](http://url/to/img.png) -->
+
+Eu acho que você pode vincular diretamente à versão bruta de uma imagem se ela estiver armazenada no seu repositório. ie
+
+<!-- ![alt text](https://github.com/LaislaSte/react-project-tcc/main/image.jpg?raw=true) -->
+
+### ROTAS
+
+Publica
+
+## Componentes
+
+## Funcionalidades
+
+## Limitações
+
 # Contrubua para o projeto:
 
 > ```
@@ -46,13 +69,12 @@
 - **importante** adicionar função de add ou remover revisão no like button [ok]
 - ajustar o layout de biografia dos perfis [ok]
 - mudar de lugar os google ads para antes do filter [ok]
+- arrumar estilo dos selects do filter, ou criar um select [ok]
+- mostrar o componente page not found nas paginas que nao existem [ok]
 
 ---
 
 ### NOT DONE
-
-- arrumar estilo dos selects do filter, ou criar um select
-- mostrar o componente page not found nas paginas que nao existem
 
 ---
 
@@ -92,6 +114,10 @@
 - **verificar** renderização de perfil dos usuários externos [OK]
 - **verificar** excluir todos os posts que o usuário fez quando ele optar por excluir sua conta [ok]
 - **verificar** cadastro de imagem no storage/ update post, register post [ok]
+  **verificar requisitos funcionais e não funcionais da documentação para ver se estão batendo com os todos** [ok]
+- **importante** verificar disabled dos btns nos formulários (validadores de campos) [ok]
+- **LIMPAR O CODE** [ok]
+- **verificar** atualização das categorias nos checkboxes [ok]
 
 ---
 
@@ -99,31 +125,23 @@
 
 #### ARRUMAR BUGS ANTES DO DEPLOY:
 
-- **verificar** atualização dos checkboxes []
 
-**verificar requisitos funcionais e não funcionais da documentação para ver se estão batendo com os todos**
 
-- **LIMPAR O CODE**
+* **importante** fazer deploy
 
-- **importante** fazer deploy
-
-- #### TODOS PARA DEPOIS DE FAZER DEPLOY:
-- **importante**
-- depois que edita uma nova senha, o usuário é redirecionado para o dominio;
-- **verificar** add google ads
+* #### TODOS PARA DEPOIS DE FAZER DEPLOY:
+* **importante**
+* depois que edita uma nova senha, o usuário é redirecionado para o dominio;
+* **verificar** add google ads
 
 ## POSSÍVEIS IMPLEMENTAÇÕES
 
-- criar um feed de seguindo para renderizar posts de quem o usuário segue.
+- criar um feed de seguindo para renderizar posts de quem o usuário segue. [ok]
+- criar paginas para ver quem segue e quem esta seguindo [ok]
+- mudança de estilo no botao de seguir e para de seguir na pagina de usuario externos [ok]
+- comentários [ok]
 
-- criar paginas para ver quem segue e quem esta seguindo
-- criar um feed de seguindo para renderizar posts de quem o usuário segue.
-- mudança de estilo no botao de seguir e para de seguir na pagina de usuario externo
-  s
 - criar página de notificações (quem esta seguinto ou quantas revisões tem um post por usuário (como um like))
-
 - utilizar CryptoJs para criptografar tokens dos users
-
 - criar paginas para os links do footer (estruturar lugar para os textos)
-
-- criar paginas para ver respondas do post
+- criar um chat

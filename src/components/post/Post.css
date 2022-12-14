@@ -1,7 +1,8 @@
 .post-container {
-    margin-bottom: 1rem;
-    padding: 1rem;
+    margin: 1rem 0;
+    padding-top: 1rem;
     border-bottom: 1px solid var(--SECONDARY_900);
+    width: 100%;
 }
 
 .header-post {
@@ -9,6 +10,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    padding: 0 1rem;
 }
 
 .header-post .header-user-post {
@@ -57,16 +59,14 @@
     gap: .8rem;
     max-width: 4rem;
     width: auto;
-    cursor: pointer;
     font-size: 1.5rem;
 }
 
 /* --------end of header---------- */
 
 .post-container .content-post {
-    margin-bottom: .5rem;
     text-align: justify;
-    padding: 1rem;
+    padding: 1rem 3rem;
 }
 
 .content-post h2 {
@@ -76,7 +76,7 @@
 .img-content-container {
     width: 100%;
     text-align: center;
-    margin-top: .5rem;
+    margin: 1.5rem 0 .8rem 0;
 }
 
 .img-content-container .img-content {
@@ -95,48 +95,34 @@
 
 .footer-post {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    padding: .5rem 1.5rem 0 0;
-    gap: 1rem;
+}
+
+.footer-post .review-like-container,
+.footer-post .coments-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: auto;
+    padding: .5rem 0;
+    gap: 1.2rem;
+}
+
+.footer-post .coments-container {
+    border-right: 1px solid #049dbf63;
+}
+
+.footer-post .review-like-container .post-coment-container-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--SECONDARY_800);
 }
 
 /* --------end of footer---------- */
-
-.show-more-content {
-    background-color: var(--BACKGROUND_DARK);
-    border-radius: 1rem;
-    padding: .5rem;
-    position: relative;
-    /* right: 2rem; */
-    z-index: 2;
-    border: 1px solid var(--SECONDARY_900);
-    display: block;
-    transition: var(--transition);
-    transition: opacity .4s ease, visibility .4s ease, transform .5s ease-in-out;
-    visibility: hidden;
-    opacity: 0;
-    transform: calc(0);
-    overflow: hidden;
-    z-index: 999;
-}
-
-.show-more-content.show-more-content-active {
-    /* display: none;
-    transition: var(--transition); */
-    visibility: visible;
-    opacity: 1;
-    transform: scale(1);
-}
-
-.show-more-content div {
-    border-bottom: 1px solid var(--SECONDARY_900);
-    padding: .2rem;
-    border-radius: .2rem;
-    transition: var(--transition);
-}
-
-/* --------end of show-more---------- */
 
 @media (min-width: 800px) {
     .post-container {

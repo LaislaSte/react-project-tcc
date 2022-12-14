@@ -14,7 +14,7 @@ const TxtArea = ({
 
     return (
         <div className="TxtArea-container">
-            <div className={`TxtArea-content`}>
+            <div className='TxtArea-content'>
                 <textarea
                     placeholder={text}
                     onChange={onchange}

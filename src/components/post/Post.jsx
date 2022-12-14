@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BiPencil, BiTrash } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
+import { FaRegCommentDots } from 'react-icons/fa';
+import { FiSend } from 'react-icons/fi';
 
 // ARCHIVES FROM PROJECT
 import './Post.css';
 import { UserAuth } from '../../services/UserContext';
-import avatarDefault from '../../assets/icons/avatarDefault.svg'
-import { fakeUser } from '../../utils/ArraysAndFunctions';
+import avatarDefault from '../../assets/icons/avatarDefault.svg';
 
 /*PAGES AND COMPONENTS */
 import Button from '../button/Button';
 import UpdatePost from '../popupmenu/UpdatePost';
+import Coments from '../coments/Coments';
+import SendComent from '../coments/SendComent';
 
 export const Post = ({
     postId,
@@ -24,10 +27,11 @@ export const Post = ({
     category,
     title,
     likes,
+    coments,
     img_content,
     click_type_review,
     click_type_like,
-    internalUser
+    internalUser = false
 }) => {
 
     // states e functions para os popups 
@@ -37,9 +41,14 @@ export const Post = ({
     const onClickSM = () => setShowMore(!showMore);
     const [showMore1, setShowMore1] = useState(false);
     const onClickSM1 = () => setShowMore1(!showMore1);
+    const [comentsModal, setComentsModal] = useState(false);
+    const showComents = () => setComentsModal(!comentsModal);
+
+    const [sendComent, setSendComent] = useState(false);
+    const callSendComent = () => setSendComent(!sendComent);
 
     // imports 
-    const { deletePost } = UserAuth();
+    const { deletePost, posts, uid } = UserAuth();
     const navigate = useNavigate();
 
     // functions 
@@ -49,13 +58,15 @@ export const Post = ({
         onClickSM1();
     }
 
-    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com a query feita.*/
+    /*ao clicar para redirecionar para o perfil, é redirecionado para a rota /user e passado o uid como parametro da url (/user/:id), nesta url estara o componente userdetails que ira usar o hook do router-dom para usar os parametros passados, esse parametro será usado para realizar uma filtragem de todos os users que há no banco e renderiar o que corresponder com o id passado por parâmetro.*/
     const goToUserPage = () => {
         navigate(`/user/${user_id}`);
     }
 
     return (
-        <>
+        <div className={comentsModal ? 'coment-modal' : ''}>
+            {comentsModal ? <MdClose onClick={showComents} className='coment-modal-icon' /> : null}
+
             <div className='post-container'>
 
                 <div className="header-post">
@@ -67,12 +78,11 @@ export const Post = ({
                         <p> {user_name ? user_name : 'Sem Nome'} </p>
                     </div>
 
-
                     {internalUser
                         ? (
                             <div className="header-icons">
 
-                                <BiTrash onClick={onClickSM1} />
+                                <BiTrash onClick={onClickSM1} className='cursor-pointer' />
                                 <div className={showMore1 ? 'modal open' : 'modal'}>
                                     <AiOutlineClose onClick={onClickSM1} />
                                     <div className="popup-container">
@@ -84,7 +94,7 @@ export const Post = ({
                                     </div>
                                 </div>
 
-                                <BiPencil onClick={onClickSM} />
+                                <BiPencil onClick={onClickSM} className='cursor-pointer' />
                                 {showMore
                                     ? (
                                         <UpdatePost
@@ -116,7 +126,7 @@ export const Post = ({
                         {img_content
                             ? (
                                 <>
-                                    <img src={img_content} alt="imagem do conteúdo do post" className='img-content' onClick={onCickImg} />
+                                    <img src={img_content} alt="imagem do conteúdo do post" className='img-content cursor-pointer' onClick={onCickImg} />
                                     <div className={modal ? "modal open" : 'modal'}>
                                         <img src={img_content} alt="" />
                                         <MdClose onClick={onCickImg} />
@@ -126,18 +136,92 @@ export const Post = ({
                             : null
                         }
                     </div>
-
-
                 </div>
 
                 <div className="footer-post">
-                    {click_type_review}
-                    {click_type_like}
-                    {likes}
+                    <div className="review-like-container">
+                        <>
+                            {sendComent
+                                ? (
+                                    <SendComent
+                                        postFather={postId}
+                                        funPopUp={callSendComent}
+                                    />
+                                )
+                                : null}
+                            {comentsModal ? <FiSend className='post-coment-container-icon' onClick={callSendComent} /> : <FaRegCommentDots className='post-coment-container-icon' onClick={showComents} />}
+                        </>
+                        {coments}
+                    </div>
+
+                    <div className="review-like-container">
+                        {click_type_review}
+
+                        <>
+                            {click_type_like}
+                            {likes}
+                        </>
+                    </div>
+
                 </div>
 
             </div>
 
-        </>
+            {comentsModal
+                ? (
+                    <div className='coments-container'>
+
+                        {posts.filter(post => post.postFather === postId)
+                            ? (<>
+                                {posts.filter(post => post.postFather === postId && post.user_id === uid).map(item => {
+                                    return (
+                                        <>
+                                            {item
+                                                ? (
+                                                    <Coments
+                                                        name={item.user_name}
+                                                        avatar={item.avatar}
+                                                        comentId={item.id}
+                                                        euid={item.user_id}
+                                                        content={item.content}
+                                                        imgContent={item.img_content}
+                                                        fatherPostId={item.postFather}
+                                                    />
+                                                )
+                                                : null
+                                            }
+                                        </>
+                                    )
+                                })}
+
+                                {posts.filter(post => post.postFather === postId && post.user_id !== uid).map(item => {
+                                    return (
+                                        <>
+                                            <Coments
+                                                name={item.user_name}
+                                                avatar={item.avatar}
+                                                comentId={item.id}
+                                                euid={item.user_id}
+                                                content={item.content}
+                                                imgContent={item.img_content}
+                                                fatherPostId={item.postFather}
+                                            />
+                                        </>
+                                    )
+                                })
+
+                                }
+                            </>)
+                            : (
+                                <p> Sem comentários </p>
+                            )
+                        }
+                    </div>
+                )
+                : null
+            }
+
+
+        </div>
     )
 }

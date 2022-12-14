@@ -9,7 +9,7 @@ import { MdClose } from 'react-icons/md';
 import './Profile.css';
 import avatarDefault from '../../assets/img-avatar.png';
 import { auth } from '../../services/Banco';
-import { UserAuth } from '../../services/UserContext'
+import { UserAuth } from '../../services/UserContext';
 
 /*PAGES AND COMPONENTS */
 import LikeButton from '../../components/likebutton/LikeButton';
@@ -17,16 +17,9 @@ import { Post } from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import CreateButton from '../../components/createbutton/CreateButton';
 import GoToPageModal from './GoToPageModal';
+import Modal from '../../components/modal/Modal';
 
 const Profile = () => {
-    // states 
-    // const [name, setName] = useState("");
-    // const [imgURL, setImgURL] = useState("");
-    // const [bio, setBio] = useState("");
-    // todos: importar posts do usuario logado do firestore e adicionalos nesse estado
-    // const [userPosts, setUserPosts] = useState([]);
-
-    //modais para os seguidores e seguindo
     const [modalFollowing, setModalFollowing] = useState(false);
     const changeModalFollowing = () => setModalFollowing(!modalFollowing);
     const [modalFollowers, setModalFollowers] = useState(false);
@@ -34,16 +27,12 @@ const Profile = () => {
 
     // imports
     const [user, loading, error] = useAuthState(auth);
-    // const { bios, imgUrl, name, uposts, getUserId, following, followers } = UserAuth();
-    const { bios, imgUrl, name, uposts, getUserId, getPosts, getReviews } = UserAuth();
+    const { bios, imgUrl, name, uposts, getUserId, following, followers, users } = UserAuth();
 
     // useeffect
     useEffect(() => {
-        console.log('effect runded');
         const callUser = () => {
             getUserId();
-            getReviews();
-            getPosts();
         }
         callUser()
 
@@ -53,26 +42,19 @@ const Profile = () => {
         <div className='Profile'>
             <Navbar />
             <CreateButton />
-
-            <div className="aaa">
-                <h1>
-                    google ads
-                </h1>
-            </div>
+            <Modal />
 
             <header className='section-profile'>
-
                 <div className="profile-container">
                     <div className="img-background">
-                        <img src={imgUrl ? imgUrl : avatarDefault} alt="" />
+                        <img src={imgUrl ? imgUrl : avatarDefault || user.photoURL ? user.photoURL : avatarDefault} alt="imagem de usuário" />
                     </div>
                 </div>
-
                 <div className="bio">
                     <h2>{name || user.displayName || 'sem Nome'}</h2>
-                    {bios}
+                    {bios ? bios : 'Nada por aqui'}
 
-                    {/* <div className="network">
+                    <div className="network">
                         <p onClick={changeModalFollowing} className='cursor-pointer'> Seguindo: {following ? following.length : 0} </p>
                         {
                             <div className={modalFollowing ? "modal open" : 'modal'}>
@@ -80,17 +62,20 @@ const Profile = () => {
                                 <div className="popup-container">
                                     <h1 className='follower-modal-h1'> Seguindo </h1>
                                     {following
-                                        ? following.map(i => {
+                                        ? following.map(id => {
                                             return (
-                                                <div className="modal-follows-container">
-                                                    <GoToPageModal
-                                                        className='modal-follows-container'
-                                                        uid={i.uid}
-                                                        name={i.name}
-                                                        avatar={i.avatar}
-                                                        text='Seguindo'
-                                                    />
-                                                </div>
+                                                <>
+                                                    {users.filter(user => user.euid === id).map(user => {
+                                                        return (
+                                                            <GoToPageModal
+                                                                uid={user.euid}
+                                                                name={user.ename}
+                                                                avatar={user.eavatar}
+                                                            />
+                                                        )
+
+                                                    })}
+                                                </>
                                             )
                                         })
                                         : null
@@ -98,22 +83,27 @@ const Profile = () => {
                                 </div>
                             </div>
                         }
+
                         <p onClick={changeModalFollowers} className='cursor-pointer'> Seguidores: {followers ? followers.length : 0} </p>
                         {
                             <div className={modalFollowers ? "modal open" : 'modal'}>
                                 <MdClose onClick={changeModalFollowers} />
                                 <div className="popup-container">
-                                    <h1 className='follower-modal-h1'>Seguidores</h1>
+                                    <h1 className='follower-modal-h1'> Seguidores </h1>
                                     {followers
-                                        ? followers.map(i => {
+                                        ? followers.map(id => {
                                             return (
-                                                <GoToPageModal
-                                                    className='popup-container'
-                                                    uid={i.uid}
-                                                    name={i.name}
-                                                    avatar={i.avatar}
-                                                    text='seguidores'
-                                                />
+                                                <>
+                                                    {users.filter(user => user.euid === id).map(user => {
+                                                        return (
+                                                            <GoToPageModal
+                                                                uid={user.euid}
+                                                                name={user.ename}
+                                                                avatar={user.eavatar}
+                                                            />
+                                                        )
+                                                    })}
+                                                </>
                                             )
                                         })
                                         : null
@@ -121,8 +111,7 @@ const Profile = () => {
                                 </div>
                             </div>
                         }
-                    </div> */}
-
+                    </div>
                 </div>
 
                 <div className="header-button-profile">
@@ -133,40 +122,50 @@ const Profile = () => {
             </header>
 
             <main className="section-posts">
-                <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
-                <div className="posts-container">
-                    {uposts.map((item, index) => {
-                        return (
-                            <Post
-                                key={index}
-                                postId={item.id}
-                                internalUser={true}
-                                user_id={user.uid}
-                                user_name={name ? name : user.displayName}
-                                avatar={imgUrl}
-                                title={item.title}
-                                category={item.category}
-                                content={item.content}
-                                img_content={item.img_content}
-                                likes={item.likes}
-                                click_type_like={
-                                    <LikeButton
-                                        postId={item.id}
-                                        uid={user.uid}
-                                        userPhoto={imgUrl}
-                                        imgContent={item.img_content}
-                                        user_name={name || user.displayName}
-                                        title={item.title}
-                                        content={item.content}
-                                        category={item.category}
-                                    />
-                                }
-                            />
-                        )
-                    })}
-                </div>
-            </main>
+                {uposts.length > 0
+                    ? (
+                        <>
+                            <h1>Postagens Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
+                            <div className="posts-container">
+                                {uposts.map((item, index) => {
+                                    return (
+                                        <Post
+                                            key={index}
+                                            postId={item.id}
+                                            internalUser={true}
+                                            user_id={user.uid}
+                                            user_name={name ? name : user.displayName}
+                                            avatar={imgUrl}
+                                            title={item.title}
+                                            category={item.category}
+                                            content={item.content}
+                                            img_content={item.img_content}
+                                            likes={item.likes}
+                                            coments={item.coments}
+                                            click_type_like={
+                                                <LikeButton
+                                                    postId={item.id}
+                                                    uid={user.uid}
+                                                    userPhoto={imgUrl}
+                                                    imgContent={item.img_content}
+                                                    user_name={name || user.displayName}
+                                                    title={item.title}
+                                                    content={item.content}
+                                                    category={item.category}
+                                                />
+                                            }
+                                        />
+                                    )
+                                })}
+                            </div>
+                        </>
+                    )
+                    : (
+                        <h1>Nenhuma Postagem Realizadas <BsFillArrowDownCircleFill className='footer-icon' /> </h1>
+                    )
+                }
 
+            </main>
         </div>
     )
 }

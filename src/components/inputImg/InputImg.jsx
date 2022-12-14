@@ -12,11 +12,11 @@ const InputImg = ({
     imgPreview,
     //para mudar o estilo do preview
     imgPreviewClassName = '',
-
+    //recebe a referencia de um elemento diferente para abrir o input por outro elemento
     onSetReference
 }) => {
 
-    //quando clicar na div, seria como clicar no input. O input vai, atravez do atributo ref, preencheer a referencia dele msm dentro deste hook do react abaixo 
+    //quando clicar na div, seria como clicar no input. O input vai, atravez do atributo ref, preencheer a referencia dele mesmo dentro deste hook do react abaixo
     const refInput = useRef(null);
 
     useEffect(

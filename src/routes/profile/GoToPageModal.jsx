@@ -11,11 +11,9 @@ const GoToPageModal = ({ uid, name, avatar }) => {
 
     return (
 
-        <div key={uid} onClick={goToUserPage} className="external-user-container">
-            <div className="external-user-modal-img-container">
-                <img src={avatar ? avatar : avatarDefault} alt="" />
-            </div>
-            <h2> {name} </h2>
+        <div key={uid} onClick={goToUserPage} className="follow-container">
+            <img src={avatar ? avatar : avatarDefault} alt="foto do usuário externo" className='follow-container-img' />
+            <p className='p-italic'> {name} </p>
         </div>
 
     )

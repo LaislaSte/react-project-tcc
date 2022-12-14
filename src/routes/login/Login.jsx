@@ -1,12 +1,10 @@
 // HOOKS AND LIBS 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEnvelope } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
 
 // ARCHIVES FROM PROJECT
-import { auth } from '../../services/Banco';
 import './Login.css';
 import { emailValid, passwordValid } from '../../utils/validators';
 import { UserAuth } from '../../services/UserContext';
@@ -15,7 +13,10 @@ import { UserAuth } from '../../services/UserContext';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 import Footer from '../../components/footer/Footer';
+
 import Loader from '../../components/loader/Loader';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../services/Banco';
 
 
 const Login = () => {
@@ -24,18 +25,22 @@ const Login = () => {
     const [password, setPassword] = useState('');
 
     // imports
-    const { logInWithEmailAndPassword, signInWithGoogle, getPosts, getReviews } = UserAuth();
+    const { logInWithEmailAndPassword, signInWithGoogle } = UserAuth();
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
     useEffect(
         () => {
-            if (loading) { return; }
+            if (loading) {
+                return;
+            }
             if (user) navigate('/explore');
+
         },
         [user, loading]
-    )
+    );
 
+    //functions
     const formValidLogin = () => {
         return emailValid(email) && passwordValid(password);
     }

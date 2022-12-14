@@ -1,6 +1,6 @@
 // HOOKS AND LIBS 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { FaBrain } from 'react-icons/fa';
 import { BiNetworkChart } from 'react-icons/bi';
@@ -19,7 +19,25 @@ import Button from '../../components/button/Button';
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/footer/Footer';
 
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../services/Banco';
+import Loader from '../../components/loader/Loader';
+
 const Public = () => {
+
+    const [user, loading, error] = useAuthState(auth);
+    const navigate = useNavigate();
+
+    useEffect(
+        () => {
+            if (loading) {
+                return;
+            }
+            if (user) navigate('/explore');
+
+        },
+        [user, loading]
+    );
 
     return (
         <div className=' public-container'>

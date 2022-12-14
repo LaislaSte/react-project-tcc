@@ -1,11 +1,3 @@
-
-/*======================
-    PÁGINA DE REGISTRO DE USUÁRIO
-
-        - Este componente se dispõe a pegar entradas do usuário como nome, e-mail e senha para realizar um cadastro
-        ao banco de dados firestore do firebase
-======================*/
-
 // HOOKS AND LIBS 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -25,6 +17,7 @@ import logo from '../../assets/icons/logo.svg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import Footer from '../../components/footer/Footer';
+import Loader from '../../components/loader/Loader';
 
 const Register = () => {
     // states
@@ -36,19 +29,18 @@ const Register = () => {
     // imports
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-    const { registerWithEmailAndPassword, verifiedUserEmail, signInWithGoogle } = UserAuth();
+    const { registerWithEmailAndPassword, signInWithGoogle } = UserAuth();
 
-    // useeffects 
     useEffect(
         () => {
             if (loading) {
-                //a loading screen/component
                 return;
             }
             if (user) navigate('/explore');
+
         },
         [user, loading]
-    )
+    );
 
     // functions 
     const formValidRegister = () => {
@@ -60,11 +52,7 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            // const res = verifiedUserEmail();
-            // res ? 
-            // : alert('Insira um e-mail válido');
             registerWithEmailAndPassword(name, email, password)
-            console.log(`usuario cadastrado`);
             navigate('/explore')
             setName('');
             setEmail('');

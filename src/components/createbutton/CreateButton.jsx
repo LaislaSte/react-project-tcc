@@ -1,7 +1,11 @@
-import React, { useState, useContext } from 'react';
-import './CreateButton.css';
-import CreatePost from '../popupmenu/CreatePost';
+// HOOKS AND LIBS 
+import React, { useState } from 'react';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
+
+// ARCHIVES FROM PROJECT
+import './CreateButton.css';
+/*PAGES AND COMPONENTS */
+import CreatePost from '../popupmenu/CreatePost';
 
 const CreateButton = () => {
 
@@ -22,7 +26,6 @@ const CreateButton = () => {
                     )
                     : null
             }
-
 
         </>
     )

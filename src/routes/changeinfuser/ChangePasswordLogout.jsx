@@ -1,6 +1,6 @@
 // HOOKS AND LIBS
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiArrowBack } from 'react-icons/bi';
 
 // ARCHIVES FROM PROJECT
@@ -18,8 +18,6 @@ const ChangePasswordLogout = () => {
     const [email, setEmail] = useState("");
 
     const { updateUserPasswordLogOut } = UserAuth();
-
-    const navigate = useNavigate();
 
     function sendEmail(e) {
         e.preventDefault();

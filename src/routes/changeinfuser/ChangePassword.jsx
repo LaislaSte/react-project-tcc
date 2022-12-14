@@ -1,7 +1,6 @@
 // HOOKS AND LIBS
-import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { BiArrowBack } from 'react-icons/bi';
 
 // ARCHIVES FROM PROJECT
@@ -19,14 +18,7 @@ const ChangePassword = () => {
 
     const [email, setEmail] = useState("");
 
-    const { updateUserPasswordLogIn, imgUrl } = UserAuth()
-    const [user, loading, error] = useAuthState(auth);
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (loading) return;
-        if (!user) navigate("/login");
-    }, [user, loading]);
+    const { updateUserPasswordLogIn, imgUrl } = UserAuth();
 
     function sendEmail(e) {
         e.preventDefault();
@@ -43,13 +35,15 @@ const ChangePassword = () => {
                 <img src={imgUrl ? imgUrl : avatarDefault} alt="imagem do usuário logado" />
             </div>
             <h1 className="title">Altere sua senha</h1>
-            <h2 className="input-warning"> Certifique-se de que seu e-mail cadastrado é um e-mail existente</h2>
-            <h3>Caso contrário é possível edita-lo nas configurações</h3>
+            <h3 className="input-warning">
+                Certifique-se de que seu e-mail cadastrado é um e-mail existente.
+                Caso contrário é possível edita-lo nas configurações
+            </h3>
 
             <form className="form" onSubmit={sendEmail}>
                 <p>Insira seu e-mail para enviar uma mensagem de atualização de senha</p>
                 <Input
-                    className="input-outline-secondary"
+                    className="input-outline-secondary input-light"
                     type="text"
                     text="E-mail cadastrado"
                     value={email}
